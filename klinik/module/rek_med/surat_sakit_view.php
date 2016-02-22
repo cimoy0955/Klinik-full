@@ -1,0 +1,469 @@
+<?php
+     require_once("root.inc.php");
+     require_once($ROOT."library/bitFunc.lib.php");
+     require_once($ROOT."library/auth.cls.php");
+     require_once($ROOT."library/textEncrypt.cls.php");
+     require_once($ROOT."library/datamodel.cls.php");
+     require_once($ROOT."library/dateFunc.lib.php");
+     require_once($ROOT."library/tree.cls.php");
+     require_once($ROOT."library/inoLiveX.php");
+     require_once($APLICATION_ROOT."library/view.cls.php");
+     
+     
+     $view = new CView($_SERVER['PHP_SELF'],$_SERVER['QUERY_STRING']);
+	$dtaccess = new DataAccess();
+     $enc = new textEncrypt();
+     $auth = new CAuth();
+     $err_code = 0;
+	$tree = new CTree("global.global_customer","cust_id",TREE_LENGTH);
+     $userData = $auth->GetUserData();
+     
+     $plx = new InoLiveX("CheckKode,GetReg");     
+
+ 	if(!$auth->IsAllowed("registrasi",PRIV_CREATE)){
+          die("access_denied");
+          exit(1);
+     } else if($auth->IsAllowed("registrasi",PRIV_CREATE)===1){
+          echo"<script>window.parent.document.location.href='".$APLICATION_ROOT."login.php?msg=Login First'</script>";
+          exit(1);
+     }
+
+     $_x_mode = "New";
+     $thisPage = "registrasi.php";
+     $viewPage = "pegawai_view.php";
+     $findPage = "pasien_find.php?";
+     $cariPage = "kk_find.php?";
+	
+     function CheckKode($kode,$custUsrId=null)
+	{
+          global $dtaccess;
+          
+          $sql = "SELECT a.cust_usr_id FROM global.global_customer_user a 
+                    WHERE upper(a.cust_usr_kode) = ".QuoteValue(DPE_CHAR,strtoupper($kode));
+                    
+          if($custUsrId) $sql .= " and a.cust_usr_id <> ".QuoteValue(DPE_CHAR,$custUsrId);
+          
+          $rs = $dtaccess->Execute($sql);
+          $dataAdaKode = $dtaccess->Fetch($rs);
+          
+		return $dataAdaKode["cust_usr_id"];
+     }
+     
+     function GetReg($kode)
+	{
+          global $dtaccess;
+          
+          $sql = "SELECT reg_id FROM klinik.klinik_registrasi a
+                    join global.global_customer_user b on b.cust_usr_id = a.id_cust_usr  
+                    WHERE reg_status not like ".QuoteValue(DPE_CHAR,STATUS_SELESAI."%")." 
+                    and upper(b.cust_usr_kode) = ".QuoteValue(DPE_CHAR,strtoupper($kode));
+                    
+          if($custUsrId) $sql .= " and a.cust_usr_id <> ".QuoteValue(DPE_CHAR,$custUsrId);
+          
+          $rs = $dtaccess->Execute($sql);
+          $data = $dtaccess->Fetch($rs);
+          
+		return $data["reg_id"];
+     }
+
+	
+	if($_POST["btnLanjut"]) {
+		$sql = "select a.*,c.reg_status,c.reg_id,b.cust_nama,reg_jenis_pasien,((current_date - cust_usr_tanggal_lahir)/365) as umur  from global.global_customer_user a
+				join global.global_customer b on a.id_cust = b.cust_id
+				left join klinik.klinik_registrasi c on c.id_cust_usr = a.cust_usr_id 
+				where a.cust_usr_kode = ".QuoteValue(DPE_CHAR,$_POST["cust_usr_kode"])."
+				order by reg_when_update desc "; 
+		$dataPasien = $dtaccess->Fetch($sql,DB_SCHEMA_GLOBAL);
+
+		$_POST["cust_nama"] = htmlspecialchars($dataPasien["cust_nama"]); 
+		$_POST["cust_usr_id"] = $dataPasien["cust_usr_id"]; 
+		$_POST["cust_usr_nama"] = htmlspecialchars($dataPasien["cust_usr_nama"]); 
+		$_POST["cust_usr_tempat_lahir"] = $dataPasien["cust_usr_tempat_lahir"]; 
+		$_POST["cust_usr_tanggal_lahir"] = format_date($dataPasien["cust_usr_tanggal_lahir"]); 
+		$_POST["cust_usr_jenis_kelamin"] = $dataPasien["cust_usr_jenis_kelamin"]; 
+		$_POST["cust_usr_status_nikah"] = $dataPasien["cust_usr_status_nikah"]; 
+		$_POST["cust_usr_agama"] = $dataPasien["cust_usr_agama"];          
+		$_POST["cust_usr_warganegara"] = $dataPasien["cust_usr_warganegara"]; 
+		if($_POST["cust_usr_warganegara"]!="WNI" && $_POST["cust_usr_warganegara"]!="WNI Keturunan") $_POST["wna"] = $_POST["cust_usr_warganegara"];
+		$_POST["cust_usr_golongan_darah"] = $dataPasien["cust_usr_golongan_darah"]; 
+		$_POST["cust_usr_alamat"] = htmlspecialchars($dataPasien["cust_usr_alamat"]); 
+		$_POST["cust_usr_telp"] = $dataPasien["cust_usr_telp"]; 
+		$_POST["cust_usr_hp"] = $dataPasien["cust_usr_hp"]; 
+		$_POST["cust_usr_foto"] = $dataPasien["cust_usr_foto"]; 
+		$_POST["cust_usr_kota"] = $dataPasien["cust_usr_kota"]; 
+		$_POST["cust_usr_propinsi"] = $dataPasien["cust_usr_propinsi"]; 
+		$_POST["cust_usr_kodepos"] = $dataPasien["cust_usr_kodepos"]; 
+		$_POST["cust_usr_tinggi"] = $dataPasien["cust_usr_tinggi"]; 
+		$_POST["cust_usr_berat"] = $dataPasien["cust_usr_berat"]; 
+		$_POST["cust_usr_pekerjaan"] = $dataPasien["cust_usr_pekerjaan"]; 
+		$_POST["cust_id"] = $dataPasien["id_cust"]; 
+		$_POST["cust_usr_alergi"] = $dataPasien["cust_usr_alergi"]; 
+		$_POST["cust_usr_jenis"] = $dataPasien["reg_jenis_pasien"]; 
+		$_POST["reg_status_pasien"] = $dataPasien["reg_status"]{0}; 
+		$_POST["cust_usr_kota_asal"] = htmlspecialchars($dataPasien["cust_usr_kota_asal"]); 
+  $_POST["reg_id"] = $dataPasien["reg_id"];
+          $_x_mode = "Edit";
+	}
+	     
+     
+	$lokasi = $APLICATION_ROOT."images/foto_pasien";
+	if($_POST["cust_usr_foto"]) $fotoName = $lokasi."/".$_POST["cust_usr_foto"];
+     else $fotoName = $lokasi."/default.jpg";     
+	 
+	// ----- update data ----- //
+	if ($_POST["btnUpdate"]) { 
+          $userCustId = $_POST["cust_usr_id"]; 
+          
+		if(!$_POST["cust_nama"]) $_POST["cust_nama"] = $_POST["cust_usr_nama"];
+		$sql = "select cust_id, cust_nama from global.global_customer 
+                    where upper(cust_nama) = ".QuoteValue(DPE_CHAR,strtoupper($_POST["cust_nama"])); 
+		$dataCust = $dtaccess->Fetch($sql,DB_SCHEMA_GLOBAL);
+		if($dataCust) $custId = $dataCust["cust_id"];
+		  
+          // --- insert ke tbl client user ---
+          $dbTable = "global_customer_user";
+          
+          $dbField[0] = "cust_usr_id";   // PK
+          $dbField[1] = "cust_usr_nama";
+          $dbField[2] = "id_cust";
+          $dbField[3] = "cust_usr_tempat_lahir";
+          $dbField[4] = "cust_usr_tanggal_lahir";
+          $dbField[5] = "cust_usr_alamat";            
+          $dbField[6] = "cust_usr_kodepos";            
+          $dbField[7] = "cust_usr_telp";
+          $dbField[8] = "cust_usr_hp";
+          $dbField[9] = "cust_usr_jenis_kelamin";
+          $dbField[10] = "cust_usr_status_nikah";
+          $dbField[11] = "cust_usr_agama";            
+          $dbField[12] = "cust_usr_golongan_darah";            
+          $dbField[13] = "cust_usr_tinggi";            
+          $dbField[14] = "cust_usr_berat";            
+          $dbField[15] = "cust_usr_foto";
+          $dbField[16] = "cust_usr_pekerjaan";    
+          $dbField[17] = "cust_usr_kode";
+          $dbField[18] = "cust_usr_alergi";
+          $dbField[19] = "cust_usr_kota_asal";
+          
+          if(!$_POST["cust_usr_agama"] || $_POST["cust_usr_agama"]=="--") $_POST["cust_usr_agama"] = 'null';
+           
+          $dbValue[0] = QuoteValue(DPE_NUMERIC,$userCustId);
+          $dbValue[1] = QuoteValue(DPE_CHAR,$_POST["cust_usr_nama"]);
+          $dbValue[2] = QuoteValue(DPE_CHAR,$custId);
+          $dbValue[3] = QuoteValue(DPE_CHAR,$_POST["cust_usr_tempat_lahir"]);
+          $dbValue[4] = QuoteValue(DPE_DATE,date_db($_POST["cust_usr_tanggal_lahir"]));
+          $dbValue[5] = QuoteValue(DPE_CHAR,$_POST["cust_usr_alamat"]);
+          $dbValue[6] = QuoteValue(DPE_CHAR,$_POST["cust_usr_kodepos"]);
+          $dbValue[7] = QuoteValue(DPE_CHAR,$_POST["cust_usr_telp"]);
+          $dbValue[8] = QuoteValue(DPE_CHAR,$_POST["cust_usr_hp"]);
+          $dbValue[9] = QuoteValue(DPE_CHAR,$_POST["cust_usr_jenis_kelamin"]);
+          $dbValue[10] = QuoteValue(DPE_CHAR,$_POST["cust_usr_status_nikah"]);
+          $dbValue[11] = QuoteValue(DPE_NUMERICKEY,$_POST["cust_usr_agama"]);
+          $dbValue[12] = QuoteValue(DPE_CHAR,$_POST["cust_usr_golongan_darah"]);
+          $dbValue[13] = QuoteValue(DPE_NUMERIC,$_POST["cust_usr_tinggi"]);
+          $dbValue[14] = QuoteValue(DPE_NUMERIC,$_POST["cust_usr_berat"]);
+          $dbValue[15] = QuoteValue(DPE_CHAR,$_POST["cust_usr_foto"]);
+          $dbValue[16] = QuoteValue(DPE_CHAR,$_POST["cust_usr_pekerjaan"]); 
+          $dbValue[17] = QuoteValue(DPE_CHAR,$_POST["cust_usr_kode"]);
+          $dbValue[18] = QuoteValue(DPE_CHAR,$_POST["cust_usr_alergi"]);
+          $dbValue[19] = QuoteValue(DPE_CHAR,$_POST["cust_usr_kota_asal"]);
+          
+          $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
+          $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey,DB_SCHEMA_GLOBAL);
+           
+          $dtmodel->Update() or die("update error");
+          
+          unset($dtmodel);
+          unset($dbField);
+          unset($dbValue);
+          unset($dbKey);
+            
+		$sql = "select reg_id, reg_status from klinik.klinik_registrasi 
+                    where id_cust_usr = ".QuoteValue(DPE_NUMERIC,$userCustId)." order by reg_tanggal desc, reg_waktu desc limit 1";
+		$dataReg = $dtaccess->Fetch($sql,DB_SCHEMA_GLOBAL);
+		if($dataReg) $regId = $dataReg["reg_id"];
+
+          // ---- insert ke registrasi ----
+          $dbTable = "klinik_registrasi";
+      
+          $dbField[0] = "reg_id";   // PK 
+          $dbField[1] = "reg_jenis_pasien"; 
+          $dbField[2] = "id_cust_usr";
+          $dbField[3] = "reg_status";
+           
+          $dbValue[0] = QuoteValue(DPE_CHAR,$regId); 
+          $dbValue[1] = QuoteValue(DPE_NUMERICKEY,$_POST["cust_usr_jenis"]); 
+          $dbValue[2] = QuoteValue(DPE_NUMERIC,$userCustId);
+          $dbValue[3] = QuoteValue(DPE_CHAR,(STATUS_REFRAKSI.STATUS_ANTRI));
+          
+          //if($row_edit["cust_id"]) $custId = $row_edit["cust_id"];
+          $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
+          $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey,DB_SCHEMA_KLINIK);
+           
+		$dtmodel->Update() or die("insert error");	 
+          
+          unset($dtmodel);
+          unset($dbField);
+          unset($dbValue);
+          unset($dbKey);
+                  
+          
+          // --- update dibayar d folio e lunas ato ga (buat pasien swadaya ato ga) ---
+          if($_POST["cust_usr_jenis"]!=PASIEN_BAYAR_SWADAYA) {
+			$lunas = 'y'; 
+			$sql = "update klinik.klinik_folio set fol_lunas = ".QuoteValue(DPE_CHAR,$lunas).", fol_dibayar = 0 
+					where id_reg = ".QuoteValue(DPE_CHAR,$regId)." and fol_jenis = ".QuoteValue(DPE_CHAR,STATUS_REGISTRASI);
+			$dtaccess->Execute($sql);
+		} else {
+			$lunas = 'n';
+			
+			$sql = "update klinik.klinik_folio set fol_lunas = ".QuoteValue(DPE_CHAR,$lunas)."
+					where id_reg = ".QuoteValue(DPE_CHAR,$regId)." and fol_jenis = ".QuoteValue(DPE_CHAR,STATUS_REGISTRASI);
+			$dtaccess->Execute($sql);
+		}
+		
+		unset($_POST["cust_usr_id"]);
+
+	}
+
+     // --- cari agama ---
+     $sql = "select * from global.global_agama order by agm_id";
+     $rs = $dtaccess->Execute($sql,DB_SCHEMA_HRIS);
+     $dataAgama = $dtaccess->FetchAll($rs);
+
+     // --- cari agama ---
+     $sql = "select * from global.global_customer_tipe order by cust_tipe_id";
+     $rs = $dtaccess->Execute($sql,DB_SCHEMA_HRIS);
+     $dataTipePasien = $dtaccess->FetchAll($rs);
+       
+?>
+
+<?php echo $view->RenderBody("inosoft.css",true); ?>
+
+<?php echo $view->InitUpload(); ?>
+<?php echo $view->InitThickBox(); ?>
+
+
+<script type="text/javascript">
+
+	function ajaxFileUpload()
+	{
+		$("#loading")
+		.ajaxStart(function(){
+			$(this).show();
+		})
+		.ajaxComplete(function(){
+			$(this).hide();
+		});
+
+		$.ajaxFileUpload
+		(
+			{
+				url:'registrasi_upload.php',
+				secureuri:false,
+				fileElementId:'fileToUpload',
+				dataType: 'json',
+				success: function (data, status)
+				{
+					if(typeof(data.error) != 'undefined')
+					{
+						if(data.error != '')
+						{
+							alert(data.error);
+						}else
+						{
+							alert(data.msg);
+							//UpdateMedia(data.file,'type=r');
+                                   //GetThumbs('target=dv_thumbs');
+                                   document.getElementById('cust_usr_foto').value= data.file;
+                                   document.img_foto.src='<?php echo $lokasi."/";?>'+data.file;
+						}
+					}
+				},
+				error: function (data, status, e)
+				{
+					alert(e);
+				}
+			}
+		)
+		
+		return false;
+
+	}
+</script>	
+
+
+<script language="Javascript">
+
+<? $plx->Run(); ?>
+
+var dataRol = Array();
+
+
+var _wnd_new;
+
+function BukaWindow(url,judul)
+{
+     if(!_wnd_new) {
+	  _wnd_new = window.open(url,judul,'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=300,left=100,top=100');
+     } else {
+	  if (_wnd_new.closed) {
+	       _wnd_new = window.open(url,judul,'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=300,left=100,top=100');
+	  } else {
+	       _wnd_new.focus();
+	  }
+     }
+     return false;
+}
+
+
+var _wnd_stat;
+
+function BukaStatWindow(url,judul)
+{
+    if(!_wnd_stat) {
+			_wnd_stat = window.open(url,judul,'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=500,height=600,left=100,top=100');
+	} else {
+		if (_wnd_stat.closed) {
+			_wnd_stat = window.open(url,judul,'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=500,height=600,left=100,top=100');
+		} else {
+			_wnd_stat.focus();
+		}
+	}
+     return false;
+}
+ 
+
+function CheckSimpan(frm) {
+     if(!frm.cust_usr_kode.value) {
+          alert("Kode Pasien Harus Diisi");
+          return false;
+     }
+     
+     if(!frm.cust_usr_nama.value) {
+          alert('Nama Harus Diisi');
+          return false;
+     } 
+     
+     if(!frm.cust_usr_jenis.value) {
+          alert('Jenis Pasien Harus Diisi');
+          return false;
+     }
+     
+     if(CheckKode(frm.cust_usr_kode.value,frm.cust_usr_id.value,'type=r')){
+		alert('Kode Pasien Sudah Ada');
+		frm.cust_usr_kode.focus();
+		frm.cust_usr_kode.select();
+		return false;
+	} 
+	
+     if(GetReg(frm.cust_usr_kode.value,'type=r')){ 
+		alert('Jenis Pasien telah di rubah');
+		return true;
+	}
+}
+
+function WargaNegara(frm, elm)
+{
+     if(elm.checked){
+          if (document.getElementById("wn3").checked)
+          {
+               frm.wna.disabled = false;
+               frm.wna.style.backgroundColor = '#FFFFFF';
+               frm.wna.focus();
+          }
+          if ((document.getElementById("wn1").checked) || (document.getElementById("wn2").checked))
+          {
+               frm.wna.disabled = true;
+               frm.wna.style.backgroundColor = '#e2dede';
+          }
+     } 
+}
+
+function GantiPassword(frm, elm)
+{
+    if(elm.checked){
+        frm.usr_password.disabled = false;
+        frm.usr_password2.disabled = false;
+        frm.usr_password2.style.backgroundColor = '#ffffff';
+        frm.usr_password.style.backgroundColor = '#ffffff';
+        frm.usr_password.focus();
+    } else {
+        frm.usr_password.disabled = true;
+        frm.usr_password2.disabled = true;
+        frm.usr_password2.style.backgroundColor = '#e2dede';
+        frm.usr_password.style.backgroundColor = '#e2dede';
+    }
+}
+</script>
+
+<style type="text/css">
+.bDisable{
+	color: #0F2F13;
+	border: 1px solid #c2c6d3;
+	background-color: #e2dede;
+}
+</style>
+
+<table width="100%" border="0" cellpadding="4" cellspacing="1">
+	<tr>
+		<td align="left" colspan=2 class="tableheader">CETAK SURAT SAKIT PASIEN</td>
+	</tr>
+</table> 
+
+
+	
+<form name="frmFind" method="POST" action="<?php echo $_SERVER["PHP_SELF"]?>">
+<table width="100%" border="1" cellpadding="4" cellspacing="1">
+     <tr>
+		<td width= "5%" align="left" class="tablecontent">Kode Pasien</td>
+		<td width= "50%" align="left" class="tablecontent-odd">
+               <input  type="text" name="cust_usr_kode" id="cust_usr_kode" size="25" maxlength="25" value="<?php echo $_POST["cust_usr_kode"];?>"/>
+               <a href="<?php echo $findPage;?>&TB_iframe=true&height=400&width=600&modal=true" class="thickbox" title="Cari Pasien"><img src="<?php echo($APLICATION_ROOT);?>images/bd_insrow.png" border="0" align="middle" width="18" height="20" style="cursor:pointer" title="Cari Pasien" alt="Cari Pasien" /></a>
+               <input type="submit" name="btnLanjut" value="Lanjut" class="button"/> 
+          </td>
+</table>
+<?php if(!$_POST["cust_usr_id"] && $_POST["btnLanjut"]) { ?>
+<font color="red"><strong>Kode Pasien Tidak Ditemukan</strong></font>
+<?php } ?>
+
+<?// if (!$_POST["cust_usr_jenis"] && $_POST["cust_usr_id"]) { ?>
+<!--<br>
+<font color="red"><strong>Pasien belum melakukan Regristrasi.</strong></font>-->
+<?// } ?> 
+<? //if (($_POST["reg_status_pasien"]!=STATUS_REGISTRASI && $_POST["reg_status_pasien"]!=STATUS_REFRAKSI) && $_POST["cust_usr_id"]) { ?>
+<!--<br>
+<font color="red"><strong>Jenis pasien tidak dapat diganti.</strong></font>-->
+<? //} ?>
+
+<?php if($dataPasien){?>
+<legend><strong><u>Data Pasien</U></strong></legend>
+     <table width="100%" border="0" cellpadding="4" cellspacing="1" id="noborder">
+          <tr>
+               <td width= "30%" align="left" class="tablecontent" class="noborder">Kode Pasien<?php if(readbit($err_code,11)||readbit($err_code,12)) {?>&nbsp;<font color="red">(*)</font><?}?></td>
+               <td width= "70%" align="left" class="tablecontent-odd"  class="noborder"><label>:&nbsp;<?php echo $dataPasien["cust_usr_kode"]; ?></label></td>
+          </tr>	
+          <tr>
+               <td width= "30%" align="left" class="tablecontent" class="noborder">Nama Lengkap</td>
+               <td width= "70%" align="left" class="tablecontent-odd" class="noborder"><label>:&nbsp;<?php echo $dataPasien["cust_usr_nama"]; ?></label></td>
+          </tr>
+          <tr>
+               <td width= "30%" align="left" class="tablecontent" class="noborder">Umur</td>
+               <td width= "70%" align="left" class="tablecontent-odd" class="noborder"><label>:&nbsp;<?php echo $dataPasien["umur"]; ?></label></td>
+          </tr>
+          <tr>
+               <td width= "30%" align="left" class="tablecontent" class="noborder">Jenis Kelamin</td>
+               <td width= "70%" align="left" class="tablecontent-odd" class="noborder"><label>:&nbsp;<?php echo $jenisKelamin[$dataPasien["cust_usr_jenis_kelamin"]]; ?></label></td>
+          </tr>
+
+	<tr>
+          <td colspan="3" align="center" class="tableheader">
+          
+               <!--<input type="submit" name="btnUpdate" id="btnSave" value="Simpan" class="button"/>-->
+               <?php echo $view->RenderButton(BTN_BUTTON,"btnUpdate","btnUpdate","Surat Keterangan Sakit","button",false,'onClick="BukaWindow(\'surat_sakit.php?id_cust_usr='.$dataPasien["cust_usr_id"].'&id_reg='.$dataPasien["reg_id"].'\',\'Cetak Surat Sakit\')"',null);?>
+ 
+          </td>
+    </tr>
+</table>
+<?php } else echo "&nbsp;";?>
+</form>
+<?php echo $view->RenderBodyEnd(); ?>

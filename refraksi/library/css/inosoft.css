@@ -1,0 +1,498 @@
+body {
+    font-family:      Verdana, Arial, Helvetica, sans-serif;
+    font-size:        12px;
+    margin: 5px;
+	margin-top:		  0px;
+	margin-left:	  0px;
+	margin-bottom:	  0px;
+	margin-right:	  0px;
+}
+
+.menubody{
+}
+
+.menubottom {
+
+}
+
+.menuleft {
+    font-family:      		Arial, Helvetica, sans-serif;
+    font-size:        		12px;
+	color:					#333333;
+	background-image:    	 url(gambar/submenu_btn.gif);
+	background-repeat:   	repeat-y;
+	font-weight: 			bold;
+}
+
+.menuleft_bawah {
+    font-family:      		Arial, Helvetica, sans-serif;
+    font-size:        		8px;
+	color:					#333333;
+}
+
+.menutop {
+   	font-family: Arial;
+	font-size: 11px;
+	color:               #FFFFFF;
+	background-color:    #008925;
+	font-weight: bold;
+	text-align: center;
+	height: 25px;
+	background-position: left top;
+	cursor:pointer;
+	text-transform: uppercase;
+}
+
+.img-button {
+    cursor:     pointer;
+    border:     0px;
+}
+
+.menuleft a:link, a:visited, a:active {
+    font-family:      Arial, Helvetica, sans-serif;
+    font-size:        12px;
+    text-decoration:  none;
+    color:            #333333;
+}
+
+.menuleft a:hover {
+    font-family:      Arial, Helvetica, sans-serif;
+    font-size:        12px;
+	text-decoration:  none;
+    color:            #6600CC;
+}
+
+.clientChat {
+    font-family:      		Arial, Helvetica, sans-serif;
+    font-size:        		12px;
+	color:					#333333;
+	background-image:    	 url(gambar/client_btn.png);
+	background-repeat:   	repeat-y;	
+}
+
+label {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: lighter;
+}
+
+
+table {
+    font-family:      Verdana, Arial, Helvetica, sans-serif;
+    font-size:        12px;
+	border-collapse : collapse;
+	border-style: none;
+	border-color: #FFFFFF;
+}
+
+.caption {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+}
+
+a:link, a:visited, a:active {
+    font-family:      Verdana, Arial, Helvetica, sans-serif;
+    font-size:        12px;
+    text-decoration:  none;
+    color:            #1F457E;
+
+}
+
+a:hover {
+    font-family:      Verdana, Arial, Helvetica, sans-serif;
+    font-size:        12px;
+    text-decoration:  underline;
+    color:            #8897AE;
+}
+
+.titlecaption {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: oblique;
+	font-weight: bolder;
+
+}
+
+.tableheader {
+	font-size: 22px;
+	text-transform: uppercase;
+	height: 25px;
+	background-position: left top;
+	margin: 0 0 20px 0;
+}
+
+.tabledashboardheader {
+	font:normal 13px arial,sans-serif;
+	font-size: 12px;
+	color:               #333333;
+	background-color:    #67b82c;
+	font-weight: bold;
+	text-transform: uppercase;
+	height: 25px;
+}
+
+.tablesmallheader {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	height: 18px;
+}
+
+.tablecontent {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: lighter;
+	height: 18px;
+	background-color:#CCCCCC;
+}
+
+.tablecontent-medium {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	font-weight: lighter;
+	background-color:    #C0F79B;
+	height: 18px;
+}
+
+.tablecontent-gede {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 23px;
+	font-weight: lighter;
+	background-color:    #B5F689;
+	height: 18px;
+}
+
+.tablecontent-odd {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: lighter;
+	height: 18px;
+	background-color:#EEEEEE;
+}
+
+.tablecontent-odd-medium {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	font-weight: lighter;
+	height: 18px;
+}
+
+.tablecontent-odd-gede {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 23px;
+	font-weight: lighter;
+	height: 18px;
+}
+
+.content {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	background-color:    #D8F6B2;
+	height: 18px;
+}
+
+.content-odd {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	background-color:    #D8F6B2;
+	height: 18px;
+}
+
+.subheader {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	height: 18;
+	text-transform: capitalize;
+	background-color:#828282;
+	color:#FFFFFF;
+}
+
+.subheader-height {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color:               #000000;
+	background-color:    #98E963;
+	background-image:     url(gambar/tbl_subheader_height.png);
+	background-repeat:	repeat-x;
+	font-weight: bolder;
+	height: 27;
+	text-transform: capitalize;
+}
+
+.subheader-print {
+    font-family:        Verdana, Arial, Helvetica, sans-serif;
+    font-size:          12px;
+    color:              #000000;
+    font-weight:        bolder;
+    height:             18;
+}
+
+.staycontent {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: lighter;
+}
+
+.button, submit, reset {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	border : 1px solid #666666;
+	font-style: normal;
+	background-color: #EEF0F4;
+	color: #000000;
+}
+
+select, option {
+	font-family:	Verdana, Arial, Helvetica, sans-serif;
+	font-size:		12px;
+	text-indent:	2px;
+	margin: 2px;
+	left: 0px;
+	clip:  rect(auto auto auto auto);
+	border-top: 0px;
+	border-right: 0px;
+	border-bottom: 0px;
+	border-left: 0px;
+}
+
+input, textarea {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	border: 1px solid #c2c6d3;
+	text-indent:	2px;
+	margin: 2px;
+	left: 0px;
+	width: auto;
+	vertical-align: middle;
+}
+
+input.txtcurrency {
+    text-align: right;
+    padding-right:5px;
+}
+
+input:focus, textarea:focus, select:focus, option:focus  {
+	border: 1px solid #000000;
+	background-color:    #F3F2F2;
+}
+
+
+.subtitlecaption {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: 500;
+}
+
+.inputcontent {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: lighter;
+	background : #E6EDFB url(../none);
+	border: none;
+	text-align: right;
+}
+
+.hlink {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+.navActive {
+	color:  #cc0000;
+}
+
+fieldset {
+	border: thin solid #67b82c;
+}
+
+.whiteborder {
+	border: none;
+	margin: 0px 0px;
+	padding: 0px 0px;
+	border-collapse : collapse;
+}
+
+.adaborder {
+	border-left: none;
+	border-top: none;
+	border-bottom: none;
+	border-right: solid #999999 1px;
+	margin: 0px 0px;
+	padding: 0px 0px;
+	border-collapse : separate;
+}
+
+.divcontent {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: lighter;
+	background-color:    #E7E6FF;
+	border-bottom: solid #999999 1px;
+	border-right: solid #999999 1px;
+}
+
+.curedit {
+	text-align: right;
+}
+
+.tabaktif {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color:               #E60000;
+	background-color:    #c2c6d3;
+	background-image:     url(gambar/tbl_subheadertab.png);
+	background-repeat:	repeat-x;
+	font-weight: bolder;
+	height: 18;
+	text-transform: capitalize;
+}
+
+.tabpasif {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color:               #000000;
+	background-color:    #c2c6d3;
+	background-image:     url(gambar/tbl_subheader2.png);
+	background-repeat:	repeat-x;
+	font-weight: bolder;
+	height: 18;
+	text-transform: capitalize;
+}
+
+#printMessage {
+    display: none;
+}
+
+
+
+
+#modalContainer {
+	background-color:transparent;
+	position:absolute;
+	width:100%;
+	height:100%;
+	top:0px;
+	left:0px;
+	z-index:10000;
+	background-image:url(gambar/transparent.gif); /* required by MSIE to prevent actions on lower z-index elements */
+}
+
+#alertBox {
+	position:relative;
+	width:300px;
+	min-height:50px;
+	margin-top:50px;
+	border:2px solid #000;
+	background-color:#DEF0FE;
+	background-image:url(gambar/alert.png);
+	background-repeat:no-repeat;
+	background-position:20px 30px;
+}
+
+#alertBox2 {
+	position:relative;
+	display:block;
+}
+
+#modalContainer > #alertBox {
+	position:fixed;
+}
+
+#alertBox h1 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color:               #000000;
+	background-color:    #c2c6d3;
+	background-image:     url(gambar/tbl_subheader.png);
+	background-repeat:	repeat-x;
+	font-weight: bolder;
+	height: 18;
+}
+
+#alertBox p {
+	display:block;
+	font:12px verdana,arial;
+	min-height:20px;
+	padding-left:5px;
+	margin-left:55px;
+}
+
+/* unrelated styles */
+
+#mContainer {
+	position:relative;
+	width:600px;
+	margin:auto;
+	padding:5px;
+	border-top:2px solid #000;
+	border-bottom:2px solid #000;
+	font:0.7em verdana,arial;
+}
+
+h1,h2 {
+	margin:0;
+	padding:4px;
+	font:bold 1.5em verdana;
+	border-bottom:1px solid #000;
+}
+
+code {
+	font-size:1.2em;
+	color:#069;
+}
+
+#credits {
+	position:relative;
+	margin:25px auto 0px auto;
+	width:350px; 
+	font:0.7em verdana;
+	border-top:1px solid #000;
+	border-bottom:1px solid #000;
+	height:90px;
+	padding-top:4px;
+}
+
+#credits img {
+	float:left;
+	margin:5px 12px 5px 0px;
+	border:1px solid #000000;
+	width:80px;
+	height:79px;
+}
+
+.important {
+	background-color:#F5FCC8;
+	padding:2px;
+}
+
+code span {
+	color:green;
+}
+
+
+.dashtrim {
+    margin: .3em;
+    float: left;
+    background-color: #505385;
+    padding: 1px;
+}
+
+.dashcontent {
+    padding: 5px;
+}
+
+.dasharea {
+    background-color: #ffffff;
+    border: none 1px #aaaaaa;
+    padding: 1px;
+}
+
+.retro table tr td{
+border:1px solid black;
+}
+
+.akustik table tr td{
+border:1px solid white;
+}

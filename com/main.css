@@ -1,0 +1,241 @@
+/* CSS Document */
+html{
+margin:0;
+padding:0;
+height:100%;
+width:100%;
+}
+
+body{
+margin:10px 0 0 0;
+padding:0;
+height:100%;
+width:100%;
+font-family:Verdana;
+font-size:12px;
+}
+
+.header{
+height:88px;
+padding:0px;
+margin:auto;
+position:static;
+border:#00FF00 1px solid;
+width:800px;
+}
+
+.header .a img {
+padding:10px 0 0 20px;
+float:left
+}
+
+.header .b img{
+float:right;
+}
+
+.subheader{
+margin:auto;
+padding:0;
+width:800px;
+height:210px;
+border:#00FF00 1px solid;
+}
+
+.isi{
+width:800px;
+margin:auto;
+padding:0;
+height:300px;
+}
+
+.isi .kiri {
+width:480px;
+height:auto;
+text-align:justify;
+margin:10px 0 5px 0;
+padding:5px 5px 5px 5px;
+float:left;
+border:ridge 1px #999999;
+}
+
+.isi .kiri h3{
+padding: 0px 0 0 0px;
+margin:0px 0 30px 0px;
+color:#FFFFFF;
+background-color:#006600;
+}
+
+.isi .kiri .judul{
+font-size:16px;
+color:#00CC00;
+margin:10px 5px 5px 5px;
+padding:0;
+text-align:left;
+}
+
+.isi .kiri .normal{
+padding:0;
+margin:2px 3px 0 0px;
+text-align:justify;
+}
+
+.isi .kiri .normal img{
+padding:0;
+margin-right:5px;
+width:175px;
+height:118px;
+border-style:none;
+float:left;
+}
+
+.isi .kiri ul{
+list-style:square;
+}
+
+.isi .kiri ul li{
+font-size:14px;
+border-bottom:solid 1px #D9E7EA;
+margin:1px 5px 0 5px;
+padding:0;
+}
+
+.isi .kiri .slider{
+float:left;
+padding:0;
+margin:0;
+}
+
+.isi .kiri .slider img{
+width:147px;
+height:135px;
+padding:0;
+margin:10px 0 0 5px;
+}
+
+.isi .kanan {
+float:right;
+margin:10px 0 0px 0;
+padding:20px 0 20px 30px;
+width:270px;
+border:ridge 1px #999999;
+}
+
+.isi .kanan .submit{
+background-image:url(login.png);
+width:131px;
+height:29px;
+}
+
+.isi .kanan2 {
+float:right;
+margin:10px 0 0px 0;
+padding:40px 0 0px 30px;
+width:270px;
+height:220px;
+border:ridge 1px #999999;
+}
+
+.isi .kanan .input{
+background-color:#FFFFCC;
+border:solid #FFFFCC 1px;
+}
+
+.isi .kanan .input:hover{
+background-color:#FFFFCC;
+border:solid #66CC00 1px;
+}
+
+.isi .footer{
+padding:0;
+margin:5px auto 10px auto;
+width:800px;
+height:150px;
+border:1px #CCCCCC solid;
+float:right;
+font-size:16px;
+}
+
+.isi .footer table{
+margin:10px auto 10px auto;
+padding:0;
+}
+
+.isi .footer table .dancing{
+vertical-align:top;
+margin:1px 0 10px 0;
+padding:0;
+text-align:center;
+color:#00CC00;
+font-family:Verdana, Arial, Helvetica, sans-serif;
+}
+
+.isi .footer ul{
+list-style:square;
+}
+
+.isi .super{
+width:800px;
+height:100px;
+margin:auto;
+padding:0;
+float:left;
+}
+
+.isi .super img{
+margin:0 0 0 400px;
+padding:0;
+width:100px;
+height:55px;
+border-style:none;
+}
+/* Slide */
+.menutengahSlide{
+float:left;
+width:430px;
+height:150px;
+margin:50px 0px 0 40px ;
+padding:0;
+border:#CCCCCC 1px solid;
+}
+
+.menutengahSlide h3{
+margin:0;
+padding:0;
+text-align:center;
+color:#FF0000;
+}
+
+.menutengahSlide .img {
+margin:0px 0px 0 0;
+padding:0;
+float:left;
+}
+
+.menutengahSlide .img a img{
+width:128px;
+height:128px;
+border-style:none;
+float:left;
+}
+
+.menutengahSlide .prev a{
+color:#000000;
+text-decoration:none;
+padding:0;
+margin:60px 0px 10px 0px;
+float:left;
+}
+
+.menutengahSlide .next a{
+color:#000000;
+text-decoration:none;
+padding:0px 0 0px 0;
+margin:60px 0px 0 0px;
+float:right;
+}
+
+.menutengahSlide .text {
+padding:0;
+margin:50px 20px 0 0;
+float:right;
+}

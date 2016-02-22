@@ -1,0 +1,269 @@
+/* CSS Document */
+body 
+{
+   	font-family: Verdana, Arial, Helvetica, sans-serif;
+   	font-size: 11px;
+   	background-color:#F8FBE1;
+	vertical-align:top;
+	margin:0px;
+}
+
+.bodytop
+{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+   	font-size: 11px;
+	
+	margin:0px;
+	background-color:#EFF7C1;
+}
+
+.bodysubmenu
+{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+   	font-size: 11px;
+	margin:0px;
+	background-color:#EFF7C1;
+}
+
+a:link { color: #0F2F13; font-weight:normal; text-decoration:none;}
+a:visited { color: #0F2F13; font-weight:normal; text-decoration:none;}
+a:active { color: #0F2F13; font-weight:normal; text-decoration:none;}
+a:hover { color: #0F2F13; font-weight:normal; text-decoration:underline;}
+
+.sub_menu_header
+{
+	font-size:11px;
+	color:#0F2F13;
+	padding:2;
+	font-weight:bold;
+	background-color:#9CB516;
+	height:18px;
+	background-image:url(images/header_sub_menu.gif);
+	background-repeat:repeat-x;
+}
+
+.sub_menu_tree
+{
+	font-size:11px;
+	color:#0F2F13;
+	padding:1;
+	background-color:#DCE89B;
+	padding-left:4;
+	height:20px;
+	background-image:url(images/submenu.gif);
+}
+
+.sub_header {
+	text-align: center;
+	font-size:11px;
+	color:#0F2F13;
+	font-weight:bold;
+	padding:1;
+	background-color:#9CB516;
+	height:18px;
+	background-image:url(images/header_sub_menu.gif);
+	background-repeat:repeat-x;
+}
+
+.tblForm
+{
+     border-collapse:collapse;
+     border: 1px solid #000000;
+}
+
+
+.tblHeader
+{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	height:auto;
+	font-weight: bold;
+	text-align:center;
+	border: 1px solid #000000;
+}
+.tblMainCol
+{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+   	font-size: 13px;
+	font-weight:bold;
+     border: 1px solid #000000;
+}
+.tblCol
+{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+   	font-size: 13px;
+     border: 1px solid #000000;
+}
+
+.tblCol-odd
+{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+   	font-size: 13px;
+     border: 1px solid #000000;
+}
+
+.tblHeader-courier
+{
+	font-family: Courier;
+	font-size: 13px;
+	height:auto;
+	font-weight: bold;
+	text-align:center;
+	border: 1px solid #000000;
+}
+
+.tblMainCol-courier
+{
+	font-family: Courier;
+   	font-size: 14px;
+	font-weight:bold;
+     border: 1px solid #000000;
+}
+
+.tblCol-courier
+{
+	font-family: Courier;
+   	font-size: 14px;
+     border: 1px solid #000000;
+}
+.tblCol-odd-courier
+{
+	font-family: Courier;
+   	font-size: 14px;
+     border: 1px solid #000000;
+}
+
+.tblMainCol-courier-kecil
+{
+	font-family: Courier;
+   	font-size: 12px;
+	font-weight:bold;
+     border: 1px solid #000000;
+}
+
+.tblCol-courier-kecil
+{
+	font-family: Courier;
+   	font-size: 12px;
+     border: 1px solid #000000;
+}
+.tblCol-odd-courier-kecil
+{
+	font-family: Courier;
+   	font-size: 12px;
+     border: 1px solid #000000;
+}
+
+
+
+.inputField
+{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #0F2F13;
+	border: 1px solid #1A5321;
+	background-color: #EBF4A8;
+}
+.PageHeader
+{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+   	font-size: 12px;
+	font-weight: bold;
+	padding:2px;
+}
+.tblSearch
+{
+	font-size: 12px;
+	font-weight: bold;
+}
+
+
+.logonLabel {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: #EBF4A8;
+	font-size:12px;
+}
+.inputField {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	border: 1px solid #1A5321;
+}
+
+.tblHeaderLeftAlign {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #FFFFFF;
+	height:auto;
+	background-image:url(images/tblHeader.jpg);
+	background-repeat:repeat-x;
+	font-weight: bold;
+}
+
+.bottom_submenu {
+	height:24px;
+	background-image:url(images/bottom_submenu.gif);
+}
+
+.bataskiri {
+	background-image:url(images/bataskiri.gif);
+	background-repeat:repeat-y;
+}
+
+.headmain {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 20px;
+	color: #0F2F13;
+	height:inherit;
+}
+
+.headerbg {
+	background-image:url(images/header_bg.gif);
+	background-repeat:repeat-x;
+}
+
+#div_cetak{ display: block; }
+#tblSearching{ display: none; }
+#div_pejabat{ display: none; }
+#tblSearching{ display: none; }
+
+.tblPejabat{
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 12px;
+}
+
+.tblPejabat-courier{
+font-family: Courier;
+font-size: 12px;
+}
+
+#noborder.tblForm  {
+border-style: none;
+}
+
+#noborder.tblHeader {
+border-style: none;
+}
+
+#noborder.tblMainCol {
+border-style: none;
+}
+
+#noborder.tblCol {
+border-style: none;
+}
+
+#noborder.tblCol-odd {
+border-style: none;
+}
+
+#noborder.tblMainCol-courier-kecil {
+border-style: none;
+}
+
+#noborder.tblCol-courier-kecil {
+border-style: none;
+}
+
+#noborder.tblCol-odd-courier-kecil {
+border-style: none;
+}

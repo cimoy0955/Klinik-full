@@ -1,0 +1,172 @@
+<?php
+     require_once("penghubung.inc.php");
+     require_once($ROOT."lib/login.php");
+     require_once($ROOT."lib/encrypt.php");
+     require_once($ROOT."lib/datamodel.php");
+     require_once($ROOT."lib/currency.php");
+     require_once($ROOT."lib/dateLib.php");
+     require_once($APLICATION_ROOT."lib/tampilan.php");
+     
+      $view = new CView($_SERVER['PHP_SELF'],$_SERVER['QUERY_STRING']);
+     $dtaccess = new DataAccess();
+     $enc = new TextEncrypt();     
+     $auth = new CAuth();
+     $table = new InoTable("table","100%","left");
+ 
+     $editPage = "tindakan_edit.php";
+     $thisPage = "tindakan_view.php";
+
+     if(!$auth->IsAllowed("setup_tindakan_admin",PRIV_READ)){
+          die("access_denied");
+          exit(1);
+          
+     } elseif($auth->IsAllowed("setup_tindakan_admin",PRIV_READ)===1){
+          echo"<script>window.parent.document.location.href='".$ROOT."login.php?msg=Session Expired'</script>";
+          exit(1);
+     }
+
+     $sql = "select a.*, b.*, c.tindakan_rawatinap_split_nominal,c.id_split
+               from klinik.klinik_tindakan_rawatinap a
+               left join klinik.klinik_kamar_kategori b on b.kategori_id = a.id_kamar_kategori
+               left join klinik.klinik_tindakan_rawatinap_split c on c.id_tindakan_rawatinap = a.klinik_tindakan_rawatinap_id 
+               order by b.kategori_nama,a.klinik_tindakan_rawatinap_nama, id_split"; 
+     $rs = $dtaccess->Execute($sql);
+     $dataTable = $dtaccess->FetchAll($rs);
+     
+     $tot = -1;
+     for($i=0,$n=count($dataTable);$i<$n;$i++) {
+          if($dataTable[$i]["klinik_tindakan_rawatinap_id"]!=$dataTable[$i-1]["klinik_tindakan_rawatinap_id"]){
+               $tot++;
+               $data[$tot] = $dataTable[$i]["klinik_tindakan_rawatinap_id"];
+          }
+          $kode[$dataTable[$i]["klinik_tindakan_rawatinap_id"]] = $dataTable[$i]["klinik_tindakan_rawatinap_kode"]; 
+          $nama[$dataTable[$i]["klinik_tindakan_rawatinap_id"]] = $dataTable[$i]["klinik_tindakan_rawatinap_nama"]; 
+          $total[$dataTable[$i]["klinik_tindakan_rawatinap_id"]] = $dataTable[$i]["klinik_tindakan_rawatinap_total"]; 
+          $kelas[$dataTable[$i]["klinik_tindakan_rawatinap_id"]] = $dataTable[$i]["kategori_id"];
+          $kelasNama[$dataTable[$i]["klinik_tindakan_rawatinap_id"]] = $dataTable[$i]["kategori_nama"];
+          $biaya[$dataTable[$i]["klinik_tindakan_rawatinap_id"]][$dataTable[$i]["id_split"]] = $dataTable[$i]["tindakan_rawatinap_split_nominal"]; 
+     }
+     
+
+	$sql = "select * from klinik.klinik_split order by split_id";
+     $rs = $dtaccess->Execute($sql,DB_SCHEMA);
+     $dataSplit = $dtaccess->FetchAll($rs);   
+     
+     //*-- config table ---*//
+     $tableHeader = "&nbsp;Setup Tindakan Rawat Inap";
+     
+     $isAllowedDel = $auth->IsAllowed("setup_tindakan_admin",PRIV_DELETE);
+     $isAllowedUpdate = $auth->IsAllowed("setup_tindakan_admin",PRIV_UPDATE);
+     $isAllowedCreate = $auth->IsAllowed("setup_tindakan_admin",PRIV_CREATE);
+     
+     // --- construct new table ---- //
+     $counterHeader = 0;
+
+   
+     $tbHeader[0][$counterHeader][TABLE_ISI] = "Kode";
+     $tbHeader[0][$counterHeader][TABLE_WIDTH] = "7%";
+     $counterHeader++;
+   
+     $tbHeader[0][$counterHeader][TABLE_ISI] = "Nama";
+     $tbHeader[0][$counterHeader][TABLE_WIDTH] = "20%";
+     $counterHeader++;
+     
+     if($dataSplit)
+     $width = 69/count($dataSplit);
+     for($j=0,$m=count($dataSplit);$j<$m;$j++) {
+          
+          $tbHeader[0][$counterHeader][TABLE_ISI] = $dataSplit[$j]["split_nama"];
+          $tbHeader[0][$counterHeader][TABLE_WIDTH] = $width."%";
+          $counterHeader++;
+          
+     }
+          
+     $tbHeader[0][$counterHeader][TABLE_ISI] = "Total";
+     $tbHeader[0][$counterHeader][TABLE_WIDTH] = "15%";
+     $counterHeader++;
+     
+      if($isAllowedUpdate){
+          $tbHeader[0][$counterHeader][TABLE_ISI] = "Edit";
+          $tbHeader[0][$counterHeader][TABLE_WIDTH] = "3%";
+          $counterHeader++;
+     }
+     
+        if($isAllowedDel){
+          $tbHeader[0][$counterHeader][TABLE_ISI] = "Hapus";
+          $tbHeader[0][$counterHeader][TABLE_WIDTH] = "2%";
+          $counterHeader++;
+     }
+     
+    
+         
+     
+     for($i=0,$h=0,$counter=0,$n=$tot;$i<=$n;$i++,$h++,$counter=0){
+      
+    if($kelas[$data[$i]]!=$kelas[$data[$i-1]]){
+      $tbContent[$h][$counter][TABLE_ISI] = $kelasNama[$data[$i]];
+      $tbContent[$h][$counter][TABLE_ALIGN] = "left";
+      $tbContent[$h][$counter][TABLE_CLASS] = "tablesmallheader";
+      $tbContent[$h][$counter][TABLE_COLSPAN] = $counterHeader;
+      $counter=0;
+      $h++;
+  }
+       
+          $tbContent[$h][$counter][TABLE_ISI] = $kode[$data[$i]];
+          $tbContent[$h][$counter][TABLE_ALIGN] = "left";
+          $counter++;
+          
+          $tbContent[$h][$counter][TABLE_ISI] = $nama[$data[$i]];
+          $tbContent[$h][$counter][TABLE_ALIGN] = "left";
+          $counter++;
+          
+          for($j=0,$m=count($dataSplit);$j<$m;$j++) {
+               
+               $tbContent[$h][$counter][TABLE_ISI] = currency_format($biaya[$data[$i]][$dataSplit[$j]["split_id"]]);
+               $tbContent[$h][$counter][TABLE_ALIGN] = "right";
+               $counter++;
+          }
+               
+          $tbContent[$h][$counter][TABLE_ISI] = currency_format($total[$data[$i]]);
+          $tbContent[$h][$counter][TABLE_ALIGN] = "right";
+          $counter++;
+              
+          if($isAllowedUpdate) {
+               $tbContent[$h][$counter][TABLE_ISI] = '<a href="'.$editPage.'?id='.$enc->Encode($data[$i]).'"><img hspace="2" width="25" height="25" src="'.$APLICATION_ROOT.'gambar/b_edit.png" alt="Edit" title="Edit" border="0"></a>';               
+               $tbContent[$h][$counter][TABLE_ALIGN] = "center";
+               $counter++;
+          }
+          if($isAllowedDel) {
+               $tbContent[$h][$counter][TABLE_ISI] = '<a href="'.$editPage.'?id='.$enc->Encode($data[$i]).'&del=1"><img hspace="2" width="25" height="25" src="'.$APLICATION_ROOT.'gambar/b_drop.png" alt="Hapus" title="Hapus" border="0"></a>';               
+               $tbContent[$h][$counter][TABLE_ALIGN] = "center";
+               $counter++;
+          }
+         
+          
+     }
+     
+     $colspan = count($tbHeader[0]);
+
+    
+     
+     $tbBottom[0][0][TABLE_WIDTH] = "100%";
+     $tbBottom[0][0][TABLE_COLSPAN] = $colspan;
+?>
+
+<?php echo $view->RenderBody("expressa.css",false); ?>
+
+<table width="100%" border="1" cellpadding="0" cellspacing="0">
+     <tr class="tableheader">
+          <td><?php echo $tableHeader;?></td>
+     </tr>
+     <tr> 
+        <td colspan="<?php echo ($jumContent);?>"><div align="right">
+            <input type="button" name="btnAdd" value="&nbsp;" id="button" onClick="document.location.href='<?php echo $editPage;?>'">        
+        <div></td>
+    </tr>
+</table>
+
+<form name="frmView" method="POST" action="<?php echo $editPage; ?>">
+     <?php echo $table->RenderView($tbHeader,$tbContent,$tbBottom); ?>
+</form>
+
+<?php echo $view->RenderBodyEnd(); ?>

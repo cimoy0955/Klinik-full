@@ -1,0 +1,11 @@
+vendor/
+
+.DS_Store
+composer.phar
+composer.json
+composer.lock
+.idea
+tekkadan/
+library/config/db.cfg.php
+library/crack.cls.php
+library/host.cfg.php

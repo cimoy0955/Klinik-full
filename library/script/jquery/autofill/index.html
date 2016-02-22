@@ -1,0 +1,97 @@
+<html>
+ <head>
+  <title>JQuery Fancy Auto Complete</title>
+  <script type='text/javascript' src='js/jquery-1.3.2.min.js'></script>
+  <script type='text/javascript' src='js/jquery.autocomplete.js'></script>
+  <link rel="stylesheet" type="text/css" href="css/jquery.autocomplete.css" />
+  <link rel="stylesheet" type="text/css" href="css/custom_search.css" />
+  <script language="javascript">
+    $(function(){
+		/*	id inputan yang akan melakukan proses autocomplete adalah "suggest"
+			request data autocomplete menuju ke "search.php" */
+		$('#suggest').autocomplete('search.php', 
+			{
+				/*	parameter "parse" pada script ini sebenarnya adalah deklarasi ulang
+					dari event parse di library jquery-autocomplete.
+					fungsinya adalah untukmenghandle data yang diterima, karena data yang
+					diterima adalah Ajax maka penanganannya adalah sebagai berikut: */
+				parse: function(data){ 
+					var parsed = [];
+					for (var i=0; i < data.length; i++) {
+						parsed[i] = {
+							data: data[i],
+							value: data[i].nama // nama field yang dicari
+						};
+					}
+					return parsed;
+				},
+				/*	pada parameter formatItem, kita dapat mengcustom tampilan yang akan muncul ketika 
+					ada result dari hasil pencarian autocomplete, kalau formatItem ini tidak di deklarasikan
+					maka hanya akan muncul berupa daftar nama yang terkesan kaku */
+				formatItem: function(data,i,max){
+					var str = '<div class="search_content">';
+					/* 	tampilkan foto, apabila foto kosong, maka tampilkan default unknown image
+						berapapun lebar foto ini, tingginya disesuaikan menjadi 50px agar tidak menghabiskan tempat */
+					str += '<img src="'+(data.foto ? data.foto : 'foto/unknown.jpeg')+'" height="50" align="left" />';
+					
+					/*  variable "data" merupakan variable dengan tipe json atau array assosiatif javascript 1 dimensi 
+						oleh karena itu dalam mengambil setiap pada "data" hanya dengan "data.nama_property" */
+					str += '<u>'+data.nama+'</u><br />'+data.alamat+'<br />Telp: '+data.telepon;;
+					str += '</div>';
+					return str;
+				},
+				width: 270, // panjang tampilan pencarian autocomplete yang akan muncul di bawah textbox pencarian
+				dataType: 'json' // tipe data yang diterima oleh library ini disetup sebagai JSON
+			}
+		).result( // fungsi ini akan dipanggil setelah user memilih salah satu result pencarian autocomplete
+			function(event,data,formated){
+				/*  variable "data" merupakan variable dengan tipe json atau array assosiatif javascript 1 dimensi 
+					oleh karena itu dalam mengambil setiap pada "data" hanya dengan "data.nama_property" */
+				$('#pegawaiDetail').show(); // tampilan table detail yang di hide sebelumnya
+				$('#dataNIP').text(data.NIP); 
+				$('#dataNama').text(data.nama);
+				$('#dataAlamat').text(data.alamat);
+				$('#dataTelepon').text(data.telepon);
+				$('#dataUmur').text(data.umur);
+				// tampilkan foto pada element <img id="dataFoto">, apabila foto kosong, maka tampilkan default unknown image 
+				$('#dataFoto').attr('src',data.foto ? data.foto : 'foto/unknown.jpeg');
+			}
+		);
+	});
+  </script>
+ </head>
+<body>
+Cari Pegawai: <input type="text" id="suggest" /><br /><br />
+<table id="pegawaiDetail" style="display:none">
+	<tr>
+		<td colspan="4"><div class="detail_title">Detail Pegawai</div></td>
+	</tr>
+	<tr valign="top">
+		<td rowspan="5"><img src="" id="dataFoto" /></td>
+		<td>NIP</td>
+		<td>:</td>
+		<td id="dataNIP"></td>
+	</tr>
+	<tr>
+		<td>Nama</td>
+		<td>:</td>
+		<td id="dataNama"></td>
+	</tr>
+	<tr>
+		<td>Alamat</td>
+		<td>:</td>
+		<td id="dataAlamt"></td>
+	</tr>
+	<tr>
+		<td>Telepon</td>
+		<td>:</td>
+		<td id="dataTelepon"></td>
+	</tr>
+	<tr>
+		<td>Umur</td>
+		<td>:</td>
+		<td id="dataUmur"></td>
+	</tr>
+</table>
+</body>
+</html>

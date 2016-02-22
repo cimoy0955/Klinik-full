@@ -1,0 +1,358 @@
+8,Operations on eyelids,XXIV,,
+80,Incision of eyelid,XXV,,
+801,Incision of lid margin,III,,H-3-11
+802,Severing of blepharorrhaphy,III,,H-3-11
+809,Other incision of eyelid,III,,H-3-11
+81,Diagnostic procedures on eyelid,XXV,,
+811,Biopsy of eyelid,III,,H-3-11
+819,Other diagnostic procedures on eyelid,III,,H-3-11
+82,Excision or destruction of lesion or tissue of eyelid,XXV,,
+820,"Removal of lesion of eyelid, not otherwise specified",II,H-1-20,H-2-23
+821,Excision of chalazion,II,H-1-20,H-2-23
+822,Excision of other minor lesion of eyelid,II,H-1-20,H-2-23
+823,"Excision of major lesion of eyelid, partial-thickness",II,H-1-20,H-2-22
+824,"Excision of major lesion of eyelid, full-thickness",II,H-1-20,H-2-22
+825,Destruction of lesion of eyelid,II,H-1-20,H-2-23
+83,Repair of blepharoptosis and lid retraction,XXV,,
+831,Repair of blepharoptosis by frontalis muscle technique with suture,II,H-1-20,H-2-22
+832,Repair of blepharoptosis by frontalis muscle technique with fascial,II,H-1-20,H-2-22
+833,Repair of blepharoptosis by resection or advancement of levator musc,II,H-1-20,H-2-22
+834,Repair of blepharoptosis by other levator muscle techniques,II,H-1-20,H-2-22
+835,Repair of blepharoptosis by tarsal technique,II,H-1-20,H-2-22
+836,Repair of blepharoptosis by other techniques,II,H-1-20,H-2-22
+837,Reduction of overcorrection of ptosis,II,H-1-20,H-2-22
+838,Correction of lid retraction,II,H-1-20,H-2-22
+84,Repair of entropion or ectropion,XXV,,
+841,Repair of entropion or ectropion by thermocauterization,II,H-1-20,H-2-23
+842,Repair of entropion or ectropion by suture technique,II,H-1-20,H-2-22
+843,Repair of entropion or ectropion with wedge resection,II,H-1-20,H-2-22
+844,Repair of entropion or ectropion with lid reconstruction,II,H-1-20,H-2-22
+849,Other repair of entropion or ectropion,II,H-1-20,H-2-23
+85,Other adjustment of lid position,XXV,,
+851,Canthotomy,II,H-1-20,H-2-23
+852,Blepharorrhaphy,II,H-1-20,H-2-22
+859,Other adjustment of lid position,II,H-1-20,H-2-22
+86,Reconstruction of eyelid with flaps or grafts,XXV,,
+861,Reconstruction of eyelid with skin flap or graft,II,H-1-20,H-2-21
+862,Reconstruction of eyelid with mucous membrane flap or graft,II,H-1-20,H-2-21
+863,Reconstruction of eyelid with hair follicle graft,II,H-1-20,H-2-21
+864,Reconstruction of eyelid with tarsoconjunctival flap,II,H-1-20,H-2-21
+869,Other reconstruction of eyelid with flaps or grafts,II,H-1-20,H-2-21
+87,Other reconstruction of eyelid,XXV,,
+870,"Reconstruction of eyelid, not otherwise specified",II,H-1-20,H-2-21
+871,"Reconstruction of eyelid involving lid margin, partial- thickness",II,H-1-20,H-2-21
+872,"Other reconstruction of eyelid, partial-thickness",II,H-1-20,H-2-21
+873,"Reconstruction of eyelid involving lid margin, full-thickness",II,H-1-20,H-2-21
+874,"Other reconstruction of eyelid, full-thickness",II,H-1-20,H-2-21
+88,Other repair of eyelid,XXV,,
+881,Linear repair of laceration of eyelid or eyebrow,III,,H-3-11
+882,"Repair of laceration involving lid margin, partial-thickness",II,H-1-20,H-2-22
+883,"Other repair of laceration of eyelid, partial-thickness",II,H-1-20,H-2-22
+884,"Repair of laceration of eyelid involving lid margin, full-thickness",II,H-1-20,H-2-22
+885,"Other repair of laceration of eyelid, full-thickness",II,H-1-20,H-2-22
+886,Lower eyelid rhytidectomy,II,H-1-20,H-2-22
+887,Upper eyelid rhytidectomy,II,H-1-20,H-2-22
+889,Other eyelid repair,III,,H-3-11
+89,Other operations on eyelids,XXV,,
+891,Electrosurgical epilation of eyelid,II,H-1-20,H-2-23
+892,Cryosurgical epilation of eyelid,II,H-1-20,H-2-23
+893,Other epilation of eyelid,II,H-1-20,H-2-23
+899,Other operations on eyelids,II,H-1-20,H-2-23
+9,Operations on lacrimal system,XXIV,,
+90,Incision of lacrimal gland,II,H-1-20,H-2-23
+91,Diagnostic procedures on lacrimal system,XXV,,
+911,Biopsy of lacrimal gland,II,H-1-20,H-2-22
+912,Biopsy of lacrimal sac,II,H-1-20,H-2-23
+919,Other diagnostic procedures on lacrimal system,II,H-1-20,H-2-23
+92,Excision of lesion or tissue of lacrimal gland,XXV,,
+920,"Excision of lacrimal gland, not otherwise specified",II,H-1-20,H-2-22
+921,Excision of lesion of lacrimal gland,II,H-1-20,H-2-22
+922,Other partial dacryoadenectomy,II,H-1-20,H-2-22
+923,Total dacryoadenectomy,II,H-1-20,H-2-21
+93,Other operations on lacrimal gland,II,H-1-20,H-2-22
+94,Manipulation of lacrimal passage,XXV,,
+941,Probing of lacrimal punctum,II,H-1-20,H-2-23
+942,Probing of lacrimal canaliculi,II,H-1-20,H-2-23
+943,Probing of nasolacrimal duct,II,H-1-20,H-2-23
+944,Intubation of nasolacrimal duct,II,H-1-20,H-2-23
+949,Other manipulation of lacrimal passage,II,H-1-20,H-2-23
+95,Incision of lacrimal sac and passages,XXV,,
+951,Incision of lacrimal punctum,II,H-1-20,H-2-23
+952,Incision of lacrimal canaliculi,II,H-1-20,H-2-23
+953,Incision of lacrimal sac,II,H-1-20,H-2-23
+959,Other incision of lacrimal passages,II,H-1-20,H-2-22
+96,Excision of lacrimal sac and passage,II,H-1-20,H-2-22
+97,Repair of canaliculus and punctum,XXV,,
+971,Correction of everted punctum,II,H-1-20,H-2-23
+972,Other repair of punctum,II,H-1-20,H-2-23
+973,Repair of canaliculus,II,H-1-20,H-2-22
+98,Fistulization of lacrimal tract to nasal cavity,XXV,,
+981,Dacryocystorhinostomy (DCR),II,H-1-20,H-2-22
+982,Conjunctivocystorhinostomy,II,H-1-20,H-2-22
+983,Conjunctivorhinostomy with insertion of tube or stent,II,H-1-20,H-2-22
+99,Other operations on lacrimal system,XXV,,
+991,Obliteration of lacrimal punctum,II,H-1-20,H-2-22
+999,Other operations on lacrimal system,II,H-1-20,H-2-23
+10,Operations on conjunctiva,XXIV,,
+100,Removal of embedded foreign body from conjunctiva by incision,II,H-1-20,H-2-23
+101,Other incision of conjunctiva,II,H-1-20,H-2-23
+102,Diagnostic procedures on conjunctiva,XXV,,
+1021,Biopsy of conjunctiva,III,,H-3-11
+1029,Other diagnostic procedures on conjunctiva,III,,H-3-11
+103,Excision or destruction of lesion or tissue of conjunctiva,XXV,,
+1031,Excision of lesion or tissue of conjunctiva,II,H-1-20,H-2-23
+1032,Destruction of lesion of conjunctiva,II,H-1-20,H-2-23
+1033,Other destructive procedures on conjunctiva,II,H-1-20,H-2-23
+104,Conjunctivoplasty,XXV,,
+1041,Repair of symblepharon with free graft,II,H-1-20,H-2-22
+1042,Reconstruction of conjunctival cul-de-sac with free graft,II,H-1-20,H-2-22
+1043,Other reconstruction of conjunctival cul-de-sac,II,H-1-20,H-2-22
+1044,Other free graft to conjunctiva,II,H-1-20,H-2-22
+1049,Other conjunctivoplasty,II,H-1-20,H-2-22
+105,Lysis of adhesions of conjunctiva and eyelid,II,H-1-20,H-2-22
+106,Repair of laceration of conjunctiva,II,H-1-20,H-2-22
+109,Other operations on conjunctiva,XXV,,
+1091,Subconjunctival injection,III,,H-3-11
+1099,Other operations on conjunctiva,II,H-1-20,H-2-23
+11,Operations on cornea,XXIV,,
+110,Magnetic removal of embedded foreign body from cornea,II,H-1-20,H-2-23
+111,Incision of cornea,II,H-1-30,H-2-33
+112,Diagnostic procedures on cornea,XXV,,
+1121,Scraping of cornea for smear or culture,II,H-1-20,H-2-23
+1122,Biopsy of cornea,II,H-1-20,H-2-23
+1129,Other diagnostic procedures on cornea,II,H-1-20,H-2-23
+113,Excision of pterygium,XXV,,
+1131,Transposition of pterygium,II,H-1-20,H-2-22
+1132,Excision of pterygium with corneal graft,II,H-1-20,H-2-22
+1139,Other excision of pterygium,II,H-1-20,H-2-22
+114,Excision or destruction of tissue or other lesion of cornea,XXV,,
+1141,Mechanical removal of corneal epithelium,II,H-1-20,H-2-22
+1142,Thermocauterization of corneal lesion,II,H-1-20,H-2-23
+1143,Cryotherapy of corneal lesion,II,H-1-20,H-2-23
+1149,Other removal or destruction of corneal lesion,II,H-1-20,H-2-22
+115,Repair of cornea,XXV,,
+1151,Suture of corneal laceration,II,H-1-30,H-2-32
+1152,Repair of postoperative wound dehiscence of cornea,II,H-1-30,H-2-33
+1153,Repair of corneal laceration or wound with conjunctival flap,II,H-1-30,H-2-31
+1159,Other repair of cornea,II,H-1-30,H-2-33
+116,Corneal transplant,XXV,,
+1160,"Corneal transplant, not otherwise specified",II,H-1-30,H-2-31
+1161,Lamellar keratoplasty with autograft,II,H-1-30,H-2-31
+1162,Other lamellar keratoplasty,II,H-1-30,H-2-31
+1163,Penetrating keratoplasty with autograft,II,H-1-30,H-2-31
+1164,Other penetrating keratoplasty,II,H-1-30,H-2-31
+1169,Other corneal transplant,II,H-1-30,H-2-31
+117,Other reconstructive and refractive surgery on cornea,XXV,,
+1171,Keratomeleusis,II,H-1-30,H-2-32
+1172,Keratophakia,II,H-1-30,H-2-32
+1173,Keratoprosthesis,II,H-1-30,H-2-31
+1174,Thermokeratoplasty,II,H-1-30,H-2-32
+1175,Radial keratotomy,II,H-1-30,H-2-32
+1176,Epikeratophakia,II,H-1-30,H-2-32
+1179,Other reconstructive surgery on cornea,II,H-1-30,H-2-32
+119,Other operations on cornea,XXV,,
+1191,Tattooing of cornea,II,H-1-20,H-2-23
+1192,Removal of artificial implant from cornea,II,H-1-30,H-2-33
+1199,Other operations on cornea,II,H-1-30,H-2-32
+12,"Operations on iris, ciliary body, sclera, and anterior chamber",XXIV,,
+120,Removal of intraocular foreign body from anterior segment of eye,XXV,,
+1200,"Removal of intraocular foreign body from anterior segment of eye, no",II,H-1-30,H-2-32
+1201,Removal of intraocular foreign body from anterior segment of eye wit,II,H-1-30,H-2-33
+1202,Removal of intraocular foreign body from anterior segment of eye wit,II,H-1-30,H-2-33
+121,Iridotomy and simple iridectomy,XXV,,
+1211,Iridotomy with transfixion,II,H-1-30,H-2-32
+1212,Other iridotomy,II,H-1-30,H-2-33
+1213,Excision of prolapsed iris,II,H-1-30,H-2-32
+1214,Other iridectomy,II,H-1-30,H-2-32
+122,"Diagnostic procedures on iris, ciliary body, sclera, and anterior ch",XXV,,
+1221,Diagnostic aspiration of anterior chamber of eye,II,H-1-30,H-2-33
+1222,Biopsy of iris,II,H-1-30,H-2-33
+1229,"Other diagnostic procedures on iris, ciliary body, sclera, and anter",II,H-1-30,H-2-33
+123,Iridoplasty and coreoplasty,XXV,,
+1231,Lysis of goniosynechiae,II,H-1-30,H-2-32
+1232,Lysis of other anterior synechiae,II,H-1-30,H-2-32
+1233,Lysis of posterior synechiae,II,H-1-30,H-2-32
+1234,Lysis of corneovitreal adhesions,II,H-1-30,H-2-32
+1235,Coreoplasty,II,H-1-30,H-2-32
+1239,Other iridoplasty,II,H-1-30,H-2-32
+124,Excision or destruction of lesion of iris and ciliary body,XXV,,
+1240,"Removal of lesion of anterior segment of eye, not otherwise specifie",II,H-1-30,H-2-33
+1241,"Destruction of lesion of iris, nonexcisional",II,H-1-30,H-2-32
+1242,Excision of lesion of iris,II,H-1-30,H-2-32
+1243,"Destruction of lesion of ciliary body, nonexcisional",II,H-1-30,H-2-33
+1244,Excision of lesion of ciliary body,II,H-1-30,H-2-31
+125,Facilitation of intraocular circulation,XXV,,
+1251,Goniopuncture without goniotomy,II,H-1-30,H-2-33
+1252,Goniotomy without goniopuncture,II,H-1-30,H-2-33
+1253,Goniotomy with goniopuncture,II,H-1-30,H-2-33
+1254,Trabeculotomy ab externo,II,H-1-30,H-2-31
+1255,Cyclodialysis,II,H-1-30,H-2-32
+1259,Other facilitation of intraocular circulation,II,H-1-30,H-2-32
+126,Scleral fistulization,XXV,,
+1261,Trephination of sclera with iridectomy,II,H-1-30,H-2-32
+1262,Thermocauterization of sclera with iridectomy,II,H-1-30,H-2-31
+1263,Iridencleisis and iridotasis,II,H-1-30,H-2-31
+1264,Trabeculectomy ab externo,II,H-1-30,H-2-31
+1265,Other scleral fistulization with iridectomy,II,H-1-30,H-2-31
+1266,Postoperative revision of scleral fistulization procedure,II,H-1-30,H-2-32
+1269,Other scleral fistulizing procedure,II,H-1-30,H-2-32
+127,Other procedures for relief of elevated intraocular pressure,XXV,,
+1271,Cyclodiathermy,II,H-1-30,H-2-32
+1272,Cyclocryotherapy,II,H-1-30,H-2-32
+1273,Cyclophotocoagulation,II,H-1-30,H-2-32
+1274,"Diminution of ciliary body, not otherwise specified",II,H-1-30,H-2-32
+1279,Other glaucoma procedures,II,H-1-30,H-2-31
+128,Operations on sclera,XXV,,
+1281,Suture of laceration of sclera,II,H-1-30,H-2-33
+1282,Repair of scleral fistula,II,H-1-30,H-2-32
+1283,"Revision of operative wound of anterior segment, not elsewhere class",II,H-1-30,H-2-32
+1284,Excision or destruction of lesion of sclera,II,H-1-20,H-2-22
+1285,Repair of scleral staphyloma with graft,II,H-1-30,H-2-31
+1286,Other repair of scleral staphyloma,II,H-1-30,H-2-32
+1287,Scleral reinforcement with graft,II,H-1-20,H-2-22
+1288,Other scleral reinforcement,II,H-1-20,H-2-22
+1289,Other operations on sclera,II,H-1-20,H-2-22
+129,"Other operations on iris, ciliary body, and anterior chamber",XXV,,
+1291,Therapeutic evacuation of anterior chamber,II,H-1-30,H-2-32
+1292,Injection into anterior chamber,II,H-1-30,H-2-33
+1293,Removal or destruction of epithelial downgrowth from anterior chambe,II,H-1-30,H-2-32
+1297,Other operations on iris,II,H-1-30,H-2-33
+1298,Other operations on ciliary body,II,H-1-30,H-2-33
+1299,Other operations on anterior chamber,II,H-1-30,H-2-32
+13,Operations on lens,XXIV,,
+130,Removal of foreign body from lens,XXV,,
+1300,"Removal of foreign body from lens, not otherwise specified",II,H-1-30,H-2-33
+1301,Removal of foreign body from lens with use of magnet,II,H-1-30,H-2-33
+1302,Removal of foreign body from lens without use of magnet,II,H-1-30,H-2-33
+131,Intracapsular extraction of lens,XXV,,
+1311,Intracapsular extraction of lens by temporal inferior route,II,H-1-30,H-2-36
+1319,Other intracapsular extraction of lens,II,H-1-30,H-2-36
+132,Extracapsular extraction of lens by linear extraction technique,II,H-1-30,H-2-36
+133,Extracapsular extraction of lens by simple aspiration (and irrigatio,II,H-1-30,H-2-36
+134,Extracapsular extraction of lens by fragmentation and aspiration tec,XXV,,
+1341,Phacoemulsification and aspiration of cataract,II,H-1-30,H-2-36
+1342,Mechanical phacofragmentation and aspiration of cataract by posterio,II,H-1-30,H-2-36
+1343,Mechanical phacofragmentation and other aspiration of cataract,II,H-1-30,H-2-36
+135,Other extracapsular extraction of lens,XXV,,
+1351,Extracapsular extraction of lens by temporal inferior route,II,H-1-30,H-2-36
+1359,Other extracapsular extraction of lens,II,H-1-30,H-2-36
+136,Other cataract extraction,XXV,,
+1364,Discission of secondary membrane (after cataract),II,H-1-30,H-2-36
+1365,Excision of secondary membrane (after cataract),II,H-1-30,H-2-36
+1366,Mechanical fragmentation of secondary membrane (after cataract),II,H-1-30,H-2-33
+1369,Other cataract extraction,II,H-1-30,H-2-36
+137,Insertion of prosthetic lens (pseudophakos),XXV,,
+1370,"Insertion of pseudophakos, not otherwise specified",II,H-1-30,H-2-36
+1371,Insertion of intraocular lens prosthesis at time of cataract extract,II,H-1-30,H-2-36
+1372,Secondary insertion of intraocular lens prosthesis,II,H-1-30,H-2-36
+138,Removal of implanted lens,II,H-1-30,H-2-33
+139,Other operations on lens,II,H-1-30,H-2-33
+1390,"Operation on lens, Not Elsewhere Classified",XXVI,,
+1391,Implatation of intraocular telescope prosthesis,XXVI,,
+14,"Operations on retina, choroid, vitreous, and posterior chamber",XXIV,,
+140,Removal of foreign body from posterior segment of eye,XXV,,
+1400,"Removal of foreign body from posterior segment of eye, not otherwise",II,H-1-30,H-2-34
+1401,Removal of foreign body from posterior segment of eye with use of ma,II,H-1-30,H-2-34
+1402,Removal of foreign body from posterior segment of eye without use of,II,H-1-30,H-2-34
+141,"Diagnostic procedures on retina, choroid, vitreous, and posterior ch",XXV,,
+1411,Diagnostic aspiration of vitreous,III,,H-3-12
+1419,"Other diagnostic procedures on retina, choroid, vitreous, and poster",III,,H-3-12
+142,Destruction of lesion of retina and choroid,XXV,,
+1421,Destruction of chorioretinal lesion by diathermy,II,H-1-30,H-2-35
+1422,Destruction of chorioretinal lesion by cryotherapy,II,H-1-30,H-2-35
+1423,Destruction of chorioretinal lesion by xenon arc photocoagulation,III,,H-3-10
+1424,Destruction of chorioretinal lesion by laser photocoagulation,III,,H-3-10
+1425,Destruction of chorioretinal lesion by photocoagulation of unspecifi,III,,H-3-10
+1426,Destruction of chorioretinal lesion by radiation therapy,II,H-1-30,H-2-35
+1427,Destruction of chorioretinal lesion by implantation of radiation sou,II,H-1-30,H-2-34
+1429,Other destruction of chorioretinal lesion,II,H-1-30,H-2-35
+143,Repair of retinal tear,XXV,,
+1431,Repair of retinal tear by diathermy,II,H-1-30,H-2-34
+1432,Repair of retinal tear by cryotherapy,II,H-1-30,H-2-37
+1433,Repair of retinal tear by xenon arc photocoagulation,II,H-1-30,H-2-37
+1434,Repair of retinal tear by laser photocoagulation,II,H-1-30,H-2-37
+1435,Repair of retinal tear by photocoagulation of unspecified type,II,H-1-30,H-2-37
+1439,Other repair of retinal tear,II,H-1-30,H-2-37
+144,Repair of retinal detachment with scleral buckling and implant,XXV,,
+1441,Scleral buckling with implant,II,H-1-30,H-2-34
+1449,Other scleral buckling,II,H-1-30,H-2-34
+145,Other repair of retinal detachment,XXV,,
+1451,Repair of retinal detachment with diathermy,II,H-1-30,H-2-37
+1452,Repair of retinal detachment with cryotherapy,II,H-1-30,H-2-37
+1453,Repair of retinal detachment with xenon arc photocoagulation,II,H-1-30,H-2-37
+1454,Repair of retinal detachment with laser photocoagulation,II,H-1-30,H-2-37
+1455,Repair of retinal detachment with photocoagulation of unspecified ty,II,H-1-30,H-2-37
+1459,Other repair of retinal detachment,II,H-1-30,H-2-37
+146,Removal of surgically implanted material from posterior segment of eye,II,H-1-20,H-2-22
+147,Operations on vitreous,XXV,,
+1471,"Removal of vitreous, anterior approach",II,H-1-30,H-2-35
+1472,Other removal of vitreous,II,H-1-30,H-2-35
+1473,Mechanical vitrectomy by anterior approach,II,H-1-30,H-2-35
+1474,Other mechanical vitrectomy,II,H-1-30,H-2-35
+1475,Injection of vitreous substitute,II,H-1-30,H-2-35
+1479,Other operations on vitreous,II,H-1-30,H-2-35
+149,"Other operations on retina, choroid, and posterior chamber",II,H-1-30,H-2-35
+15,Operations on extraocular muscles,XXIV,,
+150,Diagnostic procedures on extraocular muscles or tendons,XXV,,
+1501,Biopsy of extraocular muscle or tendon,II,H-1-20,H-2-21
+1509,Other diagnostic procedures on extraocular muscles and tendons,II,H-1-20,H-2-21
+151,Operations on one extraocular muscle involving temporary detachment,XXV,,
+1511,Recession of one extraocular muscle,II,H-1-20,H-2-21
+1512,Advancement of one extraocular muscle,II,H-1-20,H-2-21
+1513,Resection of one extraocular muscle,II,H-1-20,H-2-21
+1519,Other operations on one extraocular muscle involving temporary detac,II,H-1-20,H-2-21
+152,Other operations on one extraocular muscle,XXV,,
+1521,Lengthening procedure on one extraocular muscle,II,H-1-20,H-2-21
+1522,Shortening procedure on one extraocular muscle,II,H-1-20,H-2-21
+1529,Other operations on one extraocular muscle,II,H-1-20,H-2-21
+153,Operations on two or more extraocular muscles involving temporary de,II,H-1-20,H-2-21
+154,"Other operations on two or more extraocular muscles, one or both eye",II,H-1-20,H-2-21
+155,Transposition of extraocular muscles,II,H-1-20,H-2-21
+156,Revision of extraocular muscle surgery,II,H-1-20,H-2-21
+157,Repair of injury of extraocular muscle,II,H-1-20,H-2-21
+159,Other operations on extraocular muscles and tendons,II,H-1-20,H-2-21
+16,Operations on orbit and eyeball,XXIV,,
+160,Orbitotomy,XXV,,
+1601,Orbitotomy with bone flap,II,H-1-20,H-2-21
+1602,Orbitotomy with insertion of orbital implant,II,H-1-20,H-2-21
+1609,Other orbitotomy,II,H-1-20,H-2-21
+161,"Removal of penetrating foreign body from eye, not otherwise specifie",II,H-1-30,H-2-35
+162,Diagnostic procedures on orbit and eyeball,XXV,,
+1621,Ophthalmoscopy,III,,H-3-12
+1622,Diagnostic aspiration of orbit,III,,H-3-12
+1623,Biopsy of eyeball and orbit,II,H-1-30,H-2-35
+1629,Other diagnostic procedures on orbit and eyeball,II,H-1-30,H-2-35
+163,Evisceration of eyeball,XXV,,
+1631,Removal of ocular contents with synchronous implant into scleral she,II,H-1-20,H-2-22
+1639,Other evisceration of eyeball,II,H-1-20,H-2-22
+164,Enucleation of eyeball,XXV,,
+1641,Enucleation of eyeball with synchronous implant into tenon's capsule,II,H-1-20,H-2-22
+1642,Enucleation of eyeball with other synchronous implant,II,H-1-20,H-2-22
+1649,Other enucleation of eyeball,II,H-1-20,H-2-22
+165,Exenteration of orbital contents,XXV,,
+1651,Exenteration of orbit with removal of adjacent structures,II,H-1-20,H-2-21
+1652,Exenteration of orbit with therapeutic removal of orbital bone,II,H-1-20,H-2-21
+1659,Other exenteration of orbit,II,H-1-20,H-2-21
+166,Secondary procedures after removal of eyeball,XXV,,
+1661,Secondary insertion of ocular implant,II,H-1-20,H-2-22
+1662,Revision and reinsertion of ocular implant,II,H-1-20,H-2-22
+1663,Revision of enucleation socket with graft,II,H-1-20,H-2-22
+1664,Other revision of enucleation socket,II,H-1-20,H-2-22
+1665,Secondary graft to exenteration cavity,II,H-1-20,H-2-22
+1666,Other revision of exenteration cavity,II,H-1-20,H-2-21
+1669,Other secondary procedures after removal of eyeball,II,H-1-20,H-2-22
+167,Removal of ocular or orbital implant,XXV,,
+1671,Removal of ocular implant,II,H-1-20,H-2-22
+1672,Removal of orbital implant,II,H-1-20,H-2-22
+168,Repair of injury of eyeball and orbit,XXV,,
+1681,Repair of wound of orbit,II,H-1-20,H-2-22
+1682,Repair of rupture of eyeball,II,H-1-20,H-2-22
+1689,Other repair of injury of eyeball or orbit,II,H-1-20,H-2-22
+169,Other operations on orbit and eyeball,XXV,,
+1691,Retrobulbar injection of therapeutic agent,III,,H-3-11
+1692,Excision of lesion of orbit,II,H-1-20,H-2-22
+1693,"Excision of lesion of eye, unspecified structure",II,H-1-20,H-2-22
+1698,Other operations on orbit,II,H-1-20,H-2-22
+1699,Other operations on eyeball,II,H-1-20,H-2-22
+1160,Keratoplasty,III,H-1-30,H-2-23
+9512,Diagnostic and Imaging Procedure of Eye,III,H-2-36,H-2-24
