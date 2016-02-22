@@ -126,7 +126,7 @@ class TextEncrypt
 //user:sr280t3cwNLXyt3KaQ==
 //pass:sr280t3c3dHY1MDS18rdymk=
 //db:rbi3yNPP2MnWu83SxdjFZA==
-
+// echo base64_encode('83A2-7C83-9A44-BA94-532A');
 /*$enc = new TextEncrypt();
 $tes = $enc->Encode("n");
 echo $tes."<br>";

@@ -395,13 +395,13 @@
 			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/setup/obat/item_view.php";
 			$menu[$countMenu]["status"] = true;	
 			$countMenu++;
-			*/
+			
 			$menu[$countMenu]["head"] = "Dosis";
 			$menu[$countMenu]["priv"] = "setup_dosis";
 			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/setup/dosis/dosis_view.php";
 			$menu[$countMenu]["status"] = true;	
 			$countMenu++;
-			
+			*/
 //			$menu[$countMenu]["head"] = "Visus";
 //			$menu[$countMenu]["priv"] = "setup_visus";
 //			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/setup/visus/visus_view.php";
@@ -419,6 +419,12 @@
 			$menu[$countMenu]["head"] = "Setup Level ICU";
 			$menu[$countMenu]["priv"] = "setup_kamar";
 			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/setup/icu/icu_view.php";
+			$menu[$countMenu]["status"] = true;	
+			$countMenu++;
+			
+			$menu[$countMenu]["head"] = "Rujukan (?)";
+			$menu[$countMenu]["priv"] = "setup_kamar";
+			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/setup/rujukan/rujukan_view.php";
 			$menu[$countMenu]["status"] = true;	
 			$countMenu++;
 			
