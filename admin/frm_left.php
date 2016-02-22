@@ -422,9 +422,21 @@
 			$menu[$countMenu]["status"] = true;	
 			$countMenu++;
 			
-			$menu[$countMenu]["head"] = "Rujukan (?)";
-			$menu[$countMenu]["priv"] = "setup_kamar";
+			$menu[$countMenu]["head"] = "Jenis Rujukan";
+			$menu[$countMenu]["priv"] = "setup_biaya";
 			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/setup/rujukan/rujukan_view.php";
+			$menu[$countMenu]["status"] = true;	
+			$countMenu++;
+			
+			$menu[$countMenu]["head"] = "Rujukan Rumah Sakit";
+			$menu[$countMenu]["priv"] = "setup_biaya";
+			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/setup/rujukan/rujukan_rs_view.php";
+			$menu[$countMenu]["status"] = true;	
+			$countMenu++;
+			
+			$menu[$countMenu]["head"] = "Rujukan Dokter";
+			$menu[$countMenu]["priv"] = "setup_biaya";
+			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/setup/rujukan/rujukan_dokter_view.php";
 			$menu[$countMenu]["status"] = true;	
 			$countMenu++;
 			

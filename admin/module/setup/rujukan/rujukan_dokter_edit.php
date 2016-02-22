@@ -15,7 +15,8 @@
 	$auth = new CAuth();
      $err_code = 0;
 	
-     $thisPage = "registrasi_tambah_rujukan_dokter.php?";
+     $thisPage = "rujukan_dokter_edit.php?";
+     $backPage = "rujukan_dokter_view.php";
      
 	$plx = new InoLiveX("");
 	
@@ -106,11 +107,8 @@
                unset($dbField);   
 			}
 			
-			echo "<script>
-                         self.parent.update_rujukan_dokter();
-                         self.parent.tb_remove();
-                    </script>";
-               exit();        
+          header("location:rujukan_dokter_view.php");
+          exit();
         }
 			
      if ($_POST["btnDelete"]) {

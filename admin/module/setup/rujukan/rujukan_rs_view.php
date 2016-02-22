@@ -13,8 +13,8 @@
      $auth = new CAuth();
      $table = new InoTable("table","100%","left");
  
-     $editPage = "rujukan_edit.php";
-     $thisPage = "rujukan_view.php";
+     $editPage = "rujukan_rs_edit.php";
+     $thisPage = "rujukan_rs_view.php";
 
      if(!$auth->IsAllowed("setup_role",PRIV_READ)){
           die("access_denied");
@@ -25,13 +25,13 @@
           exit(1);
      }
 
-     $sql = "select a.* from global.global_rujukan a 
-               order by a.rujukan_nama ";
+     $sql = "select a.* from global.global_rujukan_rs a 
+               order by a.rujukan_rs_nama ";
      $rs = $dtaccess->Execute($sql,DB_SCHEMA_GLOBAL);
      $dataTable = $dtaccess->FetchAll($rs);
      
      //*-- config table ---*//
-     $tableHeader = "&nbsp;Setup Rujukan";
+     $tableHeader = "&nbsp;Setup Rujukan Rumah Sakit";
      
      $isAllowedDel = $auth->IsAllowed("setup_role",PRIV_DELETE);
      $isAllowedUpdate = $auth->IsAllowed("setup_role",PRIV_UPDATE);
@@ -59,24 +59,40 @@
      $tbHeader[0][$counterHeader][TABLE_WIDTH] = "30%";
      $counterHeader++; 
      
+     $tbHeader[0][$counterHeader][TABLE_ISI] = "Telp";
+     $tbHeader[0][$counterHeader][TABLE_WIDTH] = "15%";
+     $counterHeader++; 
+     
+     $tbHeader[0][$counterHeader][TABLE_ISI] = "Alamat";
+     $tbHeader[0][$counterHeader][TABLE_WIDTH] = "48%";
+     $counterHeader++; 
+     
      for($i=0,$counter=0,$n=count($dataTable);$i<$n;$i++,$counter=0){
           $tbContent[$i][$counter][TABLE_ISI] = $i+1;               
          $tbContent[$i][$counter][TABLE_ALIGN] = "center";
          $counter++;
                
           if($isAllowedDel) {
-               $tbContent[$i][$counter][TABLE_ISI] = ($dataTable[$i]["rujukan_id"]!='6') ? '<input type="checkbox" name="cbDelete[]" value="'.$dataTable[$i]["rujukan_id"].'">' : "&nbsp;";               
+               $tbContent[$i][$counter][TABLE_ISI] = '<input type="checkbox" name="cbDelete[]" value="'.$dataTable[$i]["rujukan_rs_id"].'">';               
                $tbContent[$i][$counter][TABLE_ALIGN] = "center";
                $counter++;
           }
           
           if($isAllowedUpdate) {
-               $tbContent[$i][$counter][TABLE_ISI] = ($dataTable[$i]["rujukan_id"]!='6') ? '<a href="'.$editPage.'?id='.$enc->Encode($dataTable[$i]["rujukan_id"]).'"><img hspace="2" width="16" height="16" src="'.$APLICATION_ROOT.'images/b_edit.png" alt="Edit" title="Edit" border="0"></a>' : "&nbsp;";               
+               $tbContent[$i][$counter][TABLE_ISI] = '<a href="'.$editPage.'?id='.$enc->Encode($dataTable[$i]["rujukan_rs_id"]).'"><img hspace="2" width="16" height="16" src="'.$APLICATION_ROOT.'images/b_edit.png" alt="Edit" title="Edit" border="0"></a>';               
                $tbContent[$i][$counter][TABLE_ALIGN] = "center";
                $counter++;
           }
           
-          $tbContent[$i][$counter][TABLE_ISI] = "&nbsp;&nbsp;".$dataTable[$i]["rujukan_nama"];
+          $tbContent[$i][$counter][TABLE_ISI] = "&nbsp;&nbsp;".$dataTable[$i]["rujukan_rs_nama"];
+          $tbContent[$i][$counter][TABLE_ALIGN] = "left";
+          $counter++; 
+
+          $tbContent[$i][$counter][TABLE_ISI] = "&nbsp;&nbsp;".$dataTable[$i]["rujukan_rs_telp"];
+          $tbContent[$i][$counter][TABLE_ALIGN] = "left";
+          $counter++; 
+
+          $tbContent[$i][$counter][TABLE_ISI] = "&nbsp;&nbsp;".$dataTable[$i]["rujukan_rs_alamat"];
           $tbContent[$i][$counter][TABLE_ALIGN] = "left";
           $counter++; 
      }

@@ -15,7 +15,8 @@
 	$auth = new CAuth();
      $err_code = 0;
 	
-     $thisPage = "registrasi_tambah_rujukan_dokter.php?";
+     $thisPage = "rujukan_rs_edit.php?";
+     $backPage = "rujukan_rs_view.php?";
      
 	$plx = new InoLiveX("");
 	
@@ -33,7 +34,7 @@
 	if($_POST["x_mode"]) $_x_mode = $_POST["x_mode"];
 	else $_x_mode = "New";
    
-	if($_POST["rujukan_dokter_id"])  $opPaketId = $_POST["rujukan_dokter_id"];
+	if($_POST["rujukan_rs_id"])  $opPaketId = $_POST["rujukan_rs_id"];
  
      if ($_GET["id"]) {
           if ($_POST["btnDelete"]) { 
@@ -43,16 +44,16 @@
                $opPaketId = $enc->Decode($_GET["id"]);
           }
          
-          $sql = "select a.* from global.global_rujukan_dokter a 
-				where rujukan_dokter_id = ".QuoteValue(DPE_CHAR,$opPaketId);
+          $sql = "select a.* from global.global_rujukan_rs a 
+				where rujukan_rs_id = ".QuoteValue(DPE_CHAR,$opPaketId);
           $rs_edit = $dtaccess->Execute($sql);
           $row_edit = $dtaccess->Fetch($rs_edit);
           $dtaccess->Clear($rs_edit);
           
-          $_POST["rujukan_dokter_nama"] = $row_edit["rujukan_dokter_nama"];
-          $_POST["rujukan_dokter_alamat"] = $row_edit["rujukan_dokter_alamat"];
-	  	$_POST["rujukan_dokter_telp"] = $row_edit["rujukan_dokter_telp"];
-	  	$_POST["rujukan_dokter_id"] = $row_edit["rujukan_dokter_id"];
+          $_POST["rujukan_rs_nama"] = $row_edit["rujukan_rs_nama"];
+          $_POST["rujukan_rs_alamat"] = $row_edit["rujukan_rs_alamat"];
+	  	$_POST["rujukan_rs_telp"] = $row_edit["rujukan_rs_telp"];
+	  	$_POST["rujukan_rs_id"] = $row_edit["rujukan_rs_id"];
 	  
 		
      }
@@ -63,31 +64,27 @@
 
      if ($_POST["btnSave"] || $_POST["btnUpdate"]) {          
           if($_POST["btnUpdate"]){
-               $rujukanRSId = & $_POST["rujukan_dokter_id"];
+               $rujukanRSId = & $_POST["rujukan_rs_id"];
                $_x_mode = "Edit";
           }
 	  
-	  if($_POST["rujukan_dokter_nama"]) $err_code = clearbit($err_code,1);
+	  if($_POST["rujukan_rs_nama"]) $err_code = clearbit($err_code,1);
 	  else $err_code = setbit($err_code,1);
 	  
           if ($err_code == 0) {
-               $dbTable = "global.global_rujukan_dokter";
+               $dbTable = "global.global_rujukan_rs";
                
-               $dbField[0] = "rujukan_dokter_id";   // PK
-               $dbField[1] = "rujukan_dokter_nama";
-               $dbField[2] = "rujukan_dokter_alamat";
-               $dbField[3] = "rujukan_dokter_telp";
-               $dbField[4] = "rujukan_dokter_kode_rekening_poin";
-               $dbField[5] = "rujukan_dokter_bank";
+               $dbField[0] = "rujukan_rs_id";   // PK
+               $dbField[1] = "rujukan_rs_nama";
+               $dbField[2] = "rujukan_rs_alamat";
+               $dbField[3] = "rujukan_rs_telp";
                
 			
-               if(!$rujukanRSId) $rujukanRSId = $dtaccess->GetNewId("global.global_rujukan_dokter","rujukan_dokter_id");   
+               if(!$rujukanRSId) $rujukanRSId = $dtaccess->GetNewId("global.global_rujukan_rs","rujukan_rs_id");   
                $dbValue[0] = QuoteValue(DPE_CHAR,$rujukanRSId);
-               $dbValue[1] = QuoteValue(DPE_CHAR,$_POST["rujukan_dokter_nama"]);  
-               $dbValue[2] = QuoteValue(DPE_CHAR,addslashes($_POST["rujukan_dokter_alamat"]));
-               $dbValue[3] = QuoteValue(DPE_CHAR,$_POST["rujukan_dokter_telp"]);
-               $dbValue[4] = QuoteValue(DPE_CHAR,$_POST["rujukan_dokter_kode_rekening_poin"]);
-               $dbValue[5] = QuoteValue(DPE_CHAR,$_POST["rujukan_dokter_bank"]);
+               $dbValue[1] = QuoteValue(DPE_CHAR,$_POST["rujukan_rs_nama"]);  
+               $dbValue[2] = QuoteValue(DPE_CHAR,addslashes($_POST["rujukan_rs_alamat"]));
+               $dbValue[3] = QuoteValue(DPE_CHAR,$_POST["rujukan_rs_telp"]);
 			
                $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
                $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey);
@@ -106,11 +103,8 @@
                unset($dbField);   
 			}
 			
-			echo "<script>
-                         self.parent.update_rujukan_dokter();
-                         self.parent.tb_remove();
-                    </script>";
-               exit();        
+			header("location:rujukan_rs_view.php");
+               exit();            
         }
 			
      if ($_POST["btnDelete"]) {
@@ -118,11 +112,11 @@
           
           for($i=0,$n=count($opPaketId);$i<$n;$i++){
                $sql = "delete from klinik.klinik_biaya 
-                         where rujukan_dokter_id = ".QuoteValue(DPE_CHAR,$opPaketId[$i]);
+                         where rujukan_rs_id = ".QuoteValue(DPE_CHAR,$opPaketId[$i]);
                $dtaccess->Execute($sql,DB_SCHEMA);
           }
           
-          header("location:rujukan_dokter_view.php");
+          header("location:rujukan_rs_view.php");
           exit();    
      } 
 
@@ -141,9 +135,9 @@
 
 function CheckDataSave(frm) {
      
-     if(!frm.rujukan_dokter_nama.value){
-		alert('Nama Dokter Harus Diisi');
-		frm.rujukan_dokter_nama.focus();
+     if(!frm.rujukan_rs_nama.value){
+		alert('Nama Instalasi Harus Diisi');
+		frm.rujukan_rs_nama.focus();
           return false;
 	}else{
           document.frmEdit.submit();     
@@ -167,35 +161,23 @@ function CheckDataSave(frm) {
      <legend><strong>Setup Asal Rujukan</strong></legend>
      <table width="100%" cellpadding="1" cellspacing="1">
      	<tr>
-               <td align="right" class="tablecontent" width="30%"><strong>Nama Dokter<?php if(readbit($err_code,1) || readbit($err_code,2)){?>&nbsp;<font color="red">(*)</font><?}?></strong>&nbsp;</td>
+               <td align="right" class="tablecontent" width="30%"><strong>Nama Instalasi<?php if(readbit($err_code,1) || readbit($err_code,2)){?>&nbsp;<font color="red">(*)</font><?}?></strong>&nbsp;</td>
                <td width="70%">
-                    <?php echo $view->RenderTextBox("rujukan_dokter_nama","rujukan_dokter_nama","50","255",$_POST["rujukan_dokter_nama"],"inputField", null,false);?>
+                    <?php echo $view->RenderTextBox("rujukan_rs_nama","rujukan_rs_nama","50","255",$_POST["rujukan_rs_nama"],"inputField", null,false);?>
                </td>
           </tr>
           <tr>
                <td align="right" class="tablecontent" width="30%"><strong>Alamat&nbsp;</td>
                <td width="70%">
-                    <?php echo $view->RenderTextArea("rujukan_dokter_alamat","rujukan_dokter_alamat","5","45",$_POST["rujukan_dokter_alamat"],"inputField", null,false);?>
+                    <?php echo $view->RenderTextArea("rujukan_rs_alamat","rujukan_rs_alamat","5","45",$_POST["rujukan_rs_alamat"],"inputField", null,false);?>
                </td>
           </tr>
 	  <tr>
 	       <td align="right" class="tablecontent" width="30%"><strong>Telp.</td>
 	       <td width="70%">
-		    <?php echo $view->RenderTextBox("rujukan_dokter_telp","rujukan_dokter_telp","50","255",$_POST["rujukan_dokter_telp"],"inputField", null,false);?>
+		    <?php echo $view->RenderTextBox("rujukan_rs_telp","rujukan_rs_telp","50","255",$_POST["rujukan_rs_telp"],"inputField", null,false);?>
 	       </td>
 	  </tr>
-       <tr>
-            <td align="right" class="tablecontent" width="30%"><strong>Nama Bank</td>
-            <td width="70%">
-              <?php echo $view->RenderTextBox("rujukan_dokter_bank","rujukan_dokter_bank","50","255",$_POST["rujukan_dokter_bank"],"inputField", null,false);?>
-            </td>
-       </tr>
-       <tr>
-            <td align="right" class="tablecontent" width="30%"><strong>Kode Rekening Poin</td>
-            <td width="70%">
-              <?php echo $view->RenderTextBox("rujukan_dokter_kode_rekening_poin","rujukan_dokter_kode_rekening_poin","50","255",$_POST["rujukan_dokter_kode_rekening_poin"],"inputField", null,false);?>
-            </td>
-       </tr>
           
           <tr>
                <td colspan="2" align="right">
@@ -209,10 +191,10 @@ function CheckDataSave(frm) {
 </tr>
 </table>
 
-<script>document.frmEdit.rujukan_dokter_nama.focus();</script>
+<script>document.frmEdit.rujukan_rs_nama.focus();</script>
 
 <? if (($_x_mode == "Edit") || ($_x_mode == "Delete")) { 
-echo $view->RenderHidden("rujukan_dokter_id","rujukan_dokter_id",$opPaketId);
+echo $view->RenderHidden("rujukan_rs_id","rujukan_rs_id",$opPaketId);
 } 
 
 echo $view->RenderHidden("x_mode","x_mode",$_x_mode);
@@ -224,7 +206,7 @@ echo $view->RenderHidden("x_mode","x_mode",$_x_mode);
 <? }?>
 <? if (readbit($err_code,1)) { ?>
 <br>
-<font color="green"><strong>Nama Dokter asal rujukan harus diisi</strong></font>
+<font color="green"><strong>Nama Instalasi asal rujukan harus diisi</strong></font>
 <? } ?>
 </span>
 <?php echo $view->RenderBodyEnd(); ?>
