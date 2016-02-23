@@ -16,7 +16,7 @@ if($_GET["user"]) $_POST["txtUser"] = $_GET["user"];
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<title>:: Balai Kesehatan Mata Masyarakat ::</title>
+<title>:: Rumah Sakit Mata Masyrakat ::</title>
 <link rel="stylesheet" type="text/css" href="com/main.css" />
 <script language="JavaScript" type="text/javascript" src="./library/script/elements.js"></script>
 <script type="text/javascript">
@@ -28,7 +28,7 @@ if($_GET["user"]) $_POST["txtUser"] = $_GET["user"];
 </script>
 </head>
 <BODY>
-<div class="header"><div class="a"><img src="com/logo.gif" width="330" height="67" /></div>
+<div class="header"><div class="a"><img src="com/RSMM-long-01.png" width="330" height="67" /></div>
 </div>
 
 <div class="subheader"><img src="com/hijau.png" /></div>
@@ -37,7 +37,7 @@ if($_GET["user"]) $_POST["txtUser"] = $_GET["user"];
 <!--  ISI  -->
 <div class="isi"> 
 <div class="kiri">
-<h3>Selamat Datang di Balai Kesehatan Mata Masyarakat </h3>
+<h3>Selamat Datang di Rumah Sakit Mata Masyarakat </h3>
 
 <p class="judul">Mata lebih berharga dari Permata</p>
 <p class="normal">
