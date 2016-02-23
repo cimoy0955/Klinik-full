@@ -473,6 +473,33 @@ where id_app = ".QuoteValue(DPE_NUMERIC,'5');
           unset($dbValue);
           unset($dbKey);     
 
+// insert ke tabel klinik_history_pasien
+          $dbSchema = "klinik";
+          $dbTable = "klinik_history_pasien";
+
+          $dbField[0] = "history_id";
+          $dbField[1] = "id_reg";
+          $dbField[2] = "history_status_pasien";
+          $dbField[3] = "history_when_out";
+
+          $history_id = $dtaccess->GetTransID();
+          $dbValue[0] = QuoteValue(DPE_CHAR,$history_id);
+          $dbValue[1] = QuoteValue(DPE_CHAR,$_POST["id_reg"]);
+          $dbValue[2] = QuoteValue(DPE_CHAR,STATUS_DIAGNOSTIK);
+          $dbValue[3] = QuoteValue(DPE_DATE,date("Y-m-d H:i:s"));
+
+          $dbKey[0] = 0;
+
+          $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey,$dbSchema);
+
+          $dtmodel->Insert() or die("insert error");
+
+          unset($dtmodel);
+          unset($dbField);
+          unset($dbValue);
+          unset($dbKey);
+          // end insert 
+          
 
           // --- insrt suster ---
           $sql = "delete from klinik.klinik_diagnostik_suster where id_diag = ".QuoteValue(DPE_CHAR,$_POST["diag_id"]);

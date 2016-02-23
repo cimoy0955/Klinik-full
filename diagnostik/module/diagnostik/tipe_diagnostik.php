@@ -176,7 +176,33 @@
 	
           if($_POST["btnSave"]) {
                
-               
+               // insert ke tabel klinik_history_pasien
+          $dbSchema = "klinik";
+          $dbTable = "klinik_history_pasien";
+
+          $dbField[0] = "history_id";
+          $dbField[1] = "id_reg";
+          $dbField[2] = "history_status_pasien";
+          $dbField[3] = "history_when_out";
+
+          $history_id = $dtaccess->GetTransID();
+          $dbValue[0] = QuoteValue(DPE_CHAR,$history_id);
+          $dbValue[1] = QuoteValue(DPE_CHAR,$_POST["id_reg"]);
+          $dbValue[2] = QuoteValue(DPE_CHAR,STATUS_DIAGNOSTIK_TIPE);
+          $dbValue[3] = QuoteValue(DPE_DATE,date("Y-m-d H:i:s"));
+
+          $dbKey[0] = 0;
+
+          $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey,$dbSchema);
+
+          $dtmodel->Insert() or die("insert error");
+
+          unset($dtmodel);
+          unset($dbField);
+          unset($dbValue);
+          unset($dbKey);
+          // end insert 
+          
                //Update ke Status sudah bayar di Diagnostik
                $sql = "update klinik.klinik_registrasi set reg_status = '".STATUS_DIAGNOSTIK.STATUS_ANTRI."', reg_waktu = CURRENT_TIME  where reg_id = ".QuoteValue(DPE_CHAR,$_POST["id_reg"]);
                $dtaccess->Execute($sql);
