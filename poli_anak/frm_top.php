@@ -115,6 +115,44 @@ function Logout()
     if(confirm('Are You Sure to LogOut?')) window.parent.document.location.href='logout.php';
     else return false;
 }
+
+function switchApp(eval) {
+     if(eval=='10'){
+          window.parent.document.location.href='../klinik/index.php';
+	}else if(eval=='11'){
+	   window.parent.document.location.href='../optik/index.php';
+	}else if(eval=='12'){
+	   window.parent.document.location.href='../logistik/index.php';
+	}else if(eval=='13'){
+	   window.parent.document.location.href='../admin/index.php';
+	}else if(eval=='14'){
+	   window.parent.document.location.href='../management/index.php';
+	}else if(eval=='15'){
+	   window.parent.document.location.href='../accounting/index.php';
+	}else if(eval=='16'){
+	   window.parent.document.location.href='../rawat_inap/index.php';
+	}else if(eval=='17'){
+	   window.parent.document.location.href='../laboratorium/index.php';
+	}else if(eval=='18'){
+	   window.parent.document.location.href='../apotik/index.php';
+	}else if(eval=='19'){
+	   window.parent.document.location.href='../ugd/index.php';
+	}else if(eval=='20'){
+	   window.parent.document.location.href='../apotik_swadaya/index.php';
+	}else if(eval=='21'){
+	   window.parent.document.location.href='../refraksi/index.php';   
+	}else if(eval=='22'){
+	   window.parent.document.location.href='../diagnostik/index.php'; 
+	}else if(eval=='23'){
+	   window.parent.document.location.href='../front_office/index.php';
+	}else if(eval=='24'){
+	   window.parent.document.location.href='../kasir/index.php';  
+	}else if(eval=='25'){
+	   window.parent.document.location.href='../dinas_luar/index.php';  
+	}else if(eval=='27'){
+	 window.parent.document.location.href='../poli_anak/index.php';
+	}
+}
 </script>
 
 
@@ -162,6 +200,13 @@ padding:0;
 <img src="com/images/bantuan.png" /><a >Bantuan</a>
 <img src="com/images/logout.png" /><a href="" onClick="javascript: return Logout();">LogOut</a>
 <img src="com/images/icon.png"/><a >Heal ExSys v.1.1 </a>
+<img src="com/images/bn.gif" /><?php echo $userData["loginname"];?>&nbsp;<?php if(strtolower($userData["loginname"]) == "petex") {?>
+<select class="input" name="cmbSystem" onKeyDown=" return tabOnEnter(this, event); " onChange="javascript: switchApp(this.value);">
+<?php for($i=0;$i<count($dataTable);$i++){?>
+ <option value="<?php echo $dataTable[$i]["app_id"];?>" onKeyDown="return tabOnEnter(this, event);" <?php echo ($dataTable[$i]["app_id"]=="27")?"selected":"";?>><?php echo $dataTable[$i]["app_nama"];?></option>
+<?php }?>
+</select>
+<?php }?>
 </div>
 
 <div id="tblMenu" style="position:relative;display:block">

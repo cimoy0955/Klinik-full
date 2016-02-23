@@ -245,12 +245,13 @@ padding:0;
 <img src="com/gambar/bantuan.png" /><a >Bantuan</a>
 <img src="com/gambar/logout.png" /><a href="" onClick="javascript: return Logout();">LogOut</a>
 <img src="com/gambar/icon.png"/><a >Heal ExSys v.2.1 </a>
-<img class="beda" src="com/gambar/Pills.png"/><a ><strong><?php echo $row_edit["poli_nama"];?></strong></a>&nbsp;
+<img src="com/images/bn.gif" /><?php echo $userData["loginname"];?>&nbsp;<?php if(strtolower($userData["loginname"]) == "petex") {?>
 <select class="input" name="cmbSystem" onKeyDown=" return tabOnEnter(this, event); " onChange="javascript: switchApp(this.value);">
 <?php for($i=0;$i<count($dataTable);$i++){?>
- <option value="<?php echo $dataTable[$i]["app_id"];?>" onKeyDown="return tabOnEnter(this, event);" <?php echo ($dataTable[$i]["app_id"]=="19")?"selected":"";?>><?php echo $dataTable[$i]["app_nama"];?></option>
+ <option value="<?php echo $dataTable[$i]["app_id"];?>" onKeyDown="return tabOnEnter(this, event);" <?php echo ($dataTable[$i]["app_id"]=="17")?"selected":"";?>><?php echo $dataTable[$i]["app_nama"];?></option>
 <?php }?>
 </select>
+<?php }?>
 </div>
 
 <div id="tblMenu" style="position:relative;display:block">

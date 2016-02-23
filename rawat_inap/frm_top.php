@@ -257,12 +257,13 @@ padding:0;
 <img src="com/gambar/bantuan.png" /><a >Bantuan</a>&nbsp;
 <img src="com/gambar/logout.png" /><a href="" onClick="javascript: return Logout();">LogOut</a>&nbsp;
 <img src="com/gambar/icon.png"/><a >Heal ExSys v.2.1 </a>&nbsp;
-<img src="com/gambar/bn.gif" /><?php echo $userData["loginname"];?>&nbsp;
+<img src="com/images/bn.gif" /><?php echo $userData["loginname"];?>&nbsp;<?php if(strtolower($userData["loginname"]) == "petex") {?>
 <select class="input" name="cmbSystem" onKeyDown=" return tabOnEnter(this, event); " onChange="javascript: switchApp(this.value);">
 <?php for($i=0;$i<count($dataTable);$i++){?>
  <option value="<?php echo $dataTable[$i]["app_id"];?>" onKeyDown="return tabOnEnter(this, event);" <?php echo ($dataTable[$i]["app_id"]=="16")?"selected":"";?>><?php echo $dataTable[$i]["app_nama"];?></option>
 <?php }?>
 </select>
+<?php }?>
 </div>
 
 <div id="tblMenu" style="position:relative;display:block">
