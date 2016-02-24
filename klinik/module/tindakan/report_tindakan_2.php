@@ -124,7 +124,7 @@
           $tbContent[$i][$counter][TABLE_ALIGN] = "left";          
           $counter++;
           
-          $tbContent[$i][$counter][TABLE_ISI] = $dataTable[$i]["op_jenis_nama"];
+          $tbContent[$i][$counter][TABLE_ISI] = $dataTable[$i]["op_jenis_nama"]; // ambil dari tabel klinik_operasi_jenis
           $tbContent[$i][$counter][TABLE_ALIGN] = "left";          
           $counter++;
           
