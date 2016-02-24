@@ -184,6 +184,12 @@
 	  else $err_code = setbit($err_code,13);
 	  */
 	  	
+	  if($_POST["id_rujukan_rs"] != '--') $err_code = clearbit($err_code,5);
+	  else $err_code = setbit($err_code,5);
+
+	  if($_POST["id_rujukan_rs"] != '--') $err_code = clearbit($err_code,6);
+	  else $err_code = setbit($err_code,6);
+
 		if ($_POST["btnSave"]) {
 
 			if ($_POST["cust_usr_noktp"]) {
@@ -196,7 +202,7 @@
 				$err_code = clearbit($err_code,14);
 			}
 			
-			if (!readbit($err_code,1) && !readbit($err_code,2) && !readbit($err_code,3)) {
+			if ($_POST["cust_usr_nama"] && $_POST["cust_usr_alamat"] && $_POST["cust_usr_tanggal_lahir"]) {
 				
 				$sql = "select cust_usr_kode 
 					from global.global_customer_user
@@ -985,6 +991,8 @@ function view_rujukan(eval) {
 		document.getElementById('detail_rujukan').style.display = "inline-block";
 	} else {
 		document.getElementById('detail_rujukan').style.display = "none";
+		document.getElementById('id_rujukan_rs').selectedIndex = "0";
+		document.getElementById('id_rujukan_dokter').selectedIndex = "0";
 	}
 }
 
@@ -1258,12 +1266,12 @@ function view_rujukan(eval) {
 			</span>
 			<!-- end update-->
 			<span id="detail_rujukan" style="display:none;">
-				&nbsp;&nbsp;Asal Rujukan:&nbsp;
+				&nbsp;&nbsp;Asal Rujukan:&nbsp;<?php if (readbit($err_code,5)) {?>&nbsp;<font color="red">(*)</font><?php } ?>
 				<?php echo $view->RenderComboBox("id_rujukan_rs","id_rujukan_rs",$optRujukanID,"myselect",null,null) ?>
 				&nbsp;<a href="<?php echo $findPage_rujukan;?>&TB_iframe=true&height=400&width=600&modal=true" class="thickbox" title="Tambah Asal Rujukan">
 					<img src="<?php echo($APLICATION_ROOT);?>images/b_insrow.png" border="0" width="12" height="14" style="cursor:pointer;margin-top: 4px;" title="Tambah Asal Rujukan" alt="Tambah Asal Rujukan" />
 				</a>
-				&nbsp;&nbsp;&nbsp;Dokter Penanggung Jawab Rujukan:&nbsp;<?php echo $view->RenderComboBox("id_rujukan_dokter","id_rujukan_dokter",$optRujukanDokterID,"myselect",null,null) ?>
+				&nbsp;&nbsp;&nbsp;Dokter Penanggung Jawab Rujukan:&nbsp;<?php if (readbit($err_code,6)) {?>&nbsp;<font color="red">(*)</font><?php } ?><?php echo $view->RenderComboBox("id_rujukan_dokter","id_rujukan_dokter",$optRujukanDokterID,"myselect",null,null) ?>
 				&nbsp;<a href="<?php echo $findPage_rujukan_dokter;?>&TB_iframe=true&height=400&width=600&modal=true" class="thickbox" title="Tambah Dokter Perujuk">
 					<img src="<?php echo($APLICATION_ROOT);?>images/b_insrow.png" border="0" width="12" height="14" style="cursor:pointer;margin-top: 4px;" title="Tambah Dokter Perujuk" alt="Tambah Dokter Perujuk" />
 				</a>
@@ -1317,6 +1325,14 @@ function view_rujukan(eval) {
 <? if (readbit($err_code,3)) { ?>
 <br>
 <font color="green"><strong>Alamat pasien harap diisi.</strong></font>
+<? } ?>
+<? if (readbit($err_code,5) && $_POST["id_rujukan_rs"] != "--") { ?>
+<br>
+<font color="green"><strong>Instalasi asal rujukan harap diisi.</strong></font>
+<? } ?>
+<? if (readbit($err_code,6) && $_POST["id_rujukan_dokter"] != "--") { ?>
+<br>
+<font color="green"><strong>Dokter perujuk harap diisi.</strong></font>
 <? } ?>
 <? if (readbit($err_code,11)) { ?>
 <br>
