@@ -202,7 +202,7 @@
 					from global.global_customer_user
 					where upper(cust_usr_nama) like ".QuoteValue(DPE_CHAR,"%".$_POST["cust_usr_nama"]."%"). 
 					" and cust_usr_tanggal_lahir = ".QuoteValue(DPE_CHAR,date_db($_POST["cust_usr_tanggal_lahir"]))." 
-					and upper(cust_usr_alamat) like ".QuoteValue(DPE_CHAR,"%".strtoupper($_POST["cust_usr_alamat"])."%");
+					and upper(cust_usr_alamat) like ".QuoteValue(DPE_CHAR,"%".strtoupper(trim($_POST["cust_usr_alamat"]))."%");
 				$rs_cekNama = $dtaccess->Execute($sql);
 				$data_cekNama = $dtaccess->Fetch($rs_cekNama);
 				if(!$data_cekNama) $err_code = clearbit($err_code,15);

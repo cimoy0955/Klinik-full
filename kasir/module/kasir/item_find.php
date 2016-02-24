@@ -26,6 +26,7 @@ function GetData($in_nama=null){
 	
 	
 	if($in_nama) $sql_where[] = "UPPER(biaya_nama) like '%".strtoupper($in_nama)."%'"; 
+	if($in_kode) $sql_where[] = "UPPER(biaya_nama) like '%".strtoupper($in_kode)."%'"; 
 	 
          $sql_where[] = "biaya_kode not like 'OP3%'";
 	 
@@ -118,8 +119,8 @@ function sendValue(nama,id,harga,kode,jenis) {
 	self.parent.tb_remove();
 }
 
-function Search(nama) {
-	GetData(nama,'target=dv_hasil');
+function Search(nama,kode) {
+	GetData(nama,kode,'target=dv_hasil');
 }
 
 </script>
@@ -139,8 +140,14 @@ function Search(nama) {
 				</td>
 			</tr>
 			<tr>
+				<td align="right" class="tablecontent">Kode biaya</td>
+				<td class="tablecontent">
+					<?php echo $view->RenderTextBox("_kode","_kode",50,200,$_POST["_kode"],false,false);?>
+				</td>
+			</tr>
+			<tr>
 				<td colspan="2" class="tablecontent"><center>
-					<input type="button" name="btnSearch" value="Cari" class="button" onClick="Search(document.getElementById('_name').value)"/>
+					<input type="button" name="btnSearch" value="Cari" class="button" onClick="Search(document.getElementById('_name').value,document.getElementById('_kode').value)"/>
 					<input type="button" name="btnClose" value="Tutup" OnClick="self.parent.tb_remove();" class="button" /></center>
 				</td>
 			</tr>

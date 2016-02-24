@@ -88,7 +88,7 @@
 	       join klinik.klinik_registrasi d on d.reg_id = a.id_reg and a.id_cust_usr = d.id_cust_usr "; 
 	$sql .= " where ".$sql_where; 
 	$sql .= " order by a.id_reg";
-  // echo $sql;
+  echo $sql."<br>";
      $dataTable = $dtaccess->FetchAll($sql);
      // -- end ---
      $m=0;
@@ -98,6 +98,7 @@
                inner join klinik.klinik_folio a on b.id_fol = a.fol_id
 			join klinik.klinik_registrasi d on d.reg_id = a.id_reg and d.id_cust_usr = a.id_cust_usr ";
 	$sql .= " where ".$sql_where ." "; 
+  echo $sql."<br>";
 	$rs = $dtaccess->Execute($sql); 
 	while($row = $dtaccess->Fetch($rs)) {
 		$dataFolSplit[$row["id_fol"]][$row["id_split"]] = $row["folsplit_nominal"];
@@ -138,6 +139,7 @@
                   and CAST(fol_dibayar_when as DATE) <= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_akhir"]))."
                   group by id_reg";
           $dataSpan = $dtaccess->Fetch($sql1);
+          echo $sql1."<br>";
           
           //if($dataTable[$i]["id_reg"]!=$dataTable[$i-1]["id_reg"]){
 	       $tbContent[$i][$counter][TABLE_ISI] = $m;

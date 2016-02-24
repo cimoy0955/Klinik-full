@@ -309,13 +309,13 @@
 			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/perawatan/report_pemeriksaan.php";
 			$menu[$countMenu]["status"] = true;        
 			$countMenu++;
-			
+			/*
 			$menu[$countMenu]["head"] = "Report Tindakan";
 			$menu[$countMenu]["priv"] = "klinik";
 			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/tindakan/report_tindakan.php";
 			$menu[$countMenu]["status"] = true;        
 			$countMenu++;
-			
+			*/
 			$menu[$countMenu]["head"] = "Report Pasien Ruang 3";
 			$menu[$countMenu]["priv"] = "klinik";
 			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/tindakan/report_tindakan_2.php";
