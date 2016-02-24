@@ -37,7 +37,7 @@
                          from klinik.klinik_refraksi a
                          join klinik.klinik_refraksi_suster b on b.id_ref = a.ref_id ";
           $sql.= " where ".implode(" and ",$sql_ref);
-          $sql .= "order by ref_tanggal, id_ref, id_pgw "; 
+          $sql .= " order by ref_tanggal, id_ref, id_pgw "; 
           $rs = $dtaccess->Execute($sql);
           $RefSuster = $dtaccess->FetchAll($rs);
           
@@ -55,6 +55,19 @@
                $point[$RefSuster[$i]["id_pgw"]][$RefSuster[$i]["ref_tanggal"]] = $RefSusTgl[$RefSuster[$i]["ref_tanggal"]]/$RefSusTotPgw[$RefSuster[$i]["ref_tanggal"]];
                $ruang[$RefSuster[$i]["id_pgw"]] = $ruangProses[STATUS_REFRAKSI]; 
           }
+
+          $sql = " select count(id_ref) as total, id_pgw, ref_tanggal
+                         from klinik.klinik_refraksi a
+                         join klinik.klinik_refraksi_admin b on b.id_ref = a.ref_id ";
+          $sql .= " where ".implode(" and ",$sql_ref);
+          $sql .= " group by id_pgw, ref_tanggal  "; 
+          $rs = $dtaccess->Execute($sql);
+          $RefAdmin = $dtaccess->FetchAll($rs);
+          
+          for($i=0,$n=count($RefAdmin);$i<$n;$i++) { 
+               $point[$RefAdmin[$i]["id_pgw"]][$RefAdmin[$i]["ref_tanggal"]] += $RefAdmin[$i]["total"];
+               $ruang[$RefAdmin[$i]["id_pgw"]] = $ruangProses[STATUS_REFRAKSI];
+          }
      }
       
      
@@ -68,7 +81,7 @@
                          from klinik.klinik_perawatan a
                          join klinik.klinik_perawatan_suster b on b.id_rawat = a.rawat_id ";
           $sql.= " where ".implode(" and ",$sql_rawat);
-          $sql .= "order by rawat_tanggal, id_rawat, id_pgw "; 
+          $sql .= " order by rawat_tanggal, id_rawat, id_pgw "; 
           $rs = $dtaccess->Execute($sql);
           $RawatSuster = $dtaccess->FetchAll($rs);
           
@@ -91,13 +104,27 @@
                          from klinik.klinik_perawatan a
                          join klinik.klinik_perawatan_dokter b on b.id_rawat = a.rawat_id ";
           $sql.= " where ".implode(" and ",$sql_rawat);
-          $sql .= "group by id_pgw, rawat_tanggal  "; 
+          $sql .= " group by id_pgw, rawat_tanggal  "; 
           $rs = $dtaccess->Execute($sql);
           $RawatDokter = $dtaccess->FetchAll($rs);
           
           for($i=0,$n=count($RawatDokter);$i<$n;$i++) { 
                $point[$RawatDokter[$i]["id_pgw"]][$RawatDokter[$i]["rawat_tanggal"]] += $RawatDokter[$i]["total"];
                $ruang[$RawatDokter[$i]["id_pgw"]] = $ruangProses[STATUS_PEMERIKSAAN];
+          }
+
+
+          $sql = " select count(id_rawat) as total, id_pgw, rawat_tanggal
+                         from klinik.klinik_perawatan a
+                         join klinik.klinik_perawatan_admin b on b.id_rawat = a.rawat_id ";
+          $sql.= " where ".implode(" and ",$sql_rawat);
+          $sql .= " group by id_pgw, rawat_tanggal  "; 
+          $rs = $dtaccess->Execute($sql);
+          $RawatAdmin = $dtaccess->FetchAll($rs);
+          
+          for($i=0,$n=count($RawatAdmin);$i<$n;$i++) { 
+               $point[$RawatAdmin[$i]["id_pgw"]][$RawatAdmin[$i]["rawat_tanggal"]] += $RawatAdmin[$i]["total"];
+               $ruang[$RawatAdmin[$i]["id_pgw"]] = $ruangProses[STATUS_PEMERIKSAAN];
           }
      }
      
@@ -110,7 +137,7 @@
                          from klinik.klinik_diagnostik a
                          join klinik.klinik_diagnostik_suster b on b.id_diag = a.diag_id ";
           $sql.= " where ".implode(" and ",$sql_diag);
-          $sql .= "order by cast(diag_waktu as date), id_diag, id_pgw "; 
+          $sql .= " order by cast(diag_waktu as date), id_diag, id_pgw "; 
           $rs = $dtaccess->Execute($sql);
           $DiagSuster = $dtaccess->FetchAll($rs);
           
@@ -134,13 +161,26 @@
                          from klinik.klinik_diagnostik a
                          join klinik.klinik_diagnostik_dokter b on b.id_diag = a.diag_id ";
           $sql.= " where ".implode(" and ",$sql_diag);
-          $sql .= "group by id_pgw, cast(diag_waktu as date)  "; 
+          $sql .= " group by id_pgw, cast(diag_waktu as date)  "; 
           $rs = $dtaccess->Execute($sql);
           $DiagDokter = $dtaccess->FetchAll($rs);
           
           for($i=0,$n=count($DiagDokter);$i<$n;$i++) { 
-               $point[$DiagDokter[$i]["id_pgw"]][$DiagDokter[$i]["rawat_tanggal"]] += $DiagDokter[$i]["total"];
+               $point[$DiagDokter[$i]["id_pgw"]][$DiagDokter[$i]["diag_tanggal"]] += $DiagDokter[$i]["total"];
                $ruang[$DiagDokter[$i]["id_pgw"]] = $ruangProses[STATUS_DIAGNOSTIK];
+          }
+
+          $sql = " select count(id_diag) as total, id_pgw, cast(diag_waktu as date) as diag_tanggal
+                         from klinik.klinik_diagnostik a
+                         join klinik.klinik_diagnostik_admin b on b.id_diag = a.diag_id ";
+          $sql.= " where ".implode(" and ",$sql_diag);
+          $sql .= " group by id_pgw, cast(diag_waktu as date)"; 
+          $rs = $dtaccess->Execute($sql);
+          $DiagAdmin = $dtaccess->FetchAll($rs);
+          
+          for($i=0,$n=count($DiagAdmin);$i<$n;$i++) { 
+               $point[$DiagAdmin[$i]["id_pgw"]][$DiagAdmin[$i]["diag_tanggal"]] += $DiagAdmin[$i]["total"];
+               $ruang[$DiagAdmin[$i]["id_pgw"]] = $ruangProses[STATUS_DIAGNOSTIK];
           }
      }
      
@@ -153,7 +193,7 @@
                          from klinik.klinik_preop a
                          join klinik.klinik_preop_suster b on b.id_preop = a.preop_id ";
           $sql.= " where ".implode(" and ",$sql_preop);
-          $sql .= "order by cast(preop_waktu as date), id_preop, id_pgw "; 
+          $sql .= " order by cast(preop_waktu as date), id_preop, id_pgw "; 
           $rs = $dtaccess->Execute($sql);
           $PreopSuster = $dtaccess->FetchAll($rs);
           
@@ -176,13 +216,26 @@
                          from klinik.klinik_preop a
                          join klinik.klinik_preop_dokter b on b.id_preop = a.preop_id ";
           $sql.= " where ".implode(" and ",$sql_preop);
-          $sql .= "group by id_pgw, cast(preop_waktu as date)  "; 
+          $sql .= " group by id_pgw, cast(preop_waktu as date)  "; 
           $rs = $dtaccess->Execute($sql);
           $PreopDokter = $dtaccess->FetchAll($rs);
           
           for($i=0,$n=count($PreopDokter);$i<$n;$i++) { 
                $point[$PreopDokter[$i]["id_pgw"]][$PreopDokter[$i]["preop_tanggal"]] += $PreopDokter[$i]["total"];
                $ruang[$PreopDokter[$i]["id_pgw"]] = $ruangProses[STATUS_PREOP]; 
+          }
+
+          $sql = " select count(id_preop) as total, id_pgw, cast(preop_waktu as date) as preop_tanggal
+                         from klinik.klinik_preop a
+                         join klinik.klinik_preop_admin b on b.id_preop = a.preop_id ";
+          $sql.= " where ".implode(" and ",$sql_preop);
+          $sql .= " group by id_pgw, cast(preop_waktu as date)"; 
+          $rs = $dtaccess->Execute($sql);
+          $PreopAdmin = $dtaccess->FetchAll($rs);
+          
+          for($i=0,$n=count($PreopAdmin);$i<$n;$i++) { 
+               $point[$PreopAdmin[$i]["id_pgw"]][$PreopAdmin[$i]["preop_tanggal"]] += $PreopAdmin[$i]["total"];
+               $ruang[$PreopAdmin[$i]["id_pgw"]] = $ruangProses[STATUS_PREOP];
           }
      }
      
@@ -195,7 +248,7 @@
                          from klinik.klinik_premedikasi a
                          join klinik.klinik_premedikasi_suster b on b.id_preme = a.preme_id ";
           $sql.= " where ".implode(" and ",$sql_preme);
-          $sql .= "order by cast(preme_waktu as date), id_preme, id_pgw "; 
+          $sql .= " order by cast(preme_waktu as date), id_preme, id_pgw "; 
           $rs = $dtaccess->Execute($sql);
           $PremeSuster = $dtaccess->FetchAll($rs);
           
@@ -219,13 +272,26 @@
                          from klinik.klinik_premedikasi a
                          join klinik.klinik_premedikasi_dokter b on b.id_preme = a.preme_id ";
           $sql.= " where ".implode(" and ",$sql_preme);
-          $sql .= "group by id_pgw, cast(preme_waktu as date)  "; 
+          $sql .= " group by id_pgw, cast(preme_waktu as date)  "; 
           $rs = $dtaccess->Execute($sql);
           $PremeDokter = $dtaccess->FetchAll($rs);
           
           for($i=0,$n=count($PremeDokter);$i<$n;$i++) { 
                $point[$PremeDokter[$i]["id_pgw"]][$PremeDokter[$i]["preme_tanggal"]] += $PremeDokter[$i]["total"];
                $ruang[$PremeDokter[$i]["id_pgw"]] = $ruangProses[STATUS_PREMEDIKASI]; 
+          }
+
+          $sql = " select count(id_preme) as total, id_pgw, cast(preme_waktu as date) as preme_tanggal 
+                         from klinik.klinik_premedikasi a
+                         join klinik.klinik_premedikasi_admin b on b.id_preme = a.preme_id ";
+          $sql.= " where ".implode(" and ",$sql_preme);
+          $sql .= " group by id_pgw, cast(preme_waktu as date)  "; 
+          $rs = $dtaccess->Execute($sql);
+          $PremeAdmin = $dtaccess->FetchAll($rs);
+          
+          for($i=0,$n=count($PremeAdmin);$i<$n;$i++) { 
+               $point[$PremeAdmin[$i]["id_pgw"]][$PremeAdmin[$i]["preme_tanggal"]] += $PremeAdmin[$i]["total"];
+               $ruang[$PremeAdmin[$i]["id_pgw"]] = $ruangProses[STATUS_PREMEDIKASI]; 
           }
      }
      
@@ -239,7 +305,7 @@
                          from klinik.klinik_operasi a
                          join klinik.klinik_operasi_suster b on b.id_op = a.op_id ";
           $sql.= " where ".implode(" and ",$sql_op);
-          $sql .= "order by cast(op_waktu as date), id_op, id_pgw "; 
+          $sql .= " order by cast(op_waktu as date), id_op, id_pgw "; 
           $rs = $dtaccess->Execute($sql);
           $OpSuster = $dtaccess->FetchAll($rs);
           
@@ -262,13 +328,26 @@
                          from klinik.klinik_operasi a
                          join klinik.klinik_operasi_dokter b on b.id_op = a.op_id ";
           $sql.= " where ".implode(" and ",$sql_op);
-          $sql .= "group by id_pgw,cast(op_waktu as date)  "; 
+          $sql .= " group by id_pgw,cast(op_waktu as date)  "; 
           $rs = $dtaccess->Execute($sql);
           $OpDokter = $dtaccess->FetchAll($rs);
           
           for($i=0,$n=count($OpDokter);$i<$n;$i++) { 
                $point[$OpDokter[$i]["id_pgw"]][$OpDokter[$i]["op_tanggal"]] += $OpDokter[$i]["total"];
                $ruang[$OpDokter[$i]["id_pgw"]] = $ruangProses[STATUS_OPERASI];
+          }
+
+          $sql = " select count(id_op) as total, id_pgw, cast(op_waktu as date) as op_tanggal 
+                         from klinik.klinik_operasi a
+                         join klinik.klinik_operasi_admin b on b.id_op = a.op_id ";
+          $sql.= " where ".implode(" and ",$sql_op);
+          $sql .= " group by id_pgw,cast(op_waktu as date)  "; 
+          $rs = $dtaccess->Execute($sql);
+          $OpAdmin = $dtaccess->FetchAll($rs);
+          
+          for($i=0,$n=count($OpAdmin);$i<$n;$i++) { 
+               $point[$OpAdmin[$i]["id_pgw"]][$OpAdmin[$i]["op_tanggal"]] += $OpAdmin[$i]["total"];
+               $ruang[$OpAdmin[$i]["id_pgw"]] = $ruangProses[STATUS_OPERASI];
           }
      }
        
@@ -280,7 +359,7 @@
           $sql = " select op_id, id_dokter, id_suster, op_tanggal 
                          from klinik.klinik_perawatan_operasi a ";
           $sql.= " where ".implode(" and ",$sql_bedah);
-          $sql .= "order by id_suster, id_dokter, op_tanggal  "; 
+          $sql .= " order by id_suster, id_dokter, op_tanggal  "; 
           $rs = $dtaccess->Execute($sql); 
           $BedahDokter = $dtaccess->FetchAll($rs);
           
@@ -291,21 +370,33 @@
                $point[$BedahDokter[$i]["id_suster"]][$BedahDokter[$i]["op_tanggal"]]++; 
                $ruang[$BedahDokter[$i]["id_suster"]] = $ruangProses[STATUS_BEDAH];
           }
+
+          $sql = " select count(id_op) as total, id_pgw, op_tanggal 
+                         from klinik.klinik_perawatan_operasi a
+                         join klinik.klinik_bedah_admin b on b.id_op = a.op_id ";
+          $sql.= " where ".implode(" and ",$sql_bedah);
+          $sql .= " group by id_pgw,op_tanggal  "; 
+          $rs = $dtaccess->Execute($sql);
+          $BedahAdmin = $dtaccess->FetchAll($rs);
+          
+          for($i=0,$n=count($BedahAdmin);$i<$n;$i++) { 
+               $point[$BedahAdmin[$i]["id_pgw"]][$BedahAdmin[$i]["op_tanggal"]] += $BedahAdmin[$i]["total"];
+               $ruang[$BedahAdmin[$i]["id_pgw"]] = $ruangProses[STATUS_OPERASI];
+          }
+          
      }
-     
-     
      
      //--- untuk cari data pegawai ----- 
      if($_POST["pgw_jenis_pegawai"]) $sql_where[] = "pgw_jenis_pegawai = ".QuoteValue(DPE_NUMERIC,$_POST["pgw_jenis_pegawai"]);
      if($_POST["pgw_kode"]) $sql_where[] = "pgw_nip = ".QuoteValue(DPE_CHAR,$_POST["pgw_kode"]);
      
-     $sql = " select pgw_id, pgw_nip, pgw_nama 
+     $sql = " select pgw_id, pgw_nip, pgw_nama, pgw_jenis_pegawai 
                     from hris.hris_pegawai a ";
                     
      if($sql_where) { 
           $sql.= " where ".implode(" and ",$sql_where);    
      }
-     $sql .= "order by pgw_nip "; 
+     $sql .= " order by pgw_jenis_pegawai,pgw_nip "; 
      $rs = $dtaccess->Execute($sql);
      $dataTable = $dtaccess->FetchAll($rs);
      
@@ -325,6 +416,7 @@
                          $id[$row] = $dataTable[$a]["pgw_id"];
                          $nama[$row] = $dataTable[$a]["pgw_nama"];
                          $nip[$row] = $dataTable[$a]["pgw_nip"];
+                         $jenis[$row] = $dataTable[$a]["pgw_jenis_pegawai"];
                     }
                }
           } 
@@ -345,6 +437,11 @@
      $tbHeader[0][$counterHeader][TABLE_ROWSPAN] = 2;    
      $counterHeader++;
      
+     $tbHeader[0][$counterHeader][TABLE_ISI] = "Jenis Pegawai";
+     $tbHeader[0][$counterHeader][TABLE_WIDTH] = "20%";    
+     $tbHeader[0][$counterHeader][TABLE_ROWSPAN] = 2;       
+     $counterHeader++;
+        
      $tbHeader[0][$counterHeader][TABLE_ISI] = "Nama";
      $tbHeader[0][$counterHeader][TABLE_WIDTH] = "20%";    
      $tbHeader[0][$counterHeader][TABLE_ROWSPAN] = 2;       
@@ -383,6 +480,10 @@
           $tbContent[$i][$counter][TABLE_ALIGN] = "center";
           $counter++;
           
+          $tbContent[$i][$counter][TABLE_ISI] = $jenisPegawai[$jenis[$i]];
+          $tbContent[$i][$counter][TABLE_ALIGN] = "center";
+          $counter++;
+          
           $tbContent[$i][$counter][TABLE_ISI] = $nama[$i];
           $tbContent[$i][$counter][TABLE_ALIGN] = "left";          
           $counter++; 
@@ -415,7 +516,7 @@
           $tbBottom[0][0][TABLE_ALIGN] = "center";
      }
      
-	if($_POST["btnExcel"]){
+     if($_POST["btnExcel"]){
           header('Content-Type: application/vnd.ms-excel');
           header('Content-Disposition: attachment; filename=report_surat_sakit_'.$_POST["tgl_awal"].'.xls');
      }
