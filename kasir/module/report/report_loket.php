@@ -88,7 +88,7 @@
 	       join klinik.klinik_registrasi d on d.reg_id = a.id_reg and a.id_cust_usr = d.id_cust_usr "; 
 	$sql .= " where ".$sql_where; 
 	$sql .= " order by a.id_reg";
-  echo $sql."<br>";
+  // echo $sql."<br>";
      $dataTable = $dtaccess->FetchAll($sql);
      // -- end ---
      $m=0;
@@ -98,7 +98,7 @@
                inner join klinik.klinik_folio a on b.id_fol = a.fol_id
 			join klinik.klinik_registrasi d on d.reg_id = a.id_reg and d.id_cust_usr = a.id_cust_usr ";
 	$sql .= " where ".$sql_where ." "; 
-  echo $sql."<br>";
+  // echo $sql."<br>";
 	$rs = $dtaccess->Execute($sql); 
 	while($row = $dtaccess->Fetch($rs)) {
 		$dataFolSplit[$row["id_fol"]][$row["id_split"]] = $row["folsplit_nominal"];
@@ -121,10 +121,10 @@
      $tbHeader[0][4][TABLE_ISI] = "Jenis Layanan";
      $tbHeader[0][4][TABLE_WIDTH] = "20%"; 
 	
-	for($i=0,$n=2;$i<$n;$i++){
-		$tbHeader[0][$i+5][TABLE_ISI] = $dataSplit[$i]["split_nama"];
-		$tbHeader[0][$i+5][TABLE_WIDTH] = "10%";
-	}
+	// for($i=0,$n=2;$i<$n;$i++){
+	// 	$tbHeader[0][$i+5][TABLE_ISI] = $dataSplit[$i]["split_nama"];
+	// 	$tbHeader[0][$i+5][TABLE_WIDTH] = "10%";
+	// }
 
 	
      $tbHeader[0][$n+5][TABLE_ISI] = "Total";
@@ -139,7 +139,7 @@
                   and CAST(fol_dibayar_when as DATE) <= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_akhir"]))."
                   group by id_reg";
           $dataSpan = $dtaccess->Fetch($sql1);
-          echo $sql1."<br>";
+          // echo $sql1."<br>";
           
           //if($dataTable[$i]["id_reg"]!=$dataTable[$i-1]["id_reg"]){
 	       $tbContent[$i][$counter][TABLE_ISI] = $m;
@@ -164,40 +164,37 @@
 	       $counter++;
 	  //}
 	        
-          $sql="SELECT b_tambahan_nama,b_tambahan_jasmed,b_tambahan_ops from klinik.klinik_biaya_tambahan a 
-                where b_tambahan_id=".QuoteValue(DPE_CHAR,$dataTable[$i]["id_biaya_tambahan"]);
-          $dataTambahan = $dtaccess->Fetch($sql);
+   //        $sql="SELECT b_tambahan_nama,b_tambahan_jasmed,b_tambahan_ops from klinik.klinik_biaya_tambahan a 
+   //              where b_tambahan_id=".QuoteValue(DPE_CHAR,$dataTable[$i]["id_biaya_tambahan"]);
+   //        $dataTambahan = $dtaccess->Fetch($sql);
           
-          if(!$dataTambahan){
-              $tbContent[$i][$counter][TABLE_ISI] = $dataTable[$i]["biaya_nama"]?$dataTable[$i]["biaya_nama"]:$biayaStatus[$dataTable[$i]["fol_jenis"]];
-          }elseif($dataTambahan){
-              $tbContent[$i][$counter][TABLE_ISI] = $dataTambahan["b_tambahan_nama"];
-          }
+          
+          $tbContent[$i][$counter][TABLE_ISI] = $biayaStatus[$dataTable[$i]["fol_jenis"]];
           $tbContent[$i][$counter][TABLE_ALIGN] = "left";
           $counter++;
 	
-	  if($dataTambahan){
-	       $tbContent[$i][$counter][TABLE_ISI] = currency_format($dataTambahan["b_tambahan_jasmed"]);
-	       $tbContent[$i][$counter][TABLE_ALIGN] = "right";
-	       $counter++;
-	       $totSplit[$dataSplit[0]["split_id"]] += $dataTambahan["b_tambahan_jasmed"];
+	  // if($dataTambahan){
+	  //      $tbContent[$i][$counter][TABLE_ISI] = currency_format($dataTambahan["b_tambahan_jasmed"]);
+	  //      $tbContent[$i][$counter][TABLE_ALIGN] = "right";
+	  //      $counter++;
+	  //      $totSplit[$dataSplit[0]["split_id"]] += $dataTambahan["b_tambahan_jasmed"];
     			
-	       $tbContent[$i][$counter][TABLE_ISI] = currency_format($dataTambahan["b_tambahan_ops"]);
-	       $tbContent[$i][$counter][TABLE_ALIGN] = "right";
-	       $counter++;
-	       $totSplit[$dataSplit[1]["split_id"]] += $dataTambahan["b_tambahan_ops"];
+	  //      $tbContent[$i][$counter][TABLE_ISI] = currency_format($dataTambahan["b_tambahan_ops"]);
+	  //      $tbContent[$i][$counter][TABLE_ALIGN] = "right";
+	  //      $counter++;
+	  //      $totSplit[$dataSplit[1]["split_id"]] += $dataTambahan["b_tambahan_ops"];
     			
-	  }elseif(!$dataTambahan){
-	       for($j=0,$x=0,$k=2;$j<$k;$j++,$x++){
-		    $tbContent[$i][$counter][TABLE_ISI] = currency_format($dataFolSplit[$dataTable[$i]["fol_id"]][$dataSplit[$j]["split_id"]]);
-		    $tbContent[$i][$counter][TABLE_ALIGN] = "right";
-		    $counter++;
-		    $totSplit[$dataSplit[$x]["split_id"]] += $dataFolSplit[$dataTable[$i]["fol_id"]][$dataSplit[$j]["split_id"]];
-    	       }
-	  }
+	  // }elseif(!$dataTambahan){
+	  //      for($j=0,$x=0,$k=2;$j<$k;$j++,$x++){
+		 //    $tbContent[$i][$counter][TABLE_ISI] = currency_format($dataFolSplit[$dataTable[$i]["fol_id"]][$dataSplit[$j]["split_id"]]);
+		 //    $tbContent[$i][$counter][TABLE_ALIGN] = "right";
+		 //    $counter++;
+		 //    $totSplit[$dataSplit[$x]["split_id"]] += $dataFolSplit[$dataTable[$i]["fol_id"]][$dataSplit[$j]["split_id"]];
+   //  	       }
+	  // }
 
           //if($dataTable[$i]["id_reg"]!=$dataTable[$i-1]["id_reg"]){
-	       $tbContent[$i][$counter][TABLE_ISI] = currency_format($dataSpan["total_bayar"]);
+	       $tbContent[$i][$counter][TABLE_ISI] = currency_format($dataTable[$i]["fol_dibayar"]);
 	       $tbContent[$i][$counter][TABLE_ALIGN] = "right";
 	       //$tbContent[$i][$counter][ROWSPAN] = $dataSpan["jml_span"];
 	       $counter++;
@@ -213,11 +210,11 @@
      $tbBottom[0][$counter][TABLE_ALIGN] = "center";
      $counter++;
 
-	for($i=0,$n=2;$i<$n;$i++){
-		$tbBottom[0][$counter][TABLE_ISI] = currency_format($totSplit[$dataSplit[$i]["split_id"]]);
-		$tbBottom[0][$counter][TABLE_ALIGN] = "right";
-		$counter++;
-	}
+	// for($i=0,$n=2;$i<$n;$i++){
+	// 	$tbBottom[0][$counter][TABLE_ISI] = currency_format($totSplit[$dataSplit[$i]["split_id"]]);
+	// 	$tbBottom[0][$counter][TABLE_ALIGN] = "right";
+	// 	$counter++;
+	// }
 
 	
 	$tbBottom[0][$counter][TABLE_ISI] = currency_format($total);
