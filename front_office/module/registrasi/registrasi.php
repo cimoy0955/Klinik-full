@@ -183,30 +183,35 @@
 	  if($_POST["cust_usr_noktp"]) $err_code = clearbit($err_code,13);
 	  else $err_code = setbit($err_code,13);
 	  */
-	  if ($_POST["btnSave"]) {
-	  	if ($_POST["cust_usr_noktp"]) {
+	  	
+		if ($_POST["btnSave"]) {
+
+			if ($_POST["cust_usr_noktp"]) {
 		  	$sql = "select cust_usr_kode from global.global_customer_user where cust_usr_noktp = ".QuoteValue(DPE_CHAR,$_POST["cust_usr_noktp"]);
 		  	$rs_ktp = $dtaccess->Execute($sql);
 			$data_ktp = $dtaccess->Fetch($rs_ktp);
 			if(!$data_ktp) $err_code = clearbit($err_code,14);
 			else $err_code = setbit($err_code,14);
-	  	}else{
-	  		$err_code = clearbit($err_code,14);
-	  	}
-	  	
-	  
-	  	$sql = "select cust_usr_kode 
-	  			from global.global_customer_user
-	  			where upper(cust_usr_nama) like ".QuoteValue(DPE_CHAR,"%".$_POST["cust_usr_nama"]."%"). 
-	  			" and cust_usr_tanggal_lahir = ".QuoteValue(DPE_CHAR,date_db($_POST["cust_usr_tanggal_lahir"]))." 
-	  			and upper(cust_usr_alamat) like ".QuoteValue(DPE_CHAR,"%".strtoupper($_POST["cust_usr_alamat"])."%");
-	  	$rs_cekNama = $dtaccess->Execute($sql);
-		$data_cekNama = $dtaccess->Fetch($rs_cekNama);
-		if(!$data_cekNama) $err_code = clearbit($err_code,15);
-		else $err_code = setbit($err_code,15);
-	  }
-	  	
+			}else{
+				$err_code = clearbit($err_code,14);
+			}
+			
+			if (!readbit($err_code,1) && !readbit($err_code,2) && !readbit($err_code,3)) {
+				
+				$sql = "select cust_usr_kode 
+					from global.global_customer_user
+					where upper(cust_usr_nama) like ".QuoteValue(DPE_CHAR,"%".$_POST["cust_usr_nama"]."%"). 
+					" and cust_usr_tanggal_lahir = ".QuoteValue(DPE_CHAR,date_db($_POST["cust_usr_tanggal_lahir"]))." 
+					and upper(cust_usr_alamat) like ".QuoteValue(DPE_CHAR,"%".strtoupper($_POST["cust_usr_alamat"])."%");
+				$rs_cekNama = $dtaccess->Execute($sql);
+				$data_cekNama = $dtaccess->Fetch($rs_cekNama);
+				if(!$data_cekNama) $err_code = clearbit($err_code,15);
+				else $err_code = setbit($err_code,15);
+				}
+			}
+
 	  if($err_code == 0){
+
 	    if(!$_POST["cust_nama"]) $_POST["cust_nama"] = $_POST["cust_usr_nama"];
 	    $sql = "select cust_id, cust_nama from global.global_customer 
 		where upper(cust_nama) = ".QuoteValue(DPE_CHAR,strtoupper($_POST["cust_nama"])); 
@@ -1301,6 +1306,18 @@ function view_rujukan(eval) {
 <? if ($err_code != 0) { ?>
 <font color="red"><strong>Periksa lagi inputan yang bertanda (*)</strong></font>
 <? }?>
+<? if (readbit($err_code,1)) { ?>
+<br>
+<font color="green"><strong>Nama pasien harap diisi.</strong></font>
+<? } ?>
+<? if (readbit($err_code,2)) { ?>
+<br>
+<font color="green"><strong>Tanggal lahir pasien harap diisi.</strong></font>
+<? } ?>
+<? if (readbit($err_code,3)) { ?>
+<br>
+<font color="green"><strong>Alamat pasien harap diisi.</strong></font>
+<? } ?>
 <? if (readbit($err_code,11)) { ?>
 <br>
 <font color="green"><strong>Nomor Rekam Medik harus diisi.</strong></font>
