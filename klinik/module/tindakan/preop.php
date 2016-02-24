@@ -794,7 +794,7 @@ where id_app = ".QuoteValue(DPE_NUMERIC,'3');
           
                 $dbTable = "klinik_preop_admin";
                      
-                $dbField[0] = "bedah_preop_id";   // PK
+                $dbField[0] = "preop_admin_id";   // PK
                 $dbField[1] = "id_preop";
                 $dbField[2] = "id_pgw";
                        
