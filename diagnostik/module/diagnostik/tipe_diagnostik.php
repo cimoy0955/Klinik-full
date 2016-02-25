@@ -70,23 +70,10 @@
           $tbHeader[0][$counterHeader][TABLE_WIDTH] = "25%";
           $counterHeader++;
 
-//		if($status==0) {
-			//$tbHeader[0][$counterHeader][TABLE_ISI] = "Bayar";
-			//$tbHeader[0][$counterHeader][TABLE_WIDTH] = "5%";
-			//$counterHeader++;
-//		}
-		
-		//$tbHeader[0][$counterHeader][TABLE_ISI] = "Jadwal";
-        //  $tbHeader[0][$counterHeader][TABLE_WIDTH] = "15%";
-          //$counterHeader++;
-          
           
           for($i=0,$n=count($dataTable),$counter=0;$i<$n;$i++,$counter=0) {
-			//if($status==0) {
-			//	if(!$dataTable[$i]["fol_lunas"]) $tbContent[$i][$counter][TABLE_ISI] = '<img hspace="2" width="16" height="16" src="'.$APLICATION_ROOT.'images/bul_arrowgrnlrg.gif" style="cursor:pointer" alt="Proses" title="Proses" border="0" onClick="ProsesDiagnostik(\''.$dataTable[$i]["reg_id"].'\')"/>';
-		//	} else {
-				$tbContent[$i][$counter][TABLE_ISI] = '<a href="'.$thisPage.'?id_reg='.$dataTable[$i]["reg_id"].'"><img hspace="2" width="16" height="16" src="'.$APLICATION_ROOT.'images/b_select.png" alt="Proses" title="Proses" border="0"/></a>';               
-		//	}
+
+				$tbContent[$i][$counter][TABLE_ISI] = '<a href="'.$thisPage.'?id_reg='.$dataTable[$i]["reg_id"].'"><img hspace="2" width="16" height="16" src="'.$APLICATION_ROOT.'images/b_select.png" alt="Proses" title="Proses" border="0"/></a>';  
                $tbContent[$i][$counter][TABLE_ALIGN] = "center";
                $counter++;
 
@@ -102,18 +89,7 @@
                $tbContent[$i][$counter][TABLE_ALIGN] = "center";
                $counter++;
 
-		//	if($status==0) {
-				//if(!$dataTable[$i]["fol_lunas"]) $tbContent[$i][$counter][TABLE_ISI] = '<img hspace="2" width="16" height="16" src="'.$APLICATION_ROOT.'images/on.gif" style="cursor:pointer" alt="Lunas" title="Lunas" border="0"/>';
-				//else $tbContent[$i][$counter][TABLE_ISI] = '<img hspace="2" width="16" height="16" src="'.$APLICATION_ROOT.'images/off.gif" style="cursor:pointer" alt="Belum Lunas" title="Belum Lunas" border="0"/>';
-				//$tbContent[$i][$counter][TABLE_ALIGN] = "center";
-				//$counter++;
-	//		}
-			
-			//if($dataTable[$i]["reg_jadwal"]=='y') $tbContent[$i][$counter][TABLE_ISI] = '<img hspace="2" width="16" height="16" src="'.$APLICATION_ROOT.'images/off.gif" alt="Terjadwal Operasi Hari Ini" title="Terjadwal Operasi Hari Ini" border="0"/>';
-			//else $tbContent[$i][$counter][TABLE_ISI] = '<img hspace="2" width="16" height="16" src="'.$APLICATION_ROOT.'images/on.gif" alt="TIdak Terjadwal Operasi Hari Ini" title="Tidak Terjadwal Operasi Hari Ini" border="0"/>';
-               
-           //    $tbContent[$i][$counter][TABLE_ALIGN] = "center";
-             //  $counter++;
+	
           }
 
           return $tableRefraksi->RenderView($tbHeader,$tbContent,$tbBottom);
@@ -176,136 +152,135 @@
 	
           if($_POST["btnSave"]) {
                
-               // insert ke tabel klinik_history_pasien
-          $dbSchema = "klinik";
-          $dbTable = "klinik_history_pasien";
-
-          $dbField[0] = "history_id";
-          $dbField[1] = "id_reg";
-          $dbField[2] = "history_status_pasien";
-          $dbField[3] = "history_when_out";
-
-          $history_id = $dtaccess->GetTransID();
-          $dbValue[0] = QuoteValue(DPE_CHAR,$history_id);
-          $dbValue[1] = QuoteValue(DPE_CHAR,$_POST["id_reg"]);
-          $dbValue[2] = QuoteValue(DPE_CHAR,STATUS_DIAGNOSTIK_TIPE);
-          $dbValue[3] = QuoteValue(DPE_DATE,date("Y-m-d H:i:s"));
-
-          $dbKey[0] = 0;
-
-          $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey,$dbSchema);
-
-          $dtmodel->Insert() or die("insert error");
-
-          unset($dtmodel);
-          unset($dbField);
-          unset($dbValue);
-          unset($dbKey);
-          // end insert 
           
                //Update ke Status sudah bayar di Diagnostik
-               $sql = "update klinik.klinik_registrasi set reg_status = '".STATUS_DIAGNOSTIK.STATUS_ANTRI."', reg_waktu = CURRENT_TIME  where reg_id = ".QuoteValue(DPE_CHAR,$_POST["id_reg"]);
-               $dtaccess->Execute($sql);
-               
+              
+                       // insert ke tabel klinik_history_pasien
+                  $dbSchema = "klinik";
+                  $dbTable = "klinik_history_pasien";
+
+                  $dbField[0] = "history_id";
+                  $dbField[1] = "id_reg";
+                  $dbField[2] = "history_status_pasien";
+                  $dbField[3] = "history_when_out";
+
+                  $history_id = $dtaccess->GetTransID();
+                  $dbValue[0] = QuoteValue(DPE_CHAR,$history_id);
+                  $dbValue[1] = QuoteValue(DPE_CHAR,$_POST["id_reg"]);
+                  $dbValue[2] = QuoteValue(DPE_CHAR,STATUS_DIAGNOSTIK_TIPE);
+                  $dbValue[3] = QuoteValue(DPE_DATE,date("Y-m-d H:i:s"));
+
+                  $dbKey[0] = 0;
+
+                  $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey,$dbSchema);
+
+                  $dtmodel->Insert() or die("insert error");
+
+                  unset($dtmodel);
+                  unset($dbField);
+                  unset($dbValue);
+                  unset($dbKey);
+                  // end insert 
+
+                   $sql = "update klinik.klinik_registrasi set reg_status = '".STATUS_DIAGNOSTIK.STATUS_ANTRI."', reg_waktu = CURRENT_TIME  where reg_id = ".QuoteValue(DPE_CHAR,$_POST["id_reg"]);
+                   $dtaccess->Execute($sql);
+                             
+                   // ---- inset ket folio ---//
+                   if($_POST["diag_keratometri"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_KERATOMETRI);
+                   if($_POST["diag_biometri"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_BIOMETRI);     
+                   if($_POST["diag_usg"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_USG);
+                   if($_POST["diag_lab_gula_darah"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_GULA);
+                   if($_POST["diag_ekg"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_EKG);
+                   if($_POST["diag_fundus"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_FUNDUS);
+                   if($_POST["diag_opthalmoscop"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_OPTHALMOSCOPY);
+                   if($_POST["diag_oct"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_OCT);
+                   if($_POST["diag_yag"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_YAG);
+                   if($_POST["diag_argon"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_ARGON);
+                   if($_POST["diag_glaukoma"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_GLAUKOMA);
+                   if($_POST["diag_humpre"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_HUMPREY);
+                   if($_POST["diag_slt"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_SLT);
+    
+                   
+                   if($sql_where) {
+                        $sql = "select * from klinik.klinik_biaya where ".implode(" or ",$sql_where);
+                        $dataBiaya = $dtaccess->FetchAll($sql,DB_SCHEMA);  
+                        $folWaktu = date("Y-m-d H:i:s");
+                   
+                   }               
+                   
+                   //$lunas = ($_POST["reg_jenis_pasien"]!=PASIEN_BAYAR_SWADAYA)?'y':'n'; 
+                   $lunas = "n";
+                   for($i=0,$n=count($dataBiaya);$i<$n;$i++) {
+                      $dbTable = "klinik_folio";
+                    
+                      $dbField[0] = "fol_id";   // PK
+                      $dbField[1] = "id_reg";
+                      $dbField[2] = "fol_nama";
+                      $dbField[3] = "fol_nominal";
+                      $dbField[4] = "id_biaya";
+                      $dbField[5] = "fol_jenis";
+                      $dbField[6] = "id_cust_usr";
+                      $dbField[7] = "fol_waktu";
+                      $dbField[8] = "fol_lunas";
+                      $dbField[9] = "fol_jumlah";
+                      $dbField[10] = "fol_nominal_satuan";
+                            
+                      $folId = $dtaccess->GetTransID();
+                      $dbValue[0] = QuoteValue(DPE_CHAR,$folId);
+                      $dbValue[1] = QuoteValue(DPE_CHAR,$_POST["id_reg"]);
+                      $dbValue[2] = QuoteValue(DPE_CHAR,$dataBiaya[$i]["biaya_nama"]);
+                      $dbValue[3] = QuoteValue(DPE_NUMERIC,$dataBiaya[$i]["biaya_total"]);
+                      $dbValue[4] = QuoteValue(DPE_CHAR,$dataBiaya[$i]["biaya_id"]);
+                      $dbValue[5] = QuoteValue(DPE_CHAR,STATUS_DIAGNOSTIK);
+                      $dbValue[6] = QuoteValue(DPE_CHAR,$_POST["id_cust_usr"]);
+                      $dbValue[7] = QuoteValue(DPE_DATE,$folWaktu);
+                      $dbValue[8] = QuoteValue(DPE_CHAR,$lunas);
+                      $dbValue[9] = QuoteValue(DPE_NUMERIC,'1');
+                      $dbValue[10] = QuoteValue(DPE_NUMERIC,$dataBiaya[$i]["biaya_total"]);
+                      
+                      //if($row_edit["cust_id"]) $custId = $row_edit["cust_id"];
+                      $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
+                      $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey,DB_SCHEMA_KLINIK);
+                      
+                      $dtmodel->Insert() or die("insert error"); 
+                      
+                      unset($dtmodel);
+                      unset($dbValue);
+                      unset($dbKey);
+                      unset($dbField); 
+                       
+                      $sql = "select * from klinik.klinik_biaya_split where id_biaya = ".QuoteValue(DPE_CHAR,$dataBiaya[$i]["biaya_id"])." and bea_split_nominal > 0";
+                      $dataSplit = $dtaccess->FetchAll($sql,DB_SCHEMA);
+                      
+                      for($a=0,$b=count($dataSplit);$a<$b;$a++) { 
+                        $dbTable = "klinik_folio_split";
+                      
+                        $dbField[0] = "folsplit_id";   // PK
+                        $dbField[1] = "id_fol";
+                        $dbField[2] = "id_split";
+                        $dbField[3] = "folsplit_nominal";
+                            
+                        $dbValue[0] = QuoteValue(DPE_CHAR,$dtaccess->GetTransID());
+                        $dbValue[1] = QuoteValue(DPE_CHAR,$folId);
+                        $dbValue[2] = QuoteValue(DPE_CHAR,$dataSplit[$a]["id_split"]);
+                        $dbValue[3] = QuoteValue(DPE_NUMERIC,$dataSplit[$a]["bea_split_nominal"]);
                          
-               // ---- inset ket folio ---//
-               if($_POST["diag_keratometri"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_KERATOMETRI);
-               if($_POST["diag_biometri"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_BIOMETRI);     
-               if($_POST["diag_usg"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_USG);
-               if($_POST["diag_lab_gula_darah"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_GULA);
-               if($_POST["diag_ekg"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_EKG);
-               if($_POST["diag_fundus"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_FUNDUS);
-               if($_POST["diag_opthalmoscop"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_OPTHALMOSCOPY);
-               if($_POST["diag_oct"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_OCT);
-               if($_POST["diag_yag"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_YAG);
-               if($_POST["diag_argon"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_ARGON);
-               if($_POST["diag_glaukoma"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_GLAUKOMA);
-               if($_POST["diag_humpre"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_HUMPREY);
-               if($_POST["diag_slt"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_SLT);
-
-               
-               if($sql_where) {
-                    $sql = "select * from klinik.klinik_biaya where ".implode(" or ",$sql_where);
-                    $dataBiaya = $dtaccess->FetchAll($sql,DB_SCHEMA);  
-                    $folWaktu = date("Y-m-d H:i:s");
-               }               
-               
-               //$lunas = ($_POST["reg_jenis_pasien"]!=PASIEN_BAYAR_SWADAYA)?'y':'n'; 
-               $lunas = "n";
-               for($i=0,$n=count($dataBiaya);$i<$n;$i++) {
-				$dbTable = "klinik_folio";
-			
-				$dbField[0] = "fol_id";   // PK
-				$dbField[1] = "id_reg";
-				$dbField[2] = "fol_nama";
-				$dbField[3] = "fol_nominal";
-				$dbField[4] = "id_biaya";
-				$dbField[5] = "fol_jenis";
-				$dbField[6] = "id_cust_usr";
-				$dbField[7] = "fol_waktu";
-				$dbField[8] = "fol_lunas";
-				$dbField[9] = "fol_jumlah";
-        $dbField[10] = "fol_nominal_satuan";
-						  
-				$folId = $dtaccess->GetTransID();
-                    $dbValue[0] = QuoteValue(DPE_CHAR,$folId);
-                    $dbValue[1] = QuoteValue(DPE_CHAR,$_POST["id_reg"]);
-                    $dbValue[2] = QuoteValue(DPE_CHAR,$dataBiaya[$i]["biaya_nama"]);
-                    $dbValue[3] = QuoteValue(DPE_NUMERIC,$dataBiaya[$i]["biaya_total"]);
-                    $dbValue[4] = QuoteValue(DPE_CHAR,$dataBiaya[$i]["biaya_id"]);
-                    $dbValue[5] = QuoteValue(DPE_CHAR,STATUS_DIAGNOSTIK);
-                    $dbValue[6] = QuoteValue(DPE_CHAR,$_POST["id_cust_usr"]);
-                    $dbValue[7] = QuoteValue(DPE_DATE,$folWaktu);
-                    $dbValue[8] = QuoteValue(DPE_CHAR,$lunas);
-                    $dbValue[9] = QuoteValue(DPE_NUMERIC,'1');
-                    $dbValue[10] = QuoteValue(DPE_NUMERIC,$dataBiaya[$i]["biaya_total"]);
-                    
-                    //if($row_edit["cust_id"]) $custId = $row_edit["cust_id"];
-                    $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
-                    $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey,DB_SCHEMA_KLINIK);
-                    
-                    $dtmodel->Insert() or die("insert error"); 
-                    
-                    unset($dtmodel);
-                    unset($dbValue);
-                    unset($dbKey);
-                    unset($dbField); 
-				 
-				$sql = "select * from klinik.klinik_biaya_split where id_biaya = ".QuoteValue(DPE_CHAR,$dataBiaya[$i]["biaya_id"])." and bea_split_nominal > 0";
-				$dataSplit = $dtaccess->FetchAll($sql,DB_SCHEMA);
-				
-				for($a=0,$b=count($dataSplit);$a<$b;$a++) { 
-					$dbTable = "klinik_folio_split";
-				
-					$dbField[0] = "folsplit_id";   // PK
-					$dbField[1] = "id_fol";
-					$dbField[2] = "id_split";
-					$dbField[3] = "folsplit_nominal";
-						  
-					$dbValue[0] = QuoteValue(DPE_CHAR,$dtaccess->GetTransID());
-					$dbValue[1] = QuoteValue(DPE_CHAR,$folId);
-					$dbValue[2] = QuoteValue(DPE_CHAR,$dataSplit[$a]["id_split"]);
-					$dbValue[3] = QuoteValue(DPE_NUMERIC,$dataSplit[$a]["bea_split_nominal"]);
-					 
-					$dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
-					$dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey,DB_SCHEMA_KLINIK);
-					
-					$dtmodel->Insert() or die("insert error"); 
-					
-					unset($dtmodel);
-					unset($dbField);
-					unset($dbValue);
-					unset($dbKey); 
-				} 
-               }
-          }          
-          
-          if($_POST["btnSave"]) echo "<script>document.location.href='".$thisPage."';</script>";
-          else echo "<script>document.location.href='".$backPage."&id_cust_usr=".$enc->Encode($_POST["id_cust_usr"])."';</script>";
-          
-          exit();   
-
-	}
+                        $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
+                        $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey,DB_SCHEMA_KLINIK);
+                        
+                        $dtmodel->Insert() or die("insert error"); 
+                        
+                        unset($dtmodel);
+                        unset($dbField);
+                        unset($dbValue);
+                        unset($dbKey); 
+                      } //end for datasplit 
+                   } //end for datafolio
+                    $_x_mode = "Save";
+                  // } //end if $err_code          
+                  
+              } // end if btnsave
+	} // end if btnsave || btnupdate
 
 ?>
 
@@ -367,9 +342,31 @@ function deselectAll(){
          document.getElementById('cbHumptre').checked = false;
 }
 
+function checkFrmSave() {
+  if ((document.getElementById('cbKeratometri').checked == false) &&
+      (document.getElementById('cbBiometri').checked == false) &&
+      (document.getElementById('cbUSG').checked == false) &&
+      (document.getElementById('cbGulaDarah').checked == false) &&
+      (document.getElementById('cbEKG').checked == false) &&
+      (document.getElementById('cbFundus').checked == false) &&
+      (document.getElementById('cbOCT').checked == false) &&
+      (document.getElementById('cbYAG').checked == false) &&
+      (document.getElementById('cbSLT').checked == false) &&      
+      (document.getElementById('cbOpthalmoscop').checked == false) &&
+      (document.getElementById('cbArgon').checked == false) &&
+      (document.getElementById('cbGlaukoma').checked == false) &&
+      (document.getElementById('cbHumptre').checked == false)) {
+    alert("Pilih salah satu pemeriksaan");
+    return false;
+  }else{
+    return true;
+  }
+}
+
+<?php if($_x_mode=="Save"){ ?>
+    document.location.href='<?php echo $thisPage;?>';
+<?php } ?>
 </script>
-
-
 <?php if(!$_GET["id"]) { ?>
 
 <!--<div id="antri_main" style="width:100%;height:auto;clear:both;overflow:auto">
@@ -407,7 +404,7 @@ function deselectAll(){
      <legend><strong>Data Pasien</strong></legend>
      <table width="100%" border="1" cellpadding="4" cellspacing="1">
           <tr>
-               <td width= "20%" align="left" class="tablecontent">Kode Pasien<?php if(readbit($err_code,11)||readbit($err_code,12)) {?>&nbsp;<font color="red">(*)</font><?}?></td>
+               <td width= "20%" align="left" class="tablecontent">Kode Pasien</td>
                <td width= "80%" align="left" class="tablecontent-odd"><label><?php echo $dataPasien["cust_usr_kode"]; ?></label></td>
           </tr>	
           <tr>
@@ -430,7 +427,7 @@ function deselectAll(){
      </fieldset>
 
      <fieldset>
-     <legend><strong>Diagnostik</strong>&nbsp;<a href="#diag" id="diag" onClick="selectAll();">Pilih Semua</a>/<a href="#diag" onClick="deselectAll();">Hilangkan Semua</a></legend>
+     <legend><strong>Diagnostik</strong>&nbsp;<a href="#diag" id="diag" onClick="selectAll();">Pilih Semua</a>/<a href="#diag" onClick="deselectAll();">Hilangkan Semua</a>&nbsp;<?php if($err_code==1) {?>&nbsp;<font color="red">(*)</font><?php }?></legend>
      <table width="100%" border="1" cellpadding="4" cellspacing="1">
         <tr>
                <td colspan="4">
@@ -463,7 +460,7 @@ function deselectAll(){
      <table width="100%" border="1" cellpadding="4" cellspacing="1">
 	  
 		<tr>
-			<td align="center"><?php echo $view->RenderButton(BTN_SUBMIT,($_x_mode == "Edit") ? "btnUpdate" : "btnSave","btnSave","Simpan","button",false,null);?></td>
+			<td align="center"><?php echo $view->RenderButton(BTN_SUBMIT,($_x_mode == "Edit") ? "btnUpdate" : "btnSave","btnSave","Simpan","button",null,"OnClick='return checkFrmSave();'");?></td>
 		</tr>
 	</table>
      </fieldset>
@@ -474,7 +471,7 @@ function deselectAll(){
 
 
 
-<?php echo $view->SetFocus("phmi");?>
+<?php echo $view->SetFocus("cbKeratometri");?>
 <input type="hidden" name="x_mode" value="<?php echo $_x_mode?>" />
 <input type="hidden" name="id_cust_usr" value="<?php echo $_POST["id_cust_usr"];?>"/>
 <input type="hidden" name="id_reg" value="<?php echo $_POST["id_reg"];?>"/>
@@ -485,10 +482,7 @@ function deselectAll(){
 <? if ($err_code != 0) { ?>
 <font color="red"><strong>Periksa lagi inputan yang bertanda (*)</strong></font>
 <? }?>
-<? if (readbit($err_code,11)) { ?>
-<br>
-<font color="green"><strong>Nomor Induk harus diisi.</strong></font>
-<? } ?>
+
 </span>
 
 </form>
