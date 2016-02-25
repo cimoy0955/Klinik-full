@@ -184,11 +184,16 @@
 	  else $err_code = setbit($err_code,13);
 	  */
 	  	
-	  if($_POST["id_rujukan_rs"] != '--') $err_code = clearbit($err_code,5);
-	  else $err_code = setbit($err_code,5);
+	  if($_POST["reg_rujukan"] != '--' && $_POST["reg_rujukan"] != '6' ) {
+	  	if ($_POST["id_rujukan_dokter"] == '--') 
+	  		$err_code = setbit($err_code,6);
+	  	else $err_code = clearbit($err_code,6);
 
-	  if($_POST["id_rujukan_rs"] != '--') $err_code = clearbit($err_code,6);
-	  else $err_code = setbit($err_code,6);
+	  	if ($_POST["id_rujukan_rs"] == '--') 
+	  		$err_code = setbit($err_code,5);
+	  	else $err_code = clearbit($err_code,5);
+	  } 
+	  
 
 		if ($_POST["btnSave"]) {
 
@@ -1326,14 +1331,6 @@ function view_rujukan(eval) {
 <br>
 <font color="green"><strong>Alamat pasien harap diisi.</strong></font>
 <? } ?>
-<? if (readbit($err_code,5) && $_POST["id_rujukan_rs"] != "--") { ?>
-<br>
-<font color="green"><strong>Instalasi asal rujukan harap diisi.</strong></font>
-<? } ?>
-<? if (readbit($err_code,6) && $_POST["id_rujukan_dokter"] != "--") { ?>
-<br>
-<font color="green"><strong>Dokter perujuk harap diisi.</strong></font>
-<? } ?>
 <? if (readbit($err_code,11)) { ?>
 <br>
 <font color="green"><strong>Nomor Rekam Medik harus diisi.</strong></font>
@@ -1348,7 +1345,6 @@ function view_rujukan(eval) {
 <? } ?>
 </span>
 <script>document.frmEdit.cust_usr_kode.focus();</script>
-
 </form>
 
 

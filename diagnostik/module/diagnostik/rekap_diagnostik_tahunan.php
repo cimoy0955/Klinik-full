@@ -244,6 +244,24 @@
      unset($rs);
      // --- end: cari rekap gambar_fundus bulanan --- //
 
+    // --- begin: cari rekap laser slt bulanan --- //
+     $sql = "select date_part('month', diag_waktu) as n_mon,
+                to_char(diag_waktu,'Mon') as mon,
+                extract(year from diag_waktu) as yyyy,
+                count(diag_id) as count_slt
+            from klinik.klinik_diagnostik ";
+      $sql_where_slt = $sql_where;
+     $sql_where_slt[] = "(diag_slt <> '')"; 
+     $sql.= " where ".implode(" and ",$sql_where_slt);
+     $sql.= " group by 1,2,3
+            order by yyyy, date_part('month', diag_waktu)";
+     $rs = $dtaccess->Execute($sql);
+     while($dataSLT = $dtaccess->Fetch($rs)){
+      $dataTable['slt'][$dataSLT['n_mon']] = $dataSLT['count_slt'];
+     }
+     unset($rs);
+     // --- end: cari rekap laser slt bulanan --- //
+
      //*-- config table ---*//
      $tableHeader = "&nbsp;Rekap Tahunan Pasien Diagnostik";
 
@@ -268,7 +286,7 @@
                    
                $tbHeader[0][$counterHeader][TABLE_ISI] = "DIAGNOSTIK CANGGIH";
                $tbHeader[0][$counterHeader][TABLE_WIDTH] = "50%";
-               $tbHeader[0][$counterHeader][TABLE_COLSPAN] = "5";
+               $tbHeader[0][$counterHeader][TABLE_COLSPAN] = "6";
                $counterHeader++;
                
                $tbHeader[0][$counterHeader][TABLE_ISI] = "JUMLAH";
@@ -294,16 +312,22 @@
                $tbHeader[1][$counterHeader][TABLE_WIDTH] = "12%";
                $counterHeader++;
      
+               $tbHeader[1][$counterHeader][TABLE_ISI] = "AL";
+               $tbHeader[1][$counterHeader][TABLE_WIDTH] = "12%";
+               $counterHeader++;
+     
                $tbHeader[1][$counterHeader][TABLE_ISI] = "OCT";
                $tbHeader[1][$counterHeader][TABLE_WIDTH] = "12%";
                $counterHeader++;
      
                for($i=0,$counter=0,$n=12,$sum_of_month=0;$i<$n;$i++,$counter=0,$sum_of_month=0){
-                if($i==0){$tbContent[$i][$counter][TABLE_ISI] = 'A';
-                 $tbContent[$i][$counter][TABLE_ALIGN] = "center";
-                 $tbContent[$i][$counter][TABLE_CLASS] = $classnya;
-                 $tbContent[$i][$counter][TABLE_ROWSPAN] = "13";
-                 $counter++;}
+                if($i==0){
+                  $tbContent[$i][$counter][TABLE_ISI] = 'A';
+                  $tbContent[$i][$counter][TABLE_ALIGN] = "center";
+                  $tbContent[$i][$counter][TABLE_CLASS] = $classnya;
+                  $tbContent[$i][$counter][TABLE_ROWSPAN] = "13";
+                  $counter++;
+                }
      
                 $tbContent[$i][$counter][TABLE_ISI] = ($i + 1);
                 $tbContent[$i][$counter][TABLE_ALIGN] = "center";
@@ -342,6 +366,13 @@
                 $counter++;
                 $sum_of_month += $dataTable['yag'][$i+1];
                 $sum_of_diag['yag'] += $dataTable['yag'][$i+1];
+     
+                $tbContent[$i][$counter][TABLE_ISI] = ($dataTable['argon'][$i+1]) ? $dataTable['yag'][$i+1] : "0";
+                $tbContent[$i][$counter][TABLE_ALIGN] = "center";
+                $tbContent[$i][$counter][TABLE_CLASS] = $classnya;
+                $counter++;
+                $sum_of_month += $dataTable['argon'][$i+1];
+                $sum_of_diag['argon'] += $dataTable['argon'][$i+1];
      
                 $tbContent[$i][$counter][TABLE_ISI] = ($dataTable['oct'][$i+1]) ? $dataTable['oct'][$i+1] : "0";
                 $tbContent[$i][$counter][TABLE_ALIGN] = "center";
@@ -387,6 +418,12 @@
                 $counter++;
                 $sum_of_all += $sum_of_diag['yag'];
      
+                $tbContent[$i][$counter][TABLE_ISI] = $sum_of_diag['argon'];
+                $tbContent[$i][$counter][TABLE_ALIGN] = "center";
+                $tbContent[$i][$counter][TABLE_CLASS] = $classnya;
+                $counter++;
+                $sum_of_all += $sum_of_diag['argon'];
+     
                 $tbContent[$i][$counter][TABLE_ISI] = $sum_of_diag['oct'];
                 $tbContent[$i][$counter][TABLE_ALIGN] = "center";
                 $tbContent[$i][$counter][TABLE_CLASS] = $classnya;
@@ -398,10 +435,10 @@
                 $tbContent[$i][$counter][TABLE_CLASS] = $classnya;
                 $counter++;
      
-               $colspan = 9;
+               $colspan = 10;
                
                if(!$_POST["btnExcel"]){
-                    $tbBottom[0][0][TABLE_ISI] .= '&nbsp;&nbsp;<input type="submit" name="btnExcel" value="Export Excel" class="button" onClick="document.location.href=\''.$editPage.'\'">&nbsp;';
+                    $tbBottom[0][0][TABLE_ISI] .= '&nbsp;&nbsp;<input type="submit" name="btnExcel" value="Export Excel" class="button" >&nbsp;';//onClick="document.location.href=\''.$editPage.'\'"
                     $tbBottom[0][0][TABLE_WIDTH] = "100%";
                     $tbBottom[0][0][TABLE_COLSPAN] = $colspan;
                     $tbBottom[0][0][TABLE_ALIGN] = "center";
@@ -409,7 +446,7 @@
           }
 	if($_POST["btnExcel"]){
           header('Content-Type: application/vnd.ms-excel');
-          header('Content-Disposition: attachment; filename=report_pemeriksaan_'.$_POST["tgl_awal"].'.xls');
+          header('Content-Disposition: attachment; filename=report_pemeriksaan_'.$_POST["in_tahun"].'.xls');
      }
      
 // --- bikin option in_tahun nya --- //
@@ -441,29 +478,30 @@ function CheckSimpan(frm) {
 </script>
 
 <table width="100%" border="1" cellpadding="0" cellspacing="0">
-     <tr class="tableheader">
-          <td><?php echo $tableHeader;?></td>
-     </tr>
-     <tr>
-      <td>
-<form name="frmView" method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>" onSubmit="return CheckSimpan(this);">
-<?php if(!$_POST["btnExcel"]) { ?>
-<table align="center" border=0 cellpadding=2 cellspacing=1 width="100%" class="tblForm" id="tblSearching">
-     <tr>
-          <td width="15%" class="tablecontent">&nbsp;Tahun Pemeriksaan</td>
-          <td width="20%" class="tablecontent-odd">
-            <?php echo $view->RenderComboBox("in_tahun","in_tahun",$optTahun);?>
-          </td> 
-          <td class="tablecontent">
-               <input type="submit" name="btnLanjut" value="Lanjut" class="button">
-          </td>
-     </tr>
-</table>
-<?php } ?>
-    
-<?php echo $table->RenderView($tbHeader,$tbContent,$tbBottom); ?>
+  <tr class="tableheader">
+    <td><?php echo $tableHeader;?></td>
+  </tr>
+  <tr>
+    <td>
+      <form name="frmView" method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>" >
+      <?php if(!$_POST["btnExcel"]) { ?>
+      <table align="center" border=0 cellpadding=2 cellspacing=1 width="100%" class="tblForm" id="tblSearching">
+           <tr>
+                <td width="15%" class="tablecontent">&nbsp;Tahun Pemeriksaan</td>
+                <td width="20%" class="tablecontent-odd">
+                  <?php echo $view->RenderComboBox("in_tahun","in_tahun",$optTahun);?>
+                </td> 
+                <td class="tablecontent">
+                     <input type="submit" name="btnLanjut" value="Lanjut" class="button">
+                </td>
+           </tr>
+      </table>
+      <?php } ?>
+          
+      <?php echo $table->RenderView($tbHeader,$tbContent,$tbBottom); ?>
 
-</form>
+
+      </form>
 
     </td>
   </tr>
