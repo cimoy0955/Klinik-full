@@ -32,10 +32,10 @@
         
      if($_GET["id_reg"]) {
      
-	    $sql = "select a.id_kwitansi , b.kwitansi_nomor from klinik.klinik_folio a
+	    $sql = "select a.id_kwitansi, a.fol_dibayar_when , b.kwitansi_nomor from klinik.klinik_folio a
 		   join global.global_kwitansi b on b.kwitansi_id = a.id_kwitansi 
 		   where a.id_reg = ".QuoteValue(DPE_CHAR,$_GET["id_reg"]) ;
-	    //$dataKWT = $dtaccess->Fetch($sql);
+	    $dataKWT = $dtaccess->Fetch($sql);
 	    
 	    $_POST["kwitansi_id"] = $dataKWT['id_kwitansi'];
 	    $_POST["id_reg"] = $_GET["id_reg"]; 
@@ -348,6 +348,10 @@ function cetak() {
      </tr>
 </table><br />
 <table  border="0" align="center" style="width:21cm;border:0px solid black;border-collapse:collapse;font-size:12px;" >
+	<tr height="25">
+		<td  style="border-bottom:0px solid black;border-right:0px solid black;"  width= "50%" align="center"><?php echo FormatFromTimeStamp($dataKWT['fol_dibayar_when']);?></td>
+		<td style="border-bottom:0px solid black;border-right:0px solid black;"  width= "50%" align="center">&nbsp;</td>
+	</tr>	
 	<tr height="25">
 		<td  style="border-bottom:0px solid black;border-right:0px solid black;"  width= "50%" align="center">Petugas Codding</td>
 		<td style="border-bottom:0px solid black;border-right:0px solid black;"  width= "50%" align="center">Dokter Penanggung Jawab</td>

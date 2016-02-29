@@ -229,8 +229,8 @@ function cetak() {
 	</tr>	
 	<tr height="65">
 		<td align="left"  style="border-right:1px solid black;text-align:center;" ><?php echo $userData['name']; ?></td>
-		<td  style="border-right:1px solid black;" align="center" valign="center"><b><?php $tgl = getdateToday();
-                           echo format_date_long($tgl);  ?></b></td>
+		<td  style="border-right:1px solid black;" align="center" valign="center"><b><?php $tgl = FormatFromTimeStamp($dataFolio[0]['fol_dibayar_when']);;
+                           echo format_date_long(date_db($tgl));  ?></b></td>
 		<td style="border-right:1px solid black;" align="left">&nbsp;</td>
 		<td style="border-right:1px solid black;" align="left">&nbsp;</td>
 	</tr>	

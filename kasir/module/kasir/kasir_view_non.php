@@ -40,11 +40,20 @@
      
      $tableRefraksi = new InoTable("table1","99%","center");
 
+     if ($_GET["currentPage"]) {
+     	$offset = ($_GET["currentPage"] - 1) * 20;
+     	$currnt_page = $_GET["currentPage"];
+     }else{
+     	$offset = 0;
+     	$currnt_page = 1;
+     }
+     
+
 
      $plx = new InoLiveX("GetFolio,GetSpecialTariff");     
      
      function GetFolio() {
-          global $dtaccess, $view, $tableRefraksi, $thisPage, $APLICATION_ROOT,$rawatStatus,$auth,$bayarPasien; 
+          global $dtaccess, $view, $tableRefraksi, $thisPage, $APLICATION_ROOT,$rawatStatus,$auth,$bayarPasien,$offset,$currnt_page; 
                
           $sql = "select a.id_reg, a.id_cust_usr, b.cust_usr_nama,a.fol_jenis,a.fol_waktu,id_biaya,a.fol_lunas,
 		    b.cust_usr_jenis, z.reg_status, z.reg_tipe_rawat, z.reg_jenis_pasien
@@ -52,8 +61,19 @@
 		    join global.global_customer_user b on a.id_cust_usr = b.cust_usr_id
 		    join klinik.klinik_registrasi z on z.reg_id = a.id_reg
 		    where z.reg_status NOT IN  ('I2','DM0') and z.reg_jenis_pasien<>'3' and  a.fol_lunas = 'n'
-		    order by id_cust_usr asc";
-	  $dataTable = $dtaccess->FetchAll($sql);
+		    order by id_cust_usr asc
+		    limit 20 offset ".$offset;
+		    $rs = $dtaccess->Execute($sql);
+	  		$dataTable = $dtaccess->FetchAll($rs);
+
+	  	$sql_num = "select a.id_reg, a.id_cust_usr, b.cust_usr_nama,a.fol_jenis,a.fol_waktu,id_biaya,a.fol_lunas,
+		    b.cust_usr_jenis, z.reg_status, z.reg_tipe_rawat, z.reg_jenis_pasien
+		    from klinik.klinik_folio a 
+		    join global.global_customer_user b on a.id_cust_usr = b.cust_usr_id
+		    join klinik.klinik_registrasi z on z.reg_id = a.id_reg
+		    where z.reg_status NOT IN  ('I2','DM0') and z.reg_jenis_pasien<>'3' and  a.fol_lunas = 'n'";
+		$rs_num = $dtaccess->Execute($sql_num);
+		$row_num = $dtaccess->RowCount($rs_num);
 		      #return $sql;
 	       $row = -1;
 	       for($i=0,$n=count($dataTable);$i<$n;$i++) {
@@ -142,6 +162,9 @@
 		    $counter=0; $i++;
 	       }
 	  }
+	  	$tbBottom[0][0][TABLE_ISI] = $view->RenderPaging($row_num,20,$currnt_page);
+	  	$tbBottom[0][0][TABLE_ALIGN] = "left";
+	  	$tbBottom[0][0][TABLE_COLSPAN] = $counterHeader;
           #return $coba;
           return $tableRefraksi->RenderView($tbHeader,$tbContent,$tbBottom);
 		
@@ -691,8 +714,15 @@
 	       unset($dbValue);
 	       unset($dbKey);    
 	  }
-	  
-	  $sql = "update klinik.klinik_folio set fol_dibayar = fol_nominal, fol_lunas = 'y', fol_dibayar_when = CURRENT_TIMESTAMP, id_kwitansi = ".QuoteValue(DPE_NUMERIC,$_POST["kwitansi_id"])."  where  id_reg = ".QuoteValue(DPE_CHAR,$_POST["id_reg"]); //fol_jenis = ".QuoteValue(DPE_CHAR,$_POST["fol_jenis"])." and
+	  $fol_tanggal = date_db($_POST["fol_tanggal"]);
+	  echo $fol_tanggal;
+	  $fol_tanggal = split("-", $fol_tanggal);
+	  echo $fol_tanggal[0];
+	  echo $fol_tanggal[1];
+	  echo $fol_tanggal[2];
+	  $fol_tanggal = date('Y-m-d H:i:s', mktime(8, 0, 0, $fol_tanggal[1], $fol_tanggal[2], $fol_tanggal[0]));
+	  echo $fol_tanggal;
+	  $sql = "update klinik.klinik_folio set fol_dibayar = fol_nominal, fol_lunas = 'y', fol_dibayar_when = '".$fol_tanggal."', id_kwitansi = ".QuoteValue(DPE_NUMERIC,$_POST["kwitansi_id"])."  where  id_reg = ".QuoteValue(DPE_CHAR,$_POST["id_reg"]); //fol_jenis = ".QuoteValue(DPE_CHAR,$_POST["fol_jenis"])." and
 	  $dtaccess->Execute($sql);
 
 	  $sql = "update klinik.klinik_registrasi set reg_waktu = CURRENT_TIME where reg_id = ".QuoteValue(DPE_CHAR,$_POST["id_reg"]);
@@ -1759,7 +1789,7 @@ function setINAKelas(args) {
 <div id="antri_main" style="width:100%;height:auto;clear:both;overflow:auto">
 		<div class="tableheader">Antrian Kasir</div>
 		 <div style="margin:10px auto 5px 7px;"><a href="<?php echo $findPasienFolio;?>&jenis=0&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Tambah Pasien"><img src="<?php echo $ROOT;?>images/bnplus.gif" />Tambah Pasien</a></div>
-		<div id="antri_kiri_isi" style="height:100;overflow:auto"><?php //echo GetFolio(); ?></div>
+		<div id="antri_kiri_isi" style="height:265;overflow:auto"><?php //echo GetFolio(); ?></div>
 </div><?php //echo $sql_fol;?>
 
 <?php if($dataPasien) { ?>
@@ -1801,6 +1831,21 @@ function setINAKelas(args) {
                <td width= "20%" align="left" class="tablecontent">Jenis Bayar</td>
                <td width= "80%" align="left" class="tablecontent-odd"><label><?php echo $bayarPasien[$dataPasien["reg_jenis_pasien"]]; ?></label></td>
           </tr>
+          <tr>
+               <td width= "20%" align="left" class="tablecontent">Tanggal Pembayaran</td>
+               <td width= "80%" align="left" class="tablecontent-odd"><label><input type="text" id="fol_tanggal" name="fol_tanggal" size="15" maxlength="10" value="<?php echo FormatFromTimeStamp($_GET["waktu"]);?>" onKeyDown="return tabOnEnter(this, event);"/>
+               <img src="<?php echo $APLICATION_ROOT;?>images/b_calendar.png" width="16" height="16" align="middle" id="img_fol_tanggal" style="cursor: pointer; border: 0px solid white;" title="Date selector" onMouseOver="this.style.background='red';" onMouseOut="this.style.background=''" /></label></td>
+          </tr>
+           <script>
+			  Calendar.setup({
+			        inputField     :    "fol_tanggal",      // id of the input field
+			        ifFormat       :    "<?=$formatCal;?>",       // format of the input field
+			        showsTime      :    false,            // will display a time selector
+			        button         :    "img_fol_tanggal",   // trigger for the calendar (button ID)
+			        singleClick    :    true,           // double-click mode
+			        step           :    1                // show all years in drop-down boxes (instead of every other year as default)
+			    });
+			  </script>
 <?php echo $view->RenderHidden("reg_jenis_bayar","reg_jenis_bayar",$dataPasien["reg_jenis_pasien"]);?>
           
 	   </table>
@@ -1935,7 +1980,7 @@ function setINAKelas(args) {
 		    <input type="hidden" name="fol_jenis" id="fol_jenis" value="<?php echo $_POST["fol_jenis"];?>" />  
 		    <input type="hidden" name="id_reg" value="<?php echo $_GET["id_reg"];?>"/>    
 		    <input type="hidden" name="id_cust_usr" value="<?php echo $_POST["id_cust_usr"];?>"/> 
-		    <input type="hidden" name="waktunya" value="<?php echo $_GET["waktu"];?>" />
+		    <!-- <input type="hidden" name="waktunya" value="<?php echo $_GET["waktu"];?>" /> -->
 		    <input type="hidden" name="id_biaya" value="<?php echo $_GET["biaya"];?>" />
 		    <input type="hidden" name="id_obat" value="<?php echo $_GET["obat"];?>" />
 		    <input type="hidden" name="id_biaya_operasi" value="<?php echo $_GET["biaya_operasi"];?>" />
