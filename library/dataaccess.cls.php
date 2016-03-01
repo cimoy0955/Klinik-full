@@ -128,14 +128,6 @@ class DataAccess
                         QuoteValue(DPE_CHAR,$_SERVER["REMOTE_ADDR"]).",". 
                         QuoteValue(DPE_DATETIME,date("Y-m-d H:i:s")).")";
                 $this->db->Execute($sql);
-               
-                //$sql = "insert into global.global_dblog(log_data,log_who,log_tipe,log_ip,log_when) values ( ".
-                       // QuoteValue(DPE_CHAR,$in_sql).",". 
-                       // QuoteValue(DPE_CHAR,$loginData["loginname"]).",". 
-                       // QuoteValue(DPE_CHAR,$tipe).",". 
-                      ////  QuoteValue(DPE_CHAR,$_SERVER["REMOTE_ADDR"]).",". 
-                       // QuoteValue(DPE_DATETIME,date("Y-m-d H:i:s")).")";
-               // $this->db->Execute($sql);
             }
         }
         
