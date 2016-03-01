@@ -715,13 +715,8 @@
 	       unset($dbKey);    
 	  }
 	  $fol_tanggal = date_db($_POST["fol_tanggal"]);
-	  echo $fol_tanggal;
 	  $fol_tanggal = split("-", $fol_tanggal);
-	  echo $fol_tanggal[0];
-	  echo $fol_tanggal[1];
-	  echo $fol_tanggal[2];
 	  $fol_tanggal = date('Y-m-d H:i:s', mktime(8, 0, 0, $fol_tanggal[1], $fol_tanggal[2], $fol_tanggal[0]));
-	  echo $fol_tanggal;
 	  $sql = "update klinik.klinik_folio set fol_dibayar = fol_nominal, fol_lunas = 'y', fol_dibayar_when = '".$fol_tanggal."', id_kwitansi = ".QuoteValue(DPE_NUMERIC,$_POST["kwitansi_id"])."  where  id_reg = ".QuoteValue(DPE_CHAR,$_POST["id_reg"]); //fol_jenis = ".QuoteValue(DPE_CHAR,$_POST["fol_jenis"])." and
 	  $dtaccess->Execute($sql);
 

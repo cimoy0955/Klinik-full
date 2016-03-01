@@ -27,6 +27,7 @@ DEFINE("TABLE_ALIGN","ALIGN");
 DEFINE("TABLE_CLASS","CLASS");
 DEFINE("TABLE_VALIGN","VALIGN");
 DEFINE("TABLE_ID","ID");
+DEFINE("TABLE_ROWCLASS","ROWCLASS");
 
 $pagingMax = 10;
 
@@ -324,7 +325,7 @@ class CView
         $strBody.= '<script language="JavaScript" type="text/javascript" src="'.$ROOT.'library/script/func_curr.js"></script>'."\n";
         $strBody.= '<script language="JavaScript" type="text/javascript" src="'.$ROOT.'library/script/mask.js"></script>'."\n";
         $strBody.= '<script language="JavaScript" type="text/javascript" src="'.$ROOT.'library/script/func_date.js"></script>'."\n";
-     
+        $strBody.= '<script language="JavaScript" type="text/javascript" src="'.$ROOT.'library/script/jquery/jquery-1.12.1.min.js"></script>'."\n";
 
      
         if($isCal){
@@ -917,6 +918,7 @@ class InoTable
           for($i=0,$n=count($in_content);$i<$n;$i++){
                $str .= $tab.'<tr ';
                if($in_content[$i][0][TABLE_ID]) $str .= ' id="'.$in_content[$i][0][TABLE_ID].'"';
+               if($in_content[$i][0][TABLE_ROWCLASS]) $str .= ' class="'.$in_content[$i][0][TABLE_ROWCLASS].'"';
                $str .= '>'."\n";
                
                for($j=0,$k=count($in_content[$i]);$j<$k;$j++){
