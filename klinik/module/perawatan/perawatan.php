@@ -1282,12 +1282,12 @@ $_POST["id_visus_koreksi_os"] = $dataRefraksi["id_visus_koreksi_os"];
 		    $dtaccess->Execute($sql);
 		    unset ($sql_where);
 		    unset ($dbField);
-		    if($_POST["rawat_kesehatan"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,"OK3-42");
-		    if($_POST["rawat_flouorecsin"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,"OK3-09");
-		    if($_POST["rawat_epilasi"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,"OK3-15");
-		    if($_POST["rawat_probing"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,"OK3-13");
-		    if($_POST["rawat_schimer"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,"OK3-12");
-		    if($_POST["rawat_nct_od"] || $_POST["rawat_nct_os"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,"OK3-26");
+		    if($_POST["rawat_kesehatan"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_UJIMATA);
+              if($_POST["rawat_anel"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_ANEL;
+		    if($_POST["rawat_flouorecsin"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_FLUORECSIN);
+		    if($_POST["rawat_schimer"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_SCHIMER);
+		    if($_POST["rawat_nct_od"] || $_POST["rawat_nct_os"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_NCT);
+              if($_POST["rawat_mata_od_retina"] || $_POST["rawat_mata_os_retina"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_FUNDUSCOPY);
 
 		    if($sql_where) {
 			 $sql = "select * from klinik.klinik_biaya a where ".implode(" or ",$sql_where);

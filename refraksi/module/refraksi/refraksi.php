@@ -474,7 +474,7 @@
 	       $dbField[10] = "fol_nominal_satuan";
 		    
                if($_POST["ck_ark"]=="ark_on" || $_POST["ref_ark_koreksi_spheris_od"] || $_POST["ref_ark_koreksi_cylinder_od"] || $_POST["ref_ark_koreksi_sudut_od"] || $_POST["ref_ark_koreksi_spheris_os"] || $_POST["ref_ark_koreksi_cylinder_os"] || $_POST["ref_ark_koreksi_sudut_os"]) {
-                    $sql = "select * from klinik.klinik_biaya where biaya_kode = ".QuoteValue(DPE_CHAR,"RF1-01"); 
+                    $sql = "select * from klinik.klinik_biaya where biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_ARK); 
                     $dataBiaya = $dtaccess->Fetch($sql,DB_SCHEMA);  
                     
                     //$lunas = ($_POST["reg_jenis_pasien"]==PASIEN_BAYAR_SWADAYA)?'n':'y';
@@ -501,6 +501,7 @@
                     unset($dtmodel);
                     unset($dbValue);
                     unset($dbKey);
+                    unset($dataBiaya);
 				//
 				//$sql = "select * from klinik.klinik_biaya_split where id_biaya = ".QuoteValue(DPE_CHAR,BIAYA_ARK)." and bea_split_nominal > 0";
 				//$dataSplit = $dtaccess->FetchAll($sql,DB_SCHEMA);
@@ -531,7 +532,7 @@
                }
 	       
 	       if($_POST["ref_streak_koreksi_sudut_od"]||$_POST["ref_streak_koreksi_spheris_od"]||$_POST["ref_streak_koreksi_cylinder_od"]||$_POST["ref_streak_koreksi_sudut_os"]||$_POST["ref_streak_koreksi_spheris_os"]||$_POST["ref_streak_koreksi_cylinder_os"]) {
-		    $sql = "select * from klinik.klinik_biaya where biaya_kode = ".QuoteValue(DPE_CHAR,"RJ3-06"); 
+		    $sql = "select * from klinik.klinik_biaya where biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_STREAK); 
                     $dataBiaya = $dtaccess->Fetch($sql,DB_SCHEMA);  
                     
 		    $folId = $dtaccess->GetTransID();
@@ -549,7 +550,10 @@
                     
                     //if($row_edit["cust_id"]) $custId = $row_edit["cust_id"];
                     $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
-                    $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey,DB_SCHEMA_KLINIK);
+                    if ($dataBiaya) {
+                         # code...
+                         $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey,DB_SCHEMA_KLINIK);
+                    }
                     
                     $dtmodel->Insert() or die("insert error"); 
                     
