@@ -1283,7 +1283,7 @@ $_POST["id_visus_koreksi_os"] = $dataRefraksi["id_visus_koreksi_os"];
 		    unset ($sql_where);
 		    unset ($dbField);
 		    if($_POST["rawat_kesehatan"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_UJIMATA);
-              if($_POST["rawat_anel"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_ANEL;
+              if($_POST["rawat_anel"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_ANEL);
 		    if($_POST["rawat_flouorecsin"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_FLUORECSIN);
 		    if($_POST["rawat_schimer"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_SCHIMER);
 		    if($_POST["rawat_nct_od"] || $_POST["rawat_nct_os"]) $sql_where[] = "biaya_kode = ".QuoteValue(DPE_CHAR,BIAYA_NCT);
@@ -1483,7 +1483,14 @@ $_POST["id_visus_koreksi_os"] = $dataRefraksi["id_visus_koreksi_os"];
           }
           
           if ($_POST["_x_mode"] == "Edit") echo "<script>document.location.href='".$backPage."&id_cust_usr=".$enc->Encode($_POST["id_cust_usr"])."';</script>";
-          else  echo "<script>document.location.href='".$thisPage."';</script>";
+          else{
+               if ($_POST["cmbNext"] == STATUS_SELESAI.STATUS_ANTRI) {
+                    $sql_cekFolio = "select count(*) as belum_lunas from klinik.klinik_folio where id_reg = ".QuoteValue(DPE_CHAR,$_POST["id_reg"])." and fol_lunas = 'n'";
+                    $data_cekFolio = $dtaccess->Fetch($sql_cekFolio);
+                    if($data_cekFolio["belum_lunas"] > 0) echo "<script> alert('Pasien memiliki tagihan belum terbayar. Silahkan diarahkan ke kasir untuk membayar tagihan.')</script>";
+               }
+               echo "<script>document.location.href='".$thisPage."';</script>";
+          }
           exit();
 
      }
