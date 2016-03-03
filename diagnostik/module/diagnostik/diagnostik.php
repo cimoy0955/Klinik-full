@@ -210,6 +210,15 @@
           unset($row);
            
           $sql = "select pgw_nama, pgw_id from klinik.klinik_diagnostik_dokter a
+                    join hris.hris_pegawai b on a.id_pgw = b.pgw_id where id_diag = ".QuoteValue(DPE_CHAR,$_POST["diag_id"])." and diag_dokter_periksa = ".QuoteValue(DPE_CHAR,'lpi');
+          $rs = $dtaccess->Execute($sql);
+          $row=$dtaccess->Fetch($rs);
+          $_POST["id_lpi_dokter"] = $row["pgw_id"];
+          $_POST["diag_lpi_dokter_nama"] = $row["pgw_nama"];
+          unset($rs);
+          unset($row);
+           
+          $sql = "select pgw_nama, pgw_id from klinik.klinik_diagnostik_dokter a
                     join hris.hris_pegawai b on a.id_pgw = b.pgw_id where id_diag = ".QuoteValue(DPE_CHAR,$_POST["diag_id"])." and diag_dokter_periksa = ".QuoteValue(DPE_CHAR,'argon');
           $rs = $dtaccess->Execute($sql);
           $row=$dtaccess->Fetch($rs);
@@ -417,6 +426,7 @@ where id_app = ".QuoteValue(DPE_NUMERIC,'5');
           $dbField[33] = "diag_lab_gula_darah";
           $dbField[34] = "diag_lab_darah_lengkap";
           $dbField[35] = "diag_slt";
+          $dbField[36] = "diag_lpi";
 	  
           
           if(!$_POST["diag_id"]) $_POST["diag_id"] = $dtaccess->GetTransID();
@@ -457,6 +467,7 @@ where id_app = ".QuoteValue(DPE_NUMERIC,'5');
           $dbValue[33] = QuoteValue(DPE_CHAR,$_POST["diag_lab_gula_darah"]);
           $dbValue[34] = QuoteValue(DPE_CHAR,$_POST["diag_lab_darah_lengkap"]);
           $dbValue[35] = QuoteValue(DPE_CHAR,$_POST["diag_slt"]);
+          $dbValue[36] = QuoteValue(DPE_CHAR,$_POST["diag_lpi"]);
           
           $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
           $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey);
@@ -1381,6 +1392,16 @@ function SusterDelete(akhir){
                </td>
           </tr>
           <? } ?>
+          <tr>
+               <td align="left" class="tablecontent">Laser Peripheral Iridectomy</td>
+               <td align="left" class="tablecontent-odd"><?php echo $view->RenderTextArea("diag_lpi","diag_lpi","2","50",$_POST["diag_lpi"],"inputField", null,null);?></td>
+               <td width="20%"  class="tablecontent" align="left">Dokter Pelaksana</td>
+               <td align="left" class="tablecontent-odd" width="80%"> 
+                    <?php echo $view->RenderTextBox("diag_lpi_dokter_nama","diag_lpi_dokter_nama","30","100",$_POST["diag_lpi_dokter_nama"],"inputField", "readonly",false);?>
+                    <a href="<?php echo $dokterPage;?>&diag=lpi&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Cari Dokter"><img src="<?php echo($APLICATION_ROOT);?>images/bd_insrow.png" border="0" align="middle" width="18" height="20" style="cursor:pointer" title="Cari Dokter" alt="Cari Dokter" /></a>
+                    <input type="hidden" id="id_lpi_dokter" name="id_lpi_dokter" value="<?php echo $_POST["id_lpi_dokter"];?>"/>
+               </td>
+          </tr>
 <? if($dataNostik["humprey"] == BIAYA_HUMPREY) { ?>
           <tr>
                <td align="left" class="tablecontent">Humprey</td>

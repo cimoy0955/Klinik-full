@@ -104,8 +104,10 @@ function sendValue(id,nama) {
 	}else if(diag_tipe == 'rap') {
 		var element_nama = self.parent.document.getElementById('diag_rap_dokter_nama');
 		var element_id = self.parent.document.getElementById('id_rap_dokter');
+	}else if(diag_tipe == 'lpi') {
+		var element_nama = self.parent.document.getElementById('diag_lpi_dokter_nama');
+		var element_id = self.parent.document.getElementById('id_lpi_dokter');
 	}
-	
 	element_nama.value = nama;
 	element_id.value = id;
 
