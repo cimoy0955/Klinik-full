@@ -18,14 +18,14 @@ $view = new CView($_SERVER['PHP_SELF'],$_SERVER['QUERY_STRING']);
 
 $plx = new InoLiveX("GetData");
 
-function GetData($in_nama=null){
+function GetData($in_nama=null,$in_kode=null){
 	global $dtaccess, $APLICATION_ROOT;
 
 	
 	$table = new InoTable("table1","100%","center",null,0,0,0,null,"tblForm");
 	
-	if($in_nama) $sql_where[] = "UPPER(item_nama) like '%".strtoupper($in_nama)."%'"; 
-
+	if($in_nama) $sql_where[] = "UPPER(a.item_nama) like '%".strtoupper($in_nama)."%'"; 
+	if($in_kode) $sql_where[] = "UPPER(a.item_kode) like '%".strtoupper($in_kode)."%'";
 	$sql_where[] = "price_list = 'SWADANA'";
 	 
 	 $sql_where = implode(" and ",$sql_where);
@@ -53,18 +53,23 @@ function GetData($in_nama=null){
       $tbHeader[0][$counter][TABLE_ALIGN] = "center";
       $counter++;
       
+      $tbHeader[0][$counter][TABLE_ISI] = "Kode Obat";
+      $tbHeader[0][$counter][TABLE_WIDTH] = "20%";
+      $tbHeader[0][$counter][TABLE_ALIGN] = "center";
+      $counter++;
+
       $tbHeader[0][$counter][TABLE_ISI] = "Nama Obat";
-      $tbHeader[0][$counter][TABLE_WIDTH] = "64%";
+      $tbHeader[0][$counter][TABLE_WIDTH] = "50%";
       $tbHeader[0][$counter][TABLE_ALIGN] = "center";
       $counter++;
 
       $tbHeader[0][$counter][TABLE_ISI] = "Harga";
-      $tbHeader[0][$counter][TABLE_WIDTH] = "64%";
+      $tbHeader[0][$counter][TABLE_WIDTH] = "20%";
       $tbHeader[0][$counter][TABLE_ALIGN] = "center";
       $counter++;
 
       $tbHeader[0][$counter][TABLE_ISI] = "Pilih";
-      $tbHeader[0][$counter][TABLE_WIDTH] = "10%";
+      $tbHeader[0][$counter][TABLE_WIDTH] = "9%";
       $tbHeader[0][$counter][TABLE_ALIGN] = "center";
       $counter++;
 	
@@ -76,6 +81,11 @@ function GetData($in_nama=null){
 		$tbContent[$i][$counter][TABLE_ISI] = ($i+1);
 		$tbContent[$i][$counter][TABLE_ALIGN] = "center";
 		$tbContent[$i][$counter][TABLE_CLASS] = $class;
+		$counter++;
+		
+		$tbContent[$i][$counter][TABLE_ISI] = "&nbsp;".$dataTable[$i]["item_kode"];
+		$tbContent[$i][$counter][TABLE_ALIGN] = "left";
+		$tbContent[$i][$counter][TABLE_CLASS] = $class;                    
 		$counter++;
 		
 		$tbContent[$i][$counter][TABLE_ISI] = "&nbsp;".$dataTable[$i]["item_nama"];
@@ -135,6 +145,12 @@ function Search(nama) {
 				<td colspan="2"><center>Pencarian&nbsp;Obat</center></td>
 			</tr>
 			<tr>
+				<td align="right" class="tablecontent">Kode Obat</td>
+				<td class="tablecontent">
+					<?php echo $view->RenderTextBox("_kode","_kode",50,200,$_POST["_kode"],false,false);?>
+				</td>
+			</tr>
+			<tr>
 				<td align="right" class="tablecontent">Nama Obat</td>
 				<td class="tablecontent">
 					<?php echo $view->RenderTextBox("_name","_name",50,200,$_POST["_name"],false,false);?>
@@ -142,7 +158,7 @@ function Search(nama) {
 			</tr>
 			<tr>
 				<td colspan="2" class="tablecontent"><center>
-					<input type="button" name="btnSearch" value="Cari" class="button" onClick="Search(document.getElementById('_name').value)"/>
+					<input type="button" name="btnSearch" value="Cari" class="button" onClick="Search(document.getElementById('_name').value, document.getElementById('_kode').value)"/>
 					<input type="button" name="btnClose" value="Tutup" OnClick="self.parent.tb_remove();" class="button" /></center>
 				</td>
 			</tr>

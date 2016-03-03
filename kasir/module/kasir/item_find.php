@@ -18,7 +18,7 @@ $view = new CView($_SERVER['PHP_SELF'],$_SERVER['QUERY_STRING']);
 
 $plx = new InoLiveX("GetData");
 
-function GetData($in_nama=null){
+function GetData($in_nama=null,$in_kode=null){
 	global $dtaccess, $APLICATION_ROOT;
 
 	
@@ -26,7 +26,7 @@ function GetData($in_nama=null){
 	
 	
 	if($in_nama) $sql_where[] = "UPPER(biaya_nama) like '%".strtoupper($in_nama)."%'"; 
-	if($in_kode) $sql_where[] = "UPPER(biaya_nama) like '%".strtoupper($in_kode)."%'"; 
+	if($in_kode) $sql_where[] = "UPPER(biaya_kode) like '%".strtoupper($in_kode)."%'"; 
 	 
          $sql_where[] = "biaya_kode not like 'OP3%'";
 	 
@@ -53,18 +53,23 @@ function GetData($in_nama=null){
       $tbHeader[0][$counter][TABLE_ALIGN] = "center";
       $counter++;
       
+      $tbHeader[0][$counter][TABLE_ISI] = "Kode Biaya";
+      $tbHeader[0][$counter][TABLE_WIDTH] = "20%";
+      $tbHeader[0][$counter][TABLE_ALIGN] = "center";
+      $counter++;
+
       $tbHeader[0][$counter][TABLE_ISI] = "Nama Tagihan";
-      $tbHeader[0][$counter][TABLE_WIDTH] = "64%";
+      $tbHeader[0][$counter][TABLE_WIDTH] = "50%";
       $tbHeader[0][$counter][TABLE_ALIGN] = "center";
       $counter++;
 
       $tbHeader[0][$counter][TABLE_ISI] = "Biaya";
-      $tbHeader[0][$counter][TABLE_WIDTH] = "64%";
+      $tbHeader[0][$counter][TABLE_WIDTH] = "20%";
       $tbHeader[0][$counter][TABLE_ALIGN] = "center";
       $counter++;
 
       $tbHeader[0][$counter][TABLE_ISI] = "Pilih";
-      $tbHeader[0][$counter][TABLE_WIDTH] = "10%";
+      $tbHeader[0][$counter][TABLE_WIDTH] = "9%";
       $tbHeader[0][$counter][TABLE_ALIGN] = "center";
       $counter++;
 	
@@ -76,6 +81,11 @@ function GetData($in_nama=null){
 		$tbContent[$i][$counter][TABLE_ISI] = ($i+1);
 		$tbContent[$i][$counter][TABLE_ALIGN] = "center";
 		$tbContent[$i][$counter][TABLE_CLASS] = $class;
+		$counter++;
+		
+		$tbContent[$i][$counter][TABLE_ISI] = "&nbsp;".$dataTable[$i]["biaya_kode"];
+		$tbContent[$i][$counter][TABLE_ALIGN] = "left";
+		$tbContent[$i][$counter][TABLE_CLASS] = $class;                    
 		$counter++;
 		
 		$tbContent[$i][$counter][TABLE_ISI] = "&nbsp;".$dataTable[$i]["biaya_nama"];

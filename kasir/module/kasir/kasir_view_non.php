@@ -912,7 +912,7 @@ var mTimer;
 function timer(){     
      clearInterval(mTimer);      
      GetFolio('target=antri_kiri_isi');     
-     mTimer = setTimeout("timer()", 1000);
+     mTimer = setTimeout("timer()", 10000);
 }
 
 timer();
@@ -1007,27 +1007,27 @@ function GantiHargaObat(jml,hrg) {
 
 //-------------autocomplete-------------//
 	
-var drz;
-function lihat0(eval){
+var drz01;
+function lihat01(eval){
 
     if(eval.length==0){
-        document.getElementById("kotaksugest").style.visibility = "hidden";
+        document.getElementById("kotaksugest01").style.visibility = "hidden";
     }else{
-        drz = buatajax();
+        drz01 = buatajax01();
         var url="cari0.php";
-        drz.onreadystatechange=stateChanged;
+        drz01.onreadystatechange=stateChanged01;
         var params = "q="+eval;
-        drz.open("POST",url,true);
+        drz01.open("POST",url,true);
         //beberapa http header harus kita set kalau menggunakan POST
-        drz.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        drz.setRequestHeader("Content-length", params.length);
-        drz.setRequestHeader("Connection", "close");
-        drz.send(params);
+        drz01.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        drz01.setRequestHeader("Content-length", params.length);
+        drz01.setRequestHeader("Connection", "close");
+        drz01.send(params);
     }
 
 }
 
-function buatajax(){
+function buatajax01(){
     if (window.XMLHttpRequest){
         return new XMLHttpRequest();
     }
@@ -1037,22 +1037,22 @@ function buatajax(){
     return null;
 }
 
-function stateChanged(){
+function stateChanged01(){
 
-var data;
-    if (drz.readyState==4 && drz.status==200){
-        data=drz.responseText;
+	var data;
+    if (drz01.readyState==4 && drz01.status==200){
+        data=drz01.responseText;
         if(data.length>0){
-            document.getElementById("kotaksugest0").innerHTML = data;
-            document.getElementById("kotaksugest0").style.visibility = "";
+            document.getElementById("kotaksugest01").innerHTML = data;
+            document.getElementById("kotaksugest01").style.visibility = "";
         }else{
-            document.getElementById("kotaksugest0").innerHTML = "";
-            document.getElementById("kotaksugest0").style.visibility = "hidden";
+            document.getElementById("kotaksugest01").innerHTML = "";
+            document.getElementById("kotaksugest01").style.visibility = "hidden";
         }
     }
 }
 
-function isi(id,kode,nama,total){
+function isi01(id,kode,nama,total){
 
     document.getElementById("biaya_id").value = id;
     document.getElementById("biaya_nama").value = nama;
@@ -1060,8 +1060,65 @@ function isi(id,kode,nama,total){
     document.getElementById("txtJumlah").value = "1";
     document.getElementById("txtHargaSatuan").value = formatCurrency(total);
     document.getElementById("txtHargaTotal").value = formatCurrency(total);
-    document.getElementById("kotaksugest").style.visibility = "hidden";
-    document.getElementById("kotaksugest").innerHTML = "";
+    document.getElementById("kotaksugest01").style.visibility = "hidden";
+    document.getElementById("kotaksugest01").innerHTML = "";
+}
+
+var drz02;
+function lihat02(eval){
+
+    if(eval.length==0){
+        document.getElementById("kotaksugest02").style.visibility = "hidden";
+    }else{
+        drz02 = buatajax02();
+        var url="cari02_non.php";
+        drz02.onreadystatechange=stateChanged02;
+        var params = "q="+eval;
+        drz02.open("POST",url,true);
+        //beberapa http header harus kita set kalau menggunakan POST
+        drz02.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        drz02.setRequestHeader("Content-length", params.length);
+        drz02.setRequestHeader("Connection", "close");
+        drz02.send(params);
+    }
+
+}
+
+function buatajax02(){
+    if (window.XMLHttpRequest){
+        return new XMLHttpRequest();
+    }
+    if (window.ActiveXObject){
+        return new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    return null;
+}
+
+function stateChanged02(){
+
+	var data;
+    if (drz02.readyState==4 && drz02.status==200){
+        data=drz02.responseText;
+        if(data.length>0){
+            document.getElementById("kotaksugest02").innerHTML = data;
+            document.getElementById("kotaksugest02").style.visibility = "";
+        }else{
+            document.getElementById("kotaksugest02").innerHTML = "";
+            document.getElementById("kotaksugest02").style.visibility = "hidden";
+        }
+    }
+}
+
+function isi02(id,kode,nama,total){
+
+    document.getElementById("obat_id").value = id;
+    document.getElementById("obat_nama").value = nama;
+    document.getElementById("obat_kode").value = kode;
+    document.getElementById("txtJumlahObat").value = "1";
+    document.getElementById("txtHargaSatuanObat").value = formatCurrency(total);
+    document.getElementById("txtHargaTotalObat").value = formatCurrency(total);
+    document.getElementById("kotaksugest02").style.visibility = "hidden";
+    document.getElementById("kotaksugest02").innerHTML = "";
 }
 
 //-------------autocomplete Dewi-------------//
@@ -1857,10 +1914,10 @@ function setINAKelas(args) {
 		    <table width="100%" border="0" cellpadding="1" cellspacing="1">
 			 <tr>
 				<td align="left" class="tablecontent">&nbsp;Kode Biaya&nbsp;</td>
-				<td align="left" class="tablecontent-odd"><?php echo $view->RenderTextBox("biaya_kode","biaya_kode","10","100",$_POST["biaya_kode"],"inputField",null,false,"onkeyup=\"lihat0(this.value);\""); ?>
+				<td align="left" class="tablecontent-odd"><?php echo $view->RenderTextBox("biaya_kode","biaya_kode","10","100",$_POST["biaya_kode"],"inputField","autocomplete=\"off\"",false,"onkeyup=\"lihat01(this.value);\""); ?>
 				  <a href="<?php echo $findPage?>&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Pilih Item">
 				  <img src="<?php echo $APLICATION_ROOT;?>images/b_select.png" border="0" align="middle" width="18" height="20" style="cursor:pointer" title="Pilih Item" alt="Pilih Item" /></a>
-				  <div id="kotaksugest0" style="position:absolute; background-color:#eeeeee;width:120px;visibility:hidden;z-index:100">
+				  <div id="kotaksugest01" style="position:absolute; background-color:#eeeeee;width:420px;visibility:hidden;z-index:100">
 				       </div>
 				</td>
 			 </tr>
@@ -1875,13 +1932,13 @@ function setINAKelas(args) {
 			 <tr>
 				<td align="left" class="tablecontent">&nbsp;Jumlah</td>
 				<td align="left" class="tablecontent-odd">
-				       <?php echo $view->RenderTextBox("txtJumlah","txtJumlah","3","3",$_POST["txtJumlah"],"curedit", null,false,'onchange="GantiHargaItem(this.value,document.getElementById(\'txtHargaSatuan\').value);"');?>
+				       <?php echo $view->RenderTextBox("txtJumlah","txtJumlah","3","3",$_POST["txtJumlah"],"curedit", null,true,'onkeyup="GantiHargaItem(this.value,document.getElementById(\'txtHargaSatuan\').value);"');?>
 				</td>					
 			 </tr>
 			 <tr>
 				<td align="left" class="tablecontent">&nbsp;Biaya</td>
 				<td align="left" class="tablecontent-odd">
-				       <?php echo $view->RenderTextBox("txtHargaSatuan","txtHargaSatuan","10","10",$_POST["txtHargaSatuan"],"curedit", null,true,'onchange="GantiHargaItem(document.getElementById(\'txtJumlah\').value,this.value);"');?>
+				       <?php echo $view->RenderTextBox("txtHargaSatuan","txtHargaSatuan","10","10",$_POST["txtHargaSatuan"],"curedit", null,true,'onkeyup="GantiHargaItem(document.getElementById(\'txtJumlah\').value,this.value);"');?>
 				</td>					
 			 </tr>
 			 <tr>
@@ -1899,10 +1956,10 @@ function setINAKelas(args) {
 		    <table width="100%" border="0" cellpadding="1" cellspacing="1">
 			 <tr>
 				<td align="left" class="tablecontent">&nbsp;Kode Biaya Obat&nbsp;</td>
-				<td align="left" class="tablecontent-odd"><?php echo $view->RenderTextBox("obat_kode","obat_kode","10","100",$_POST["obat_kode"],"inputField",null,false,"onkeyup=\"lihat0(this.value);\""); ?>
+				<td align="left" class="tablecontent-odd"><?php echo $view->RenderTextBox("obat_kode","obat_kode","10","100",$_POST["obat_kode"],"inputField","autocomplete=\"off\"",false,"onkeyup=\"lihat02(this.value);\""); ?>
 				  <a href="<?php echo $findPageObat?>&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Pilih Item">
 				  <img src="<?php echo $APLICATION_ROOT;?>images/b_select.png" border="0" align="middle" width="18" height="20" style="cursor:pointer" title="Pilih Item" alt="Pilih Item" /></a>
-				  <div id="kotaksugest0" style="position:absolute; background-color:#eeeeee;width:120px;visibility:hidden;z-index:100">
+				  <div id="kotaksugest02" style="position:absolute; background-color:#eeeeee;width:420px;visibility:hidden;z-index:100">
 				       </div>
 				</td>
 			 </tr>
@@ -1917,13 +1974,13 @@ function setINAKelas(args) {
 			 <tr>
 				<td align="left" class="tablecontent">&nbsp;Jumlah</td>
 				<td align="left" class="tablecontent-odd">
-				       <?php echo $view->RenderTextBox("txtJumlahObat","txtJumlahObat","3","3",$_POST["txtJumlahObat"],"curedit", null,false,'onchange="GantiHargaObat(this.value,document.getElementById(\'txtHargaSatuanObat\').value);"');?>
+				       <?php echo $view->RenderTextBox("txtJumlahObat","txtJumlahObat","3","3",$_POST["txtJumlahObat"],"curedit", null,true,'onkeyup="GantiHargaObat(this.value,document.getElementById(\'txtHargaSatuanObat\').value);"');?>
 				</td>					
 			 </tr>
 			 <tr>
 				<td align="left" class="tablecontent">&nbsp;Biaya</td>
 				<td align="left" class="tablecontent-odd">
-				       <?php echo $view->RenderTextBox("txtHargaSatuanObat","txtHargaSatuanObat","10","10",$_POST["txtHargaSatuanObat"],"curedit", null,true,'onchange="GantiHargaObat(document.getElementById(\'txtJumlahObat\').value,this.value);"');?>
+				       <?php echo $view->RenderTextBox("txtHargaSatuanObat","txtHargaSatuanObat","10","10",$_POST["txtHargaSatuanObat"],"curedit", null,true,'onkeyup="GantiHargaObat(document.getElementById(\'txtJumlahObat\').value,this.value);"');?>
 				</td>					
 			 </tr>
 			 <tr>
@@ -1941,10 +1998,10 @@ function setINAKelas(args) {
 		    <table width="100%" border="0" cellpadding="1" cellspacing="1">
 			 <tr>
 				<td align="left" class="tablecontent">&nbsp;Kode Biaya Operasi&nbsp;</td>
-				<td align="left" class="tablecontent-odd"><?php echo $view->RenderTextBox("operasi_kode","operasi_kode","10","100",$_POST["operasi_kode"],"inputField",null,false,"onkeyup=\"lihat0(this.value);\""); ?>
+				<td align="left" class="tablecontent-odd"><?php echo $view->RenderTextBox("operasi_kode","operasi_kode","10","100",$_POST["operasi_kode"],"inputField","autocomplete=\"off\"",false,"onkeyup=\"lihat03(this.value);\""); ?>
 				  <a href="<?php echo $findPageOps?>&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Pilih Item">
 				  <img src="<?php echo $APLICATION_ROOT;?>images/b_select.png" border="0" align="middle" width="18" height="20" style="cursor:pointer" title="Pilih Item" alt="Pilih Item" /></a>
-				  <div id="kotaksugest0" style="position:absolute; background-color:#eeeeee;width:120px;visibility:hidden;z-index:100">
+				  <div id="kotaksugest03" style="position:absolute; background-color:#eeeeee;width:120px;visibility:hidden;z-index:100">
 				       </div>
 				</td>
 			 </tr>

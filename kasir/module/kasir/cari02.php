@@ -13,14 +13,19 @@
 
 
 $kata = $_POST['q'];
-$query = "select biaya_id,biaya_nama,biaya_total,biaya_kode from klinik.klinik_biaya where upper(biaya_kode) like '".strtoupper($kata)."%' and biaya_kode is not null order by biaya_kode limit 10 ";
+$query = "select a.id, a.item_nama, a.item_kode, b.price_list_rate, b.price_list 
+            from stocks.tb_item a
+            left join stocks.item_price b on b.item_kode = a.item_kode 
+            where a.item_kode like '%".$kata."%' and price_list = 'SWADANA'
+            order by a.item_kode
+            limit 10";
 $rs = $dtaccess->Execute($query);
 $dataTable = $dtaccess->FetchAll($rs);
   // echo $query;
 echo '<ul>';
 for($i=0,$n=count($dataTable);$i<$n;$i++) {
     // echo $dataTable[$i]["icd_nama"].'<br />';
-    echo '<li onClick="isi01(\''.$dataTable[$i]["biaya_id"].'\',\''.$dataTable[$i]["biaya_kode"].'\',\''.$dataTable[$i]["biaya_nama"].'\',\''.$dataTable[$i]["biaya_total"].'\');" style="cursor:pointer">'.$dataTable[$i]["biaya_kode"].'&nbsp;|&nbsp;'.$dataTable[$i]["biaya_nama"].'</li>';
+    echo '<li onClick="isi02(\''.$dataTable[$i]["id"].'\',\''.$dataTable[$i]["item_kode"].'\',\''.$dataTable[$i]["item_nama"].'\',\''.$dataTable[$i]["price_list_rate"].'\');" style="cursor:pointer">'.$dataTable[$i]["item_kode"].'&nbsp;|&nbsp;'.$dataTable[$i]["item_nama"].'</li>';
   
 }
 echo '</ul>';
