@@ -262,8 +262,30 @@
      unset($rs);
      // --- end: cari rekap laser slt bulanan --- //
 
+    // --- begin: cari rekap lpi bulanan --- //
+     $sql = "select date_part('month', diag_waktu) as n_mon,
+                to_char(diag_waktu,'Mon') as mon,
+                extract(year from diag_waktu) as yyyy,
+                count(diag_id) as count_lpi
+            from klinik.klinik_diagnostik ";
+      $sql_where_lpi = $sql_where;
+     $sql_where_lpi[] = "(diag_lpi <> '')"; 
+     $sql.= " where ".implode(" and ",$sql_where_lpi);
+     $sql.= " group by 1,2,3
+            order by yyyy, date_part('month', diag_waktu)";
+     $rs = $dtaccess->Execute($sql);
+     while($datalpi = $dtaccess->Fetch($rs)){
+      $dataTable['lpi'][$datalpi['n_mon']] = $datalpi['count_lpi'];
+     }
+     unset($rs);
+     // --- end: cari rekap lpi bulanan --- //
+
      //*-- config table ---*//
      $tableHeader = "&nbsp;Rekap Tahunan Pasien Diagnostik";
+     if ($_POST["in_tahun"]) {
+       $tableHeader .= "&nbsp;-&nbsp;TAHUN&nbsp;".$_POST["in_tahun"];
+     }
+     
 
      if($_POST["btnLanjut"]){
                // --- construct new table ---- //
@@ -285,8 +307,8 @@
                $counterHeader++;
                    
                $tbHeader[0][$counterHeader][TABLE_ISI] = "DIAGNOSTIK CANGGIH";
-               $tbHeader[0][$counterHeader][TABLE_WIDTH] = "50%";
-               $tbHeader[0][$counterHeader][TABLE_COLSPAN] = "6";
+               $tbHeader[0][$counterHeader][TABLE_WIDTH] = "62%";
+               $tbHeader[0][$counterHeader][TABLE_COLSPAN] = "7";
                $counterHeader++;
                
                $tbHeader[0][$counterHeader][TABLE_ISI] = "JUMLAH";
@@ -297,28 +319,33 @@
                $counterHeader = 0;
      
                $tbHeader[1][$counterHeader][TABLE_ISI] = "HFA";
-               $tbHeader[1][$counterHeader][TABLE_WIDTH] = "12%";
+               $tbHeader[1][$counterHeader][TABLE_WIDTH] = "8%";
                $counterHeader++;
      
                $tbHeader[1][$counterHeader][TABLE_ISI] = "USG";
-               $tbHeader[1][$counterHeader][TABLE_WIDTH] = "12%";
+               $tbHeader[1][$counterHeader][TABLE_WIDTH] = "8%";
                $counterHeader++;
      
                $tbHeader[1][$counterHeader][TABLE_ISI] = "FF";
-               $tbHeader[1][$counterHeader][TABLE_WIDTH] = "12%";
+               $tbHeader[1][$counterHeader][TABLE_WIDTH] = "8%";
                $counterHeader++;
      
                $tbHeader[1][$counterHeader][TABLE_ISI] = "YL";
-               $tbHeader[1][$counterHeader][TABLE_WIDTH] = "12%";
+               $tbHeader[1][$counterHeader][TABLE_WIDTH] = "8%";
                $counterHeader++;
      
                $tbHeader[1][$counterHeader][TABLE_ISI] = "AL";
-               $tbHeader[1][$counterHeader][TABLE_WIDTH] = "12%";
+               $tbHeader[1][$counterHeader][TABLE_WIDTH] = "8%";
                $counterHeader++;
      
                $tbHeader[1][$counterHeader][TABLE_ISI] = "OCT";
-               $tbHeader[1][$counterHeader][TABLE_WIDTH] = "12%";
+               $tbHeader[1][$counterHeader][TABLE_WIDTH] = "8%";
                $counterHeader++;
+     
+               $tbHeader[1][$counterHeader][TABLE_ISI] = "LPI";
+               $tbHeader[1][$counterHeader][TABLE_WIDTH] = "8%";
+               $counterHeader++;
+
      
                for($i=0,$counter=0,$n=12,$sum_of_month=0;$i<$n;$i++,$counter=0,$sum_of_month=0){
                 if($i==0){
@@ -381,6 +408,13 @@
                 $sum_of_month += $dataTable['oct'][$i+1];
                 $sum_of_diag['oct'] += $dataTable['oct'][$i+1];
      
+                $tbContent[$i][$counter][TABLE_ISI] = ($dataTable['lpi'][$i+1]) ? $dataTable['lpi'][$i+1] : "0";
+                $tbContent[$i][$counter][TABLE_ALIGN] = "center";
+                $tbContent[$i][$counter][TABLE_CLASS] = $classnya;
+                $counter++;
+                $sum_of_month += $dataTable['lpi'][$i+1];
+                $sum_of_diag['lpi'] += $dataTable['lpi'][$i+1];
+     
                 $tbContent[$i][$counter][TABLE_ISI] = $sum_of_month;
                 $tbContent[$i][$counter][TABLE_ALIGN] = "center";
                 $tbContent[$i][$counter][TABLE_CLASS] = $classnya;
@@ -388,12 +422,19 @@
      
                }
                $counter = 0;
+
                $tbContent[$i][$counter][TABLE_ISI] = "TOTAL";
                 $tbContent[$i][$counter][TABLE_ALIGN] = "center";
                 $tbContent[$i][$counter][TABLE_CLASS] = $classnya;
                 $tbContent[$i][$counter][TABLE_COLSPAN] = "2";
                 $counter++;
      
+               $tbContent[$i][$counter][TABLE_ISI] = "&nbsp;";
+                $tbContent[$i][$counter][TABLE_ALIGN] = "center";
+                $tbContent[$i][$counter][TABLE_CLASS] = $classnya;
+                $tbContent[$i][$counter][TABLE_COLSPAN] = "2";
+                $counter++;
+
                 $tbContent[$i][$counter][TABLE_ISI] = $sum_of_diag['humpre'];
                 $tbContent[$i][$counter][TABLE_ALIGN] = "center";
                 $tbContent[$i][$counter][TABLE_CLASS] = $classnya;
@@ -430,12 +471,18 @@
                 $counter++;
                 $sum_of_all += $sum_of_diag['oct'];
      
+                $tbContent[$i][$counter][TABLE_ISI] = $sum_of_diag['lpi'];
+                $tbContent[$i][$counter][TABLE_ALIGN] = "center";
+                $tbContent[$i][$counter][TABLE_CLASS] = $classnya;
+                $counter++;
+                $sum_of_all += $sum_of_diag['lpi'];
+     
                 $tbContent[$i][$counter][TABLE_ISI] = $sum_of_all;
                 $tbContent[$i][$counter][TABLE_ALIGN] = "center";
                 $tbContent[$i][$counter][TABLE_CLASS] = $classnya;
                 $counter++;
      
-               $colspan = 10;
+               $colspan = 11;
                
                if(!$_POST["btnExcel"]){
                     $tbBottom[0][0][TABLE_ISI] .= '&nbsp;&nbsp;<input type="submit" name="btnExcel" value="Export Excel" class="button" >&nbsp;';//onClick="document.location.href=\''.$editPage.'\'"
