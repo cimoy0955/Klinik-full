@@ -599,9 +599,6 @@
           $sql = "delete from klinik.klinik_perawatan_injeksi where id_op = ".QuoteValue(DPE_CHAR,$_POST["op_id"]);
           $dtaccess->Execute($sql);
 
-          $sql = "delete from klinik.klinik_folio where id_reg = ".QuoteValue(DPE_CHAR,$_POST["id_reg"])."
-                    and id_biaya = ".QuoteValue(DPE_CHAR,BIAYA_INJEKSI);
-          $dtaccess->Execute($sql);
 
           unset($dbTable);
           unset($dbField);
@@ -639,17 +636,32 @@
 
                          $statusInjeksi = true;
                     }
-		    
+              
                }
                unset($dbField);
 
                if($statusInjeksi) {
                     // --- insert d folio n folio_split ---
-                    $sql = "select biaya_nama, biaya_total, biaya_jenis
+                    for ($i=0; $i < count($_POST["id_injeksi"]); $i++) { 
+                         if ($_POST["id_injeksi"][$i] == '1') {
+                              $kodenya = BIAYA_IM;
+                         } elseif ($_POST["id_injeksi"][$i] == '2') {
+                              $kodenya = BIAYA_IV;
+                         } elseif ($_POST["id_injeksi"][$i] == '4' || $_POST["id_injeksi"][$i] == '5') {
+                              $kodenya = BIAYA_PRABULBER_SUBCONJUNCTIVA;
+                         } elseif ($_POST["id_injeksi"][$i] == '3') {
+                              $kodenya = BIAYA_SUBCUTAN;
+                         } 
+                         
+                         $sql_injeksi_where[] = "upper(biaya_kode) = ".QuoteValue(DPE_CHAR,$kodenya);
+                    }
+
+                    $sql = "select biaya_id, biaya_nama, biaya_total, biaya_jenis
                               from klinik.klinik_biaya
-                              where biaya_id = ".QuoteValue(DPE_CHAR,BIAYA_INJEKSI);
+                              where ".implode(" or ",$sql_injeksi_where);
+                              // echo $sql;
                     $rs = $dtaccess->Execute($sql);
-                    $dataBiaya = $dtaccess->Fetch($rs);
+                    $dataBiaya = $dtaccess->FetchAll($rs);
 
                     $lunas = ($_POST["reg_jenis_pasien"]!=PASIEN_KOMPLIMEN)?'n':'y';
 unset($dbTable,$dbField,$dbValue,$dbKey);
@@ -666,31 +678,36 @@ unset($dbTable,$dbField,$dbValue,$dbKey);
                     $dbField[9] = "fol_jumlah";
                     $dbField[10] = "fol_nominal_satuan";
 
+                    for ($i=0; $i < count($dataBiaya); $i++) { 
+                         $sql = "delete from klinik.klinik_folio where id_reg = ".QuoteValue(DPE_CHAR,$_POST["id_reg"])." and id_biaya = ".QuoteValue(DPE_CHARKEY,$dataBiaya[$i]["biaya_id"]);
+                         $dtaccess->Execute($sql);
+                         
                          $folioId = $dtaccess->GetTransID();
                          $dbValue[0] = QuoteValue(DPE_CHARKEY,$folioId);
                          $dbValue[1] = QuoteValue(DPE_CHARKEY,$_POST["id_reg"]);
-                         $dbValue[2] = QuoteValue(DPE_CHAR,$dataBiaya["biaya_nama"]);
-                         $dbValue[3] = QuoteValue(DPE_NUMERIC,$dataBiaya["biaya_total"]);
-                         $dbValue[4] = QuoteValue(DPE_CHARKEY,BIAYA_INJEKSI);
+                         $dbValue[2] = QuoteValue(DPE_CHAR,$dataBiaya[$i]["biaya_nama"]);
+                         $dbValue[3] = QuoteValue(DPE_NUMERIC,$dataBiaya[$i]["biaya_total"]);
+                         $dbValue[4] = QuoteValue(DPE_CHARKEY,$dataBiaya[$i]["biaya_id"]);
                          $dbValue[5] = QuoteValue(DPE_CHAR,$dataBiaya["biaya_jenis"]);
                          $dbValue[6] = QuoteValue(DPE_NUMERICKEY,$_POST["id_cust_usr"]);
                          $dbValue[7] = QuoteValue(DPE_DATE,date("Y-m-d H:i:s"));
                          $dbValue[8] = QuoteValue(DPE_CHAR,$lunas);
                          $dbValue[9] = QuoteValue(DPE_NUMERIC,'1');
-                          $dbValue[10] = QuoteValue(DPE_NUMERIC,$dataBiaya["biaya_total"]);
+                         $dbValue[10] = QuoteValue(DPE_NUMERIC,$dataBiaya[$i]["biaya_total"]);
 
-                    $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
+                         $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
 
-                    $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey);
+                         $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey);
 
-                    $dtmodel->Insert() or die("insert  error");
+                         $dtmodel->Insert() or die("insert  error");
 
-                    unset($dtmodel);
-                    unset($dbValue);
-                    unset($dbKey);
-		    unset($dbField);
+                         unset($dtmodel);
+                         unset($dbValue);
+                         unset($dbKey);
+                    }
+                    unset($dbField);
 
-
+/*
                     $sql = "select bea_split_nominal, id_split
                               from klinik.klinik_biaya_split
                               where id_biaya = ".QuoteValue(DPE_CHAR,BIAYA_INJEKSI)."
@@ -722,7 +739,7 @@ unset($dbTable,$dbField,$dbValue,$dbKey);
                          unset($dbKey);
 
                     }
-		    unset($dbField);
+		    unset($dbField);*/
                }
           }
 
@@ -864,74 +881,74 @@ unset($dbTable,$dbField,$dbValue,$dbKey);
 			$dtaccess->Execute($sql);
 			$folWaktu = date("Y-m-d H:i:s");
 			// --- nyimpen folio paket operasi ----
-			 if($_POST["op_paket_biaya"]) {
+			 // if($_POST["op_paket_biaya"]) {
 
-			      $sql = "select * from klinik.klinik_operasi_paket where op_paket_id = ".QuoteValue(DPE_CHAR,$_POST["op_paket_biaya"]);
+			 //      $sql = "select * from klinik.klinik_operasi_paket where op_paket_id = ".QuoteValue(DPE_CHAR,$_POST["op_paket_biaya"]);
 
-			      $dataBiaya = $dtaccess->Fetch($sql,DB_SCHEMA);
+			 //      $dataBiaya = $dtaccess->Fetch($sql,DB_SCHEMA);
 
-			      //$lunas = ($_POST["reg_jenis_pasien"]!=PASIEN_BAYAR_SWADAYA)?'y':'n';
-			      $lunas = 'n';
-			      unset($dbTable,$dbField,$dbValue,$dbKey);
+			 //      //$lunas = ($_POST["reg_jenis_pasien"]!=PASIEN_BAYAR_SWADAYA)?'y':'n';
+			 //      $lunas = 'n';
+			 //      unset($dbTable,$dbField,$dbValue,$dbKey);
 
-			      $dbTable = "klinik_folio";
+			 //      $dbTable = "klinik_folio";
 
-			      $dbField[0] = "fol_id";   // PK
-			      $dbField[1] = "id_reg";
-			      $dbField[2] = "fol_nama";
-			      $dbField[3] = "fol_nominal";
-			      $dbField[4] = "fol_lunas";
-			      $dbField[5] = "fol_jenis";
-			      $dbField[6] = "id_cust_usr";
-			      $dbField[7] = "fol_waktu";
-			      $dbField[8] = "fol_jumlah";
-			      $dbField[9] = "fol_nominal_satuan";
+			 //      $dbField[0] = "fol_id";   // PK
+			 //      $dbField[1] = "id_reg";
+			 //      $dbField[2] = "fol_nama";
+			 //      $dbField[3] = "fol_nominal";
+			 //      $dbField[4] = "fol_lunas";
+			 //      $dbField[5] = "fol_jenis";
+			 //      $dbField[6] = "id_cust_usr";
+			 //      $dbField[7] = "fol_waktu";
+			 //      $dbField[8] = "fol_jumlah";
+			 //      $dbField[9] = "fol_nominal_satuan";
 
-			      $folId = $dtaccess->GetTransID();
-			      $dbValue[0] = QuoteValue(DPE_CHAR,$folId);
-			      $dbValue[1] = QuoteValue(DPE_CHAR,$_POST["id_reg"]);
-			      $dbValue[2] = QuoteValue(DPE_CHAR,$dataBiaya["op_paket_nama"]);
-			      $dbValue[3] = QuoteValue(DPE_NUMERIC,$dataBiaya["op_paket_total"]);
-			      $dbValue[4] = QuoteValue(DPE_CHAR,$lunas);
-			      $dbValue[5] = QuoteValue(DPE_CHAR,STATUS_BEDAH);
-			      $dbValue[6] = QuoteValue(DPE_NUMERICKEY,$_POST["id_cust_usr"]);
-			      $dbValue[7] = QuoteValue(DPE_DATE,$folWaktu);
-			      $dbValue[8] = QuoteValue(DPE_NUMERIC,'1');
-			      $dbValue[9] = QuoteValue(DPE_NUMERIC,$dataBiaya["op_paket_total"]);
+			 //      $folId = $dtaccess->GetTransID();
+			 //      $dbValue[0] = QuoteValue(DPE_CHAR,$folId);
+			 //      $dbValue[1] = QuoteValue(DPE_CHAR,$_POST["id_reg"]);
+			 //      $dbValue[2] = QuoteValue(DPE_CHAR,$dataBiaya["op_paket_nama"]);
+			 //      $dbValue[3] = QuoteValue(DPE_NUMERIC,$dataBiaya["op_paket_total"]);
+			 //      $dbValue[4] = QuoteValue(DPE_CHAR,$lunas);
+			 //      $dbValue[5] = QuoteValue(DPE_CHAR,STATUS_BEDAH);
+			 //      $dbValue[6] = QuoteValue(DPE_NUMERICKEY,$_POST["id_cust_usr"]);
+			 //      $dbValue[7] = QuoteValue(DPE_DATE,$folWaktu);
+			 //      $dbValue[8] = QuoteValue(DPE_NUMERIC,'1');
+			 //      $dbValue[9] = QuoteValue(DPE_NUMERIC,$dataBiaya["op_paket_total"]);
 
-			      $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
-			      $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey,DB_SCHEMA_KLINIK);
+			 //      $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
+			 //      $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey,DB_SCHEMA_KLINIK);
 
-			      $dtmodel->Insert() or die("insert error");
+			 //      $dtmodel->Insert() or die("insert error");
 
-			      unset($dtmodel);
-			      unset($dbValue);
-			      unset($dbKey);
-			      unset($dbField);
+			 //      unset($dtmodel);
+			 //      unset($dbValue);
+			 //      unset($dbKey);
+			 //      unset($dbField);
 
-			      $sql = "select * from klinik.klinik_operasi_paket_split
-					      where id_op_paket = ".QuoteValue(DPE_CHAR,$dataBiaya["op_paket_id"])." and op_paket_split_nominal > 0";
-			      $dataSplit = $dtaccess->FetchAll($sql,DB_SCHEMA);
-			      for($a=0,$b=count($dataSplit);$a<$b;$a++) {
-				   unset($dbTable,$dbField,$dbValue,$dbKey);
-				   $dbTable = "klinik_folio_split";
-				   $dbField[0] = "folsplit_id";   // PK
-				   $dbField[1] = "id_fol";
-				   $dbField[2] = "id_split";
-				   $dbField[3] = "folsplit_nominal";
-				   $dbValue[0] = QuoteValue(DPE_CHAR,$dtaccess->GetTransID());
-				   $dbValue[1] = QuoteValue(DPE_CHAR,$folId);
-				   $dbValue[2] = QuoteValue(DPE_CHAR,$dataSplit[$a]["id_split"]);
-				   $dbValue[3] = QuoteValue(DPE_NUMERIC,$dataSplit[$a]["op_paket_split_nominal"]);
-				   $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
-				   $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey,DB_SCHEMA_KLINIK);
-				   $dtmodel->Insert() or die("insert error");
-				   unset($dtmodel);
-				   unset($dbField);
-				   unset($dbValue);
-				   unset($dbKey);
-			      }
-			 }
+			 //      $sql = "select * from klinik.klinik_operasi_paket_split
+				// 	      where id_op_paket = ".QuoteValue(DPE_CHAR,$dataBiaya["op_paket_id"])." and op_paket_split_nominal > 0";
+			 //      $dataSplit = $dtaccess->FetchAll($sql,DB_SCHEMA);
+			 //      for($a=0,$b=count($dataSplit);$a<$b;$a++) {
+				//    unset($dbTable,$dbField,$dbValue,$dbKey);
+				//    $dbTable = "klinik_folio_split";
+				//    $dbField[0] = "folsplit_id";   // PK
+				//    $dbField[1] = "id_fol";
+				//    $dbField[2] = "id_split";
+				//    $dbField[3] = "folsplit_nominal";
+				//    $dbValue[0] = QuoteValue(DPE_CHAR,$dtaccess->GetTransID());
+				//    $dbValue[1] = QuoteValue(DPE_CHAR,$folId);
+				//    $dbValue[2] = QuoteValue(DPE_CHAR,$dataSplit[$a]["id_split"]);
+				//    $dbValue[3] = QuoteValue(DPE_NUMERIC,$dataSplit[$a]["op_paket_split_nominal"]);
+				//    $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
+				//    $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey,DB_SCHEMA_KLINIK);
+				//    $dtmodel->Insert() or die("insert error");
+				//    unset($dtmodel);
+				//    unset($dbField);
+				//    unset($dbValue);
+				//    unset($dbKey);
+			 //      }
+			 // }
 
 			 /*
 			  *  simpen data tagihan obat tambahan
@@ -1229,7 +1246,6 @@ unset($dbTable,$dbField,$dbValue,$dbKey);
                order by item_nama";
      $dataObat = $dtaccess->FetchAll($sql);
 
-
      // --- buat option teknik injeksi ---
      $sql = "select * from klinik.klinik_injeksi order by injeksi_id";
      $dataInjeksi = $dtaccess->FetchAll($sql);
@@ -1249,6 +1265,7 @@ unset($dbTable,$dbField,$dbValue,$dbKey);
 
 	//-- user request 28 Mar 14 --//
 	//-- combo box for durante OP --//
+     $optDurop[] = $view->RenderOption("--","--",$show);
 	for($i=0,$n=count($dataDurop);$i<$n;$i++){
 	  if($_POST["id_durop_komp"]) $show = ($_POST["id_durop_komp"]==$dataDurop[$i]["durop_komp_id"])?"selected":"";
 	  elseif(!$_POST["id_durop_komp"] && $dataDurop[$i]["durop_komp_id"]==5) $show = "selected";
@@ -1409,7 +1426,7 @@ function InjeksiTambah(){
                     ],
                'td', { className: 'tablecontent-odd', style: 'color: black;' },
                     [
-                         'select', {name:'id_injeksi[]', id:'id_injeksi_'+akhir+''} ,[],
+                         'select', {name:'id_injeksi['+akhir+']', id:'id_injeksi_'+akhir+''} ,[],
                          'input', {type:'button', class:'button', value:'Hapus', name:'btnDel['+akhir+']', id:'btnDel_'+akhir+''}
                     ]
                 ]
@@ -2073,7 +2090,7 @@ function isi11(nama,id,kode){
                                         $show = ($dataDetailInjeksi[$i]["id_injeksi"]==$dataInjeksi[$j]["injeksi_id"]) ? "selected":"";
                                         $optInjeksi[$j+1] = $view->RenderOption($dataInjeksi[$j]["injeksi_id"],$dataInjeksi[$j]["injeksi_nama"],$show);
                                    }
-                                   echo $view->RenderComboBox("id_injeksi[0]","id_injeksi_0",$optInjeksi);
+                                   echo $view->RenderComboBox("id_injeksi[$i]","id_injeksi_0",$optInjeksi);
                               ?>
                          </td>
                          <td align="center" width="15%">
