@@ -58,6 +58,14 @@
      $rs = $dtaccess->Execute($sql,DB_SCHEMA);
      $dataSplit = $dtaccess->FetchAll($rs);
      
+     if ($_POST["btnDelete"]) {
+          $folId = & $_POST["cbDelete"];
+          
+          for($i=0,$n=count($folId);$i<$n;$i++){
+               $sql_del = "delete from klinik.klinik_folio where fol_id = ".QuoteValue(DPE_CHAR,$folId[$i]);
+               $dtaccess->Execute($sql_del);
+          }
+     } 
           
      $skr = date("d-m-Y");
      if(!$_POST["tgl_awal"]) $_POST["tgl_awal"] = $skr;
@@ -106,7 +114,7 @@
 	$counter=0;
 		
      $tbHeader[0][0][TABLE_ISI] = "No";
-     $tbHeader[0][0][TABLE_WIDTH] = "1%";
+     $tbHeader[0][0][TABLE_WIDTH] = "2.5%";
 	
      $tbHeader[0][1][TABLE_ISI] = "No. Reg";
      $tbHeader[0][1][TABLE_WIDTH] = "7%";
@@ -126,9 +134,9 @@
 	// }
 
 	
-     $tbHeader[0][$n+5][TABLE_ISI] = "Total";
-     $tbHeader[0][$n+5][TABLE_WIDTH] = "10%";
-	echo count($dataTable);
+     $tbHeader[0][5][TABLE_ISI] = "Total";
+     $tbHeader[0][5][TABLE_WIDTH] = "10%";
+	
      
      for($i=0,$counter=0,$i=0,$j=0,$n=count($dataTable);$i<$n;$counter=0,$i++,$j++){
      
@@ -143,8 +151,8 @@
         if($dataTable[$i]["id_reg"]!=$dataTable[$i-1]["id_reg"]){
             $m++;
             $tbContent[$j][$counter][TABLE_ROWCLASS] = "parent";
-            $tbContent[$j][$counter][TABLE_ISI] = $m."&nbsp;";
-            $tbContent[$j][$counter][TABLE_ALIGN] = "right";
+            $tbContent[$j][$counter][TABLE_ISI] = "&nbsp;".$m;
+            $tbContent[$j][$counter][TABLE_ALIGN] = "left";
             $tbContent[$j][$counter][TABLE_CLASS] = "tablecontent";
             $counter++;
 
@@ -208,9 +216,12 @@
               $tbContent[$j][$counter][TABLE_ISI] = "&nbsp;";
             }elseif (!$_POST["btnExcel"]) {
               if (($dataTable[$i]["id_reg"]!=$dataTable[$i+1]["id_reg"]) || (!$dataTable[$i+1]["id_reg"])) {
-                $tbContent[$j][$counter][TABLE_ISI] = "&nbsp;<img src='".$APLICATION_ROOT."images/tv-item-last.gif' />" ;
+                $tbContent[$j][$counter][TABLE_ISI] = "&nbsp;<img src='".$APLICATION_ROOT."images/tv-item-last.gif' style=\"float:left;margin-left:-2px;\"/>" ;
               }else{
-                $tbContent[$j][$counter][TABLE_ISI] = "&nbsp;<img src='".$APLICATION_ROOT."images/tv-item.gif' />" ;
+                $tbContent[$j][$counter][TABLE_ISI] = "&nbsp;<img src='".$APLICATION_ROOT."images/tv-item.gif' style=\"float:left;margin-left:-2px;\"/>" ;
+              }
+              if ($auth->IsAllowed("report_kasir",PRIV_DELETE)) {
+                $tbContent[$j][$counter][TABLE_ISI] .= '<input type="checkbox" name="cbDelete[]" value="'.$dataTable[$i]["fol_id"].'" style="float:left;margin-left:0px;">';
               }
             }
             $tbContent[$j][$counter][TABLE_ALIGN] = "right";
@@ -359,6 +370,7 @@ function CariLayanan(id){
 
 </script>
 
+<form name="frmView" method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>" onSubmit="return CheckSimpan(this);">
 <?php if(!$_POST["btnExcel"]) { ?>
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -367,7 +379,6 @@ function CariLayanan(id){
      </tr>
 </table>
 
-<form name="frmView" method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>" onSubmit="return CheckSimpan(this);">
 <table align="center" border=0 cellpadding=2 cellspacing=1 width="100%" id="tblSearching">
      <tr class="tablecontent">
           <td width="15%">&nbsp;Tanggal</td>
@@ -408,16 +419,16 @@ function CariLayanan(id){
 		</td>
 	</tr>
 	<tr>
-          <td class="tablecontent" colspan="6">
-               <input type="submit" name="btnLanjut" value="Lanjut" class="button">
-			<input type="submit" name="btnExcel" value="Export Excel" class="button">
-          </td>
-     </tr>
+    <td class="tablecontent" colspan="6">
+      <input type="submit" name="btnLanjut" value="Lanjut" class="button" />
+      <input type="submit" name="btnExcel" value="Export Excel" class="button" />
+      <input type="submit" name="btnDelete" value="Hapus" class="button" />
+    </td>
+  </tr>
 </table>
 
 <BR>
 
-</form>
 
 <script type="text/javascript">
     Calendar.setup({
@@ -442,12 +453,13 @@ function CariLayanan(id){
 <?php if($_POST["btnExcel"]) {?>
      <table width="100%" border="1" cellpadding="0" cellspacing="0">
           <tr class="tableheader">
-               <td align="center" colspan="<?php echo (count($dataSplit)+6)?>"><strong>BUKU PENERIMAAN BIAYA PELAYANAN KASIR<br/>BKMM PROP. JATIM<br/>BUKU PENERIMAAN UMUM TAHUN <?php echo $dataTable[0]["tahun"]?></strong></td>
+               <td align="center" colspan="<?php echo (count($dataSplit)+6)?>"><strong>BUKU PENERIMAAN BIAYA PELAYANAN KASIR<br/>BKMM PROP. JATIM<br/>BUKU PENERIMAAN UMUM TANGGAL <?php echo format_date_long($dataTable[0]["tanggal"]);?></strong></td>
           </tr>
      </table>
 <?php }?>
 
 <?php echo $table->RenderView($tbHeader,$tbContent,$tbBottom); ?>
+</form>
 
 
 <?php echo $view->RenderBodyEnd(); ?>
