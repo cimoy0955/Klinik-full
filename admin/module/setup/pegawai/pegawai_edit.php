@@ -818,8 +818,8 @@
      $dataStatus = $dtaccess->FetchAll($rs);
 	$dtaccess->Clear($rs);
 
-	// --- cari status pegawai ---
-     // status pegawai: dokter, perawat, refraksionis, administrasi
+	// --- cari jenis pegawai ---
+     // jenis pegawai: dokter, perawat, refraksionis, administrasi
      $sql = "select * from hris_jenis_pegawai order by jenis_peg_id";
      $rs = $dtaccess->Execute($sql,DB_SCHEMA_HRIS);
      $dataJenisPegawai = $dtaccess->FetchAll($rs);
@@ -1884,7 +1884,7 @@ function jenisPegawai(nilai)
 <font color="red"><strong>Hint : format tanggal harus "dd-mm-yyyy" (tanggal-bulan-tahun) dan pastikan tanggal tersebut benar.</strong></font>
 <? } ?>
 
-<!--<? if (readbit($err_code,16)) { ?>
+<? if (readbit($err_code,16)) { ?>
 <br>
 <font color="green"><strong>Format Tanggal untuk Tanggal Habis SK Pegawai tidak benar.</strong></font>
 <? } ?>
@@ -1899,7 +1899,7 @@ function jenisPegawai(nilai)
 <? if (readbit($err_code,20)) { ?>
 <br>
 <font color="green"><strong>Format Tanggal untuk TMT Akademik tidak benar.</strong></font>
-<? } ?>-->
+<? } ?>
 </span>
 <script>document.frmEdit.usr_loginname.focus();</script>
 

@@ -22,6 +22,7 @@
      
     if(!$_POST["reg_dinasluar_tanggal"]) $_POST["reg_dinasluar_tanggal"] = getDateToday();
     if($_GET["tipe"]) $_POST["tipe"] = $_GET["tipe"];
+    echo $_POST["tipe"];
      
     $plx = new InoLiveX("CheckKode,GetReg,CekUmur,get_rujukan_rs,get_rujukan_dokter");     
 

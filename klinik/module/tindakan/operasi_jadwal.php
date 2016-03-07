@@ -681,11 +681,11 @@
      $sql = "select diag_id from klinik.klinik_diagnostik where id_reg = ".QuoteValue(DPE_CHAR,$_GET["id_reg"]);
      $dataDiag = $dtaccess->Fetch($sql);
      
-	#if(!$dataDiag) $optionsNext[$count] = $view->RenderOption(STATUS_DIAGNOSTIK,"Ke Ruang Diagnostik",$show); $count++;
-	#$optionsNext[$count] = $view->RenderOption(STATUS_OPERASI_JADWAL,"Penjadwalan Operasi",$show); $count++;
-	
-	#$optionsNext[$count] = $view->RenderOption(STATUS_BEDAH,"Bedah Minor",$show); $count++;
-
+     $optionsNext[$count] = $view->RenderOption(STATUS_OPERASI.STATUS_ANTRI,"Operasi Hari Ini",$show); $count++;
+     $optionsNext[$count] = $view->RenderOption(STATUS_SELESAI.STATUS_ANTRI,"Pulang Dengan Resep",$show); $count++;
+     $optionsNext[$count] = $view->RenderOption(STATUS_SELESAI.STATUS_ANTRI,"Apotek & Selesai",$show); $count++;
+     $optionsNext[$count] = $view->RenderOption(STATUS_RAWATINAP.STATUS_ANTRI,"Rawat Inap",$show); $count++;
+     
      $lokasi = $APLICATION_ROOT."images/foto_perawatan";
 	$fotoName = ($_POST["rawat_mata_foto"]) ? $lokasi."/".$_POST["rawat_mata_foto"] : $lokasi."/default.jpg";
 	$sketsaName = ($_POST["rawat_mata_sketsa"]) ? $lokasi."/".$_POST["rawat_mata_sketsa"] : $lokasi."/default.jpg";
@@ -1390,14 +1390,14 @@ timer();
      <table width="100%" border="1" cellpadding="4" cellspacing="1">
 		<tr>
                <td align="left" style="display:block;" id="next1" class="tablecontent">Tahap berikutnya&nbsp;&nbsp;&nbsp;
-               <?php /*echo $view->RenderComboBox("cmbNext1","cmbNext1",$optionsNext,"inputField",null,null);*/?>
+               <?php echo $view->RenderComboBox("cmbNext1","cmbNext1",$optionsNext,"inputField",null,null);?>
 	       </td>
 	       <!--<td align="left" style="display:none;" id="next2" class="tablecontent">Tahap berikutnya&nbsp;&nbsp;&nbsp;
                <?php /*echo $view->RenderComboBox("cmbNext2","cmbNext2",$optionsNext1,"inputField",null,null);*/?>
                </td>
 	       </tr>-->
 	       <td align='left' id='td_target_next'>
-	       <?php echo SetNext1('default',$dataPasien["reg_tipe_rawat"]);?>
+	       <!--  <?php echo SetNext1('default',$dataPasien["reg_tipe_rawat"]);?> -->
 	       </td></tr>
 		<tr>
 		    <td align="center" colspan='2'>

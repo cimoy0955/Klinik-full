@@ -55,13 +55,9 @@
      function GetPerawatan($status) {
           global $dtaccess, $view, $tableRefraksi, $thisPage, $APLICATION_ROOT, $bayarPasien2; 
                
-          $sql = "select cust_usr_nama,a.reg_id, a.reg_status, a.reg_waktu, a.reg_jadwal, z.fol_lunas ,a.reg_jenis_pasien
+          $sql = "select cust_usr_nama,a.reg_id, a.reg_status, a.reg_waktu, a.reg_jadwal,a.reg_jenis_pasien
                     from klinik.klinik_registrasi a
                     left join global.global_customer_user b on a.id_cust_usr = b.cust_usr_id
-		    left join (
-			 select distinct fol_lunas, id_reg from klinik.klinik_folio
-			 where fol_lunas = 'n' and (fol_jenis = '".STATUS_REFRAKSI."' or fol_jenis = '".STATUS_DIAGNOSTIK."' or fol_jenis = '".STATUS_REGISTRASI."')
-		    ) z on a.reg_id = z.id_reg 
                     where a.reg_status like '".STATUS_PEMERIKSAAN.$status."' and a.reg_tipe_umur = 'D' and (a.reg_tipe_rawat = ".QuoteValue(DPE_CHAR,RAWAT_JALAN)." or a.reg_tipe_rawat is null)
 		    order by reg_waktu asc, reg_status desc, reg_tanggal asc";
 		    
@@ -144,7 +140,7 @@
           }
 
           return $tableRefraksi->RenderView($tbHeader,$tbContent,$tbBottom);
-	  //return $sql;
+	  // return $sql;
 	}
 
      function SetPerawatan($id) {
