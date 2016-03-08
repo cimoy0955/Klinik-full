@@ -22,7 +22,7 @@
      
     if(!$_POST["reg_dinasluar_tanggal"]) $_POST["reg_dinasluar_tanggal"] = getDateToday();
     if($_GET["tipe"]) $_POST["tipe"] = $_GET["tipe"];
-    echo $_POST["tipe"];
+    // echo $_POST["tipe"];
      
     $plx = new InoLiveX("CheckKode,GetReg,CekUmur,get_rujukan_rs,get_rujukan_dokter");     
 
@@ -212,15 +212,15 @@
 				
 				$sql = "select cust_usr_kode 
 					from global.global_customer_user
-					where upper(cust_usr_nama) like ".QuoteValue(DPE_CHAR,"%".$_POST["cust_usr_nama"]."%"). 
+					where upper(cust_usr_nama) like ".QuoteValue(DPE_CHAR,"%".strtoupper(trim($_POST["cust_usr_nama"]))."%"). 
 					" and cust_usr_tanggal_lahir = ".QuoteValue(DPE_CHAR,date_db($_POST["cust_usr_tanggal_lahir"]))." 
 					and upper(cust_usr_alamat) like ".QuoteValue(DPE_CHAR,"%".strtoupper(trim($_POST["cust_usr_alamat"]))."%");
 				$rs_cekNama = $dtaccess->Execute($sql);
 				$data_cekNama = $dtaccess->Fetch($rs_cekNama);
 				if(!$data_cekNama) $err_code = clearbit($err_code,15);
 				else $err_code = setbit($err_code,15);
-				}
 			}
+		}
 
 	  if($err_code == 0){
 
@@ -617,7 +617,7 @@
 	  $sql_delete = "delete from global.global_customer_user where cust_usr_id=".QuoteValue(DPE_CHAR,$_POST["cust_usr_id"]);
 	  $dtaccess->Execute($sql_delete);
 	}
-	header("location:registrasi.php");
+	header("location:registrasi.php?tipe=".$_POST["tipe"]);
 	exit();
      }
      /* user request 17 Feb 14:
@@ -1062,7 +1062,7 @@ function view_rujukan(eval) {
 		</td>
 	</tr>
 	<tr>
-		<td class="tablecontent">Nomor KTP<?php if(readbit($err_code,13)||readbit($err_code,14)) {?>&nbsp;<font color="red">(*)</font><?}?></td>
+		<td class="tablecontent">NIK<?php if(readbit($err_code,13)||readbit($err_code,14)) {?>&nbsp;<font color="red">(*)</font><?}?></td>
 		<td class="tablecontent-odd">
 		  <?php echo $view->RenderTextBox("cust_usr_noktp","cust_usr_noktp","20","16",$_POST["cust_usr_noktp"],"inputField",null,false);?>
 		</td>
