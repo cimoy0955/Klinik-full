@@ -84,13 +84,13 @@
           $tbHeader[0][$counterHeader][TABLE_ISI] = "Jam Masuk";
           $tbHeader[0][$counterHeader][TABLE_WIDTH] = "25%";
           $counterHeader++;
-
+/*
 
 		if($status==0) {
 			$tbHeader[0][$counterHeader][TABLE_ISI] = "Bayar";
 			$tbHeader[0][$counterHeader][TABLE_WIDTH] = "5%";
 			$counterHeader++;
-		}
+		}*/
 		
 		$tbHeader[0][$counterHeader][TABLE_ISI] = "Jadwal";
           $tbHeader[0][$counterHeader][TABLE_WIDTH] = "15%";
@@ -125,12 +125,12 @@
                $tbContent[$i][$counter][TABLE_ALIGN] = "center";
                $counter++;
           
-			if($status==0) {
+			/*if($status==0) {
 				if(!$dataTable[$i]["fol_lunas"]) $tbContent[$i][$counter][TABLE_ISI] = '<img hspace="2" width="16" height="16" src="'.$APLICATION_ROOT.'images/on.gif" style="cursor:pointer" alt="Lunas" title="Lunas" border="0"/>';
 				else $tbContent[$i][$counter][TABLE_ISI] = '<img hspace="2" width="16" height="16" src="'.$APLICATION_ROOT.'images/off.gif" style="cursor:pointer" alt="Belum Lunas" title="Belum Lunas" border="0"/>';
 				$tbContent[$i][$counter][TABLE_ALIGN] = "center";
 				$counter++;
-			}
+			}*/
 			
 			if($dataTable[$i]["reg_jadwal"]=='y') $tbContent[$i][$counter][TABLE_ISI] = '<img hspace="2" width="15" height="15" src="'.$APLICATION_ROOT.'images/off.gif" alt="Terjadwal Operasi Hari Ini" title="Terjadwal Operasi Hari Ini" border="0"/>';
 			else $tbContent[$i][$counter][TABLE_ISI] = '<img hspace="2" width="16" height="16" src="'.$APLICATION_ROOT.'images/on.gif" alt="Tidak Terjadwal Operasi Hari Ini" title="Tidak Terjadwal Operasi Hari Ini" border="0"/>';
