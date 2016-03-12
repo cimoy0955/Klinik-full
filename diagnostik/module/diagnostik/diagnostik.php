@@ -179,7 +179,7 @@
           unset($row);
 
           $sql = "select pgw_nama, pgw_id from klinik.klinik_diagnostik_admin a
-                    join hris.hris_pegawai b on a.id_pgw = b.pgw_id where id_ref = ".QuoteValue(DPE_CHAR,$_POST["diag_id"]);
+                    join hris.hris_pegawai b on a.id_pgw = b.pgw_id where id_diag = ".QuoteValue(DPE_CHAR,$_POST["diag_id"]);
           $rs = $dtaccess->Execute($sql);
           
           $i=0;
