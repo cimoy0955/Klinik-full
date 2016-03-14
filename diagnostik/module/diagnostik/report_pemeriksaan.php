@@ -32,16 +32,16 @@
      $sql = "select b.cust_usr_kode as Kode, b.cust_usr_nama as Nama, b.cust_usr_alamat as Alamat, b.cust_usr_tanggal_lahir as TglLahir, b.cust_usr_jenis_kelamin as Sex, 
                a.reg_jenis_pasien as JenisPasien, a.reg_status_pasien as StatusPasien,
                c.diag_acial_od as AcialOD, c.diag_acial_os as AcialOS, c.diag_iol_od as IOL_OD, c.diag_iol_os as IOL_OS, e.bio_av_nama as AV_Constant, c.diag_deviasi as StdDev, d.bio_rumus_nama as RumusBiometri,c.diag_ekg as EKG,c.diag_fundus as FundusAngiografi, c.diag_opthalmoscop as IndirectOpthalmoscopy, c.diag_oct as OCT, c.diag_yag as YAG,c.diag_argon as ARGON, c.diag_slt as SLT, c.diag_humpre as HUMPREY, c.diag_lab_gula_darah as GDA, c.diag_lab_darah_lengkap as GDL
-               from klinik.klinik_registrasi a 
+               from klinik.klinik_diagnostik c
                join global.global_customer_user b on a.id_cust_usr = b.cust_usr_id
-               join klinik.klinik_diagnostik c on c.id_reg = a.reg_id
+               join klinik.klinik_registrasi a on c.id_reg = a.reg_id
                left join klinik.klinik_biometri_rumus d on c.diag_rumus = d.bio_rumus_id
                left join klinik.klinik_biometri_av e on e.bio_av_id = c.diag_av_constant";
      $sql.= " where ".implode(" and ",$sql_where);
      $sql.= " order by a.reg_status_pasien, b.cust_usr_nama";
      $rs = $dtaccess->Execute($sql);
      $dataTable = $dtaccess->FetchAll($rs);
-     //echo $sql;
+     echo $sql;
      //*-- config table ---*//
      $tableHeader = "&nbsp;Report Pasien Pemeriksaan";
 
