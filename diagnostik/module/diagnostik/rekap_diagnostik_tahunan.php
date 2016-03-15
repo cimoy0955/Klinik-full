@@ -287,7 +287,7 @@
      }
      
 
-     if($_POST["btnLanjut"]){
+     if($_POST["btnLanjut"] || $_POST["btnExcel"]){
                // --- construct new table ---- //
                $counterHeader = 0;
                     
@@ -429,12 +429,6 @@
                 $tbContent[$i][$counter][TABLE_COLSPAN] = "2";
                 $counter++;
      
-               $tbContent[$i][$counter][TABLE_ISI] = "&nbsp;";
-                $tbContent[$i][$counter][TABLE_ALIGN] = "center";
-                $tbContent[$i][$counter][TABLE_CLASS] = $classnya;
-                $tbContent[$i][$counter][TABLE_COLSPAN] = "2";
-                $counter++;
-
                 $tbContent[$i][$counter][TABLE_ISI] = $sum_of_diag['humpre'];
                 $tbContent[$i][$counter][TABLE_ALIGN] = "center";
                 $tbContent[$i][$counter][TABLE_CLASS] = $classnya;
