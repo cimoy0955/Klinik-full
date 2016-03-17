@@ -138,66 +138,69 @@
 	
      $i=0;$m=1;$counter=0;
      //for($i=0,$m=1,$counter=0,$n=count($dataTable);$i<$n;$i++,$m++,$counter=0){
-     foreach($kodePasien as $key => $value){
+     if($kodePasien)
+  	  {
+        foreach($kodePasien as $key => $value){
           
           //if($dataTable[$i]["id_reg"]!=$dataTable[$i-1]["id_reg"]){
-	  $tbContent[$i][$counter][TABLE_ISI] = $m;
-	  $tbContent[$i][$counter][TABLE_ALIGN] = "right";
-	  //$tbContent[$i][$counter][ROWSPAN] = $dataSpan["jml_span"];
-	  $counter++;
-    
-	  $tbContent[$i][$counter][TABLE_ISI] = $value;
-	  $tbContent[$i][$counter][TABLE_ALIGN] = "left";
-	  //$tbContent[$i][$counter][ROWSPAN] = $dataSpan["jml_span"];
-	  $counter++;
-    
-	  $tbContent[$i][$counter][TABLE_ISI] = $namaPasien[$key];
-	  $tbContent[$i][$counter][TABLE_ALIGN] = "left";
-	  //$tbContent[$i][$counter][ROWSPAN] = $dataSpan["jml_span"];
-	  $counter++;
-    
-	  $tbContent[$i][$counter][TABLE_ISI] = format_date($tanggalPasien[$key]);
-	  $tbContent[$i][$counter][TABLE_ALIGN] = "left";
-	  //$tbContent[$i][$counter][ROWSPAN] = $dataSpan["jml_span"];
-	  $counter++;
-	  
-	  for($j=0,$n=count($dataSplit);$j<$n;$j++){
-	  //foreach($biayaPasien[$key] as $biaya_key => $biaya_value){
-	       $tbContent[$i][$counter][TABLE_ISI] = currency_format($biayaPasien[$key][$dataSplit[$j]["biaya_id"]]);
-	       $tbContent[$i][$counter][TABLE_ALIGN] = "left";
-	       //$tbContent[$i][$counter][ROWSPAN] = $dataSpan["jml_span"];
-	       $counter++;
-	       $SubTotal[$dataSplit[$j]["biaya_id"]] += $biayaPasien[$key][$dataSplit[$j]["biaya_id"]];
-	       $TotalPasien[$key] += $biayaPasien[$key][$dataSplit[$j]["biaya_id"]];
-
-	  }
-
-	  $tbContent[$i][$counter][TABLE_ISI] = currency_format($TotalPasien[$key]);
-	  $tbContent[$i][$counter][TABLE_ALIGN] = "right";
-	  //$tbContent[$i][$counter][ROWSPAN] = $dataSpan["jml_span"];
-	  $counter++;
-     //}
-	   $total += $TotalPasien[$key];
-	   //if ($dataTable[$i]["cust_usr_kode"]<>$dataTable[$i+1]["cust_usr_kode"]) $m++;
-	   $i++; $m++; $counter=0;
-     }
-     
-     $counter = 0;
-     $tbBottom[0][$counter][TABLE_WIDTH] = "30%";
-     $tbBottom[0][$counter][TABLE_COLSPAN] = 4;
-     $tbBottom[0][$counter][TABLE_ALIGN] = "center";
-     $counter++;
-     
-     for($k=0,$n=count($dataSplit);$k<$n;$k++){
-	  $tbBottom[0][$counter][TABLE_ISI] = currency_format($SubTotal[$dataSplit[$k]["biaya_id"]]);
-	  $tbBottom[0][$counter][TABLE_ALIGN] = "left";
-	  //$tbContent[$i][$counter][ROWSPAN] = $dataSpan["jml_span"];
-	  $counter++;
-     }
-	
+        $tbContent[$i][$counter][TABLE_ISI] = $m;
+            $tbContent[$i][$counter][TABLE_ALIGN] = "right";
+            //$tbContent[$i][$counter][ROWSPAN] = $dataSpan["jml_span"];
+            $counter++;
+            
+            $tbContent[$i][$counter][TABLE_ISI] = $value;
+            $tbContent[$i][$counter][TABLE_ALIGN] = "left";
+            //$tbContent[$i][$counter][ROWSPAN] = $dataSpan["jml_span"];
+            $counter++;
+            
+            $tbContent[$i][$counter][TABLE_ISI] = $namaPasien[$key];
+            $tbContent[$i][$counter][TABLE_ALIGN] = "left";
+            //$tbContent[$i][$counter][ROWSPAN] = $dataSpan["jml_span"];
+            $counter++;
+            
+            $tbContent[$i][$counter][TABLE_ISI] = format_date($tanggalPasien[$key]);
+            $tbContent[$i][$counter][TABLE_ALIGN] = "left";
+            //$tbContent[$i][$counter][ROWSPAN] = $dataSpan["jml_span"];
+            $counter++;
+            
+            for($j=0,$n=count($dataSplit);$j<$n;$j++){
+            //foreach($biayaPasien[$key] as $biaya_key => $biaya_value){
+                 $tbContent[$i][$counter][TABLE_ISI] = currency_format($biayaPasien[$key][$dataSplit[$j]["biaya_id"]]);
+                 $tbContent[$i][$counter][TABLE_ALIGN] = "left";
+                 //$tbContent[$i][$counter][ROWSPAN] = $dataSpan["jml_span"];
+                 $counter++;
+                 $SubTotal[$dataSplit[$j]["biaya_id"]] += $biayaPasien[$key][$dataSplit[$j]["biaya_id"]];
+                 $TotalPasien[$key] += $biayaPasien[$key][$dataSplit[$j]["biaya_id"]];
+      
+            }
+      
+            $tbContent[$i][$counter][TABLE_ISI] = currency_format($TotalPasien[$key]);
+            $tbContent[$i][$counter][TABLE_ALIGN] = "right";
+            //$tbContent[$i][$counter][ROWSPAN] = $dataSpan["jml_span"];
+            $counter++;
+             //}
+             $total += $TotalPasien[$key];
+             //if ($dataTable[$i]["cust_usr_kode"]<>$dataTable[$i+1]["cust_usr_kode"]) $m++;
+             $i++; $m++; $counter=0;
+             }
+             
+             $counter = 0;
+             $tbBottom[0][$counter][TABLE_WIDTH] = "30%";
+             $tbBottom[0][$counter][TABLE_COLSPAN] = 4;
+             $tbBottom[0][$counter][TABLE_ALIGN] = "center";
+             $counter++;
+             
+             for($k=0,$n=count($dataSplit);$k<$n;$k++){
+            $tbBottom[0][$counter][TABLE_ISI] = currency_format($SubTotal[$dataSplit[$k]["biaya_id"]]);
+            $tbBottom[0][$counter][TABLE_ALIGN] = "left";
+            //$tbContent[$i][$counter][ROWSPAN] = $dataSpan["jml_span"];
+            $counter++;
+             }
+  
      $tbBottom[0][$counter][TABLE_ISI] = currency_format($total);
      $tbBottom[0][$counter][TABLE_ALIGN] = "right";
      $counter++;
+         }
      
      $tableHeader = "Report Pembayaran Loket Pasien";
 
