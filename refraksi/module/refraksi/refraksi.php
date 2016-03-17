@@ -207,7 +207,20 @@
           unset($rs);
           unset($row);
           
-          
+          /*// --- tindakan tambahan
+          $sql = "select * from klinik.klinik_perawatan_tindakan a
+                    left join klinik.klinik_biaya b on a.id_tindakan = b.biaya_id
+                    where id_rawat = ".QuoteValue(DPE_CHAR,$_POST["rawat_id"])." 
+                    order by rawat_tindakan_urut";//a.id_tindakan = b.biaya_id 
+          $rs = $dtaccess->Execute($sql);
+          $i=0;
+          //echo $sql;
+          while($row=$dtaccess->Fetch($rs)) {
+               $_POST["tindakan_id"][$i] = $row["biaya_id"];
+               $_POST["tindakan_nama"][$i] = $row["biaya_nama"];
+            $_POST["tindakan_total"][$i] = currency_format($row["biaya_total"]);
+               $i++;
+          }*/
      }
      
      // --- cari input refraksi pertama hari ini ---
@@ -632,12 +645,18 @@
 
 	}
 
+     $show = ($_POST["ref_prisma_koreksi_base1"]=='1')?"selected":"";
      $optionsBase1[0] = $view->RenderOption("1","TRUE",$show);
+     $show = ($_POST["ref_prisma_koreksi_base1"]=='0')?"selected":"";
      $optionsBase1[1] = $view->RenderOption("0","FALSE",$show);
 
+
+     $show = ($_POST["ref_prisma_koreksi_base2"]=='1')?"selected":"";
      $optionsBase2[0] = $view->RenderOption("1","TRUE",$show);
+     $show = ($_POST["ref_prisma_koreksi_base2"]=='0')?"selected":"";
      $optionsBase2[1] = $view->RenderOption("0","FALSE",$show);
 
+     $show = "";
 	
      $optionsNext[0] = $view->RenderOption(STATUS_PREOP,"Operasi Hari Ini",$show);
      $optionsNext[1] = $view->RenderOption(STATUS_BEDAH,"Operasi Kecil Hari Ini",$show);
@@ -767,7 +786,7 @@ function TambahTindakan(){
                     ],
               'td',  { align: 'center', style: 'color: black;' },   
                       [
-                 'input', {type:'text', value:'', size:20, maxLength:100, name:'tindakan_total[]', id:'tindakan_total_'+akhir},[],
+                 'input', {type:'text', value:'', size:20, maxLength:100, class:'curedit', name:'tindakan_total[]', id:'tindakan_total_'+akhir},[],
                       ],
                'td', { align: 'center', style: 'color: black;' },
                        [
@@ -1033,8 +1052,18 @@ function DeleteTindakan(akhir){
 
 
      <fieldset>
-     <legend><strong><!--<a style="cursor:pointer" onClick="ChangeDisplay('tbArk');">--><input type="checkbox" name="ck_ark" id="ck_ark" value="ark_on" onClick="viewARK();">&nbsp;ARK<!--</a>--></strong></legend>
-     <table width="100%" border="0" cellpadding="4" cellspacing="1" id="tbArk" style="display:none">
+     <?php
+          if ($_POST["ref_ark_koreksi_spheris_od"] || $_POST["ref_ark_koreksi_cylinder_od"] || $_POST["ref_ark_koreksi_sudut_od"] || $_POST["ref_ark_koreksi_spheris_os"] || $_POST["ref_ark_koreksi_cylinder_os"] || $_POST["ref_ark_koreksi_sudut_os"]) {
+               $showARK = "checked";
+               $styleARK = "style=\"display:block;\"";
+          } else {
+               $showARK = "";
+               $styleARK = "style=\"display:none;\"";
+          }
+          
+     ?>
+     <legend><strong><input type="checkbox" name="ck_ark" id="ck_ark" value="ark_on" onClick="viewARK();" <?php echo $showARK ?>>&nbsp;ARK</strong></legend>
+     <table width="100%" border="0" cellpadding="4" cellspacing="1" id="tbArk" <?php echo $styleARK;?> >
 	  <tr><td width="50%" style="vertical-align: top">
 	  <table border="1" width="100%">
           <tr class="subheader">
@@ -1124,7 +1153,7 @@ function DeleteTindakan(akhir){
                     </td>                    
                </tr>
           <?php } else { ?>
-               <?php for($i=0,$n=count($_POST["id_item"]);$i<$n;$i++) { ?>
+               <?php for($i=0,$n=count($_POST["tindakan_id"]);$i<$n;$i++) { ?>
                     <tr id="tr_tindakan_<?php echo $i;?>">
                          <td align="left" class="tablecontent-odd" width="70%">
                               <?php echo $view->RenderTextBox("tindakan_nama[]","tindakan_nama_".$i,"30","100",$_POST["tindakan_nama"][$i],"inputField", "readonly",false);?>

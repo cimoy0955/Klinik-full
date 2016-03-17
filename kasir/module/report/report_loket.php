@@ -70,10 +70,14 @@
      $skr = date("d-m-Y");
      if(!$_POST["tgl_awal"]) $_POST["tgl_awal"] = $skr;
      if(!$_POST["tgl_akhir"]) $_POST["tgl_akhir"] = $skr; 
-     $sql_where[] = "a.fol_lunas = ".QuoteValue(DPE_CHAR,"y"); 
      
-     if($_POST["tgl_awal"]) $sql_where[] = "CAST(a.fol_dibayar_when as DATE) >= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_awal"]));
-     if($_POST["tgl_akhir"]) $sql_where[] = "CAST(a.fol_dibayar_when as DATE) <= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_akhir"]));
+     $sql_where[] = "a.fol_lunas = ".QuoteValue(DPE_CHAR,"y"); 
+
+     $timestampAwal = date_db($_POST["tgl_awal"])." ".$_POST["jam_awal"].":00:00";
+     $timestampAkhir = date_db($_POST["tgl_akhir"])." ".$_POST["jam_akhir"].":00:00";
+     
+     if($_POST["tgl_awal"]) $sql_where[] = "a.fol_dibayar_when >= ".QuoteValue(DPE_DATE,$timestampAwal);
+     if($_POST["tgl_akhir"]) $sql_where[] = "a.fol_dibayar_when <= ".QuoteValue(DPE_DATE,$timestampAkhir);
      
      if(!$_POST["cust_usr_jenis"] && !$_POST["id_biaya"]) { 
 		$sql_where[] = "(d.reg_jenis_pasien <> ".QuoteValue(DPE_CHAR,PASIEN_BAYAR_SWADAYA)." and id_biaya = ".QuoteValue(DPE_CHAR,BIAYA_KARTU)." or d.reg_jenis_pasien = ".QuoteValue(DPE_CHAR,PASIEN_BAYAR_SWADAYA).")";
@@ -399,6 +403,25 @@ function CariLayanan(id){
                     <?php } ?>
 			</select>
           </td> 
+     </tr>
+     <tr class="tablecontent">
+          <td width="15%">&nbsp;Pukul</td>
+          <td width="35%" colspan="3">
+            <select name="jam_awal" id="jam_awal">
+              <?php for ($i=0; $i < 24; $i++) { ?>
+                <option value="<?php echo str_pad($i, 2, "0", STR_PAD_LEFT);?>" <?php if ($i==8): ?>
+                  selected
+                <?php endif ?>><?php echo str_pad($i, 2, "0", STR_PAD_LEFT);?>:00</option>
+              <?php }?>
+            </select> - 
+            <select name="jam_akhir" id="jam_akhir">
+              <?php for ($i=0; $i < 24; $i++) { ?>
+                <option value="<?php echo str_pad($i, 2, "0");?>" <?php if ($i==14): ?>
+                  selected
+                <?php endif ?>><?php echo str_pad($i, 2, "0", STR_PAD_LEFT);?>:00</option>
+              <?php }?>
+            </select>
+          </td>
      </tr>
      <tr class="tablecontent">
 		<td>&nbsp;Layanan</td>
