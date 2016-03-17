@@ -291,13 +291,13 @@
 			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/setup/jenis_pasien/jenis_pasien_view.php";
 			$menu[$countMenu]["status"] = true;	
 			$countMenu++;
-			
+			/*
 			$menu[$countMenu]["head"] = "Jenis Biaya";
 			$menu[$countMenu]["priv"] = "setup_biaya_pasien";
 			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/setup/jenis_biaya/jenis_biaya_view.php";
 			$menu[$countMenu]["status"] = true;	
 			$countMenu++;
-			
+			*/
 			$menu[$countMenu]["head"] = "Jenis Biaya Pemeriksaan";
 			$menu[$countMenu]["priv"] = "setup_biaya_pasien";
 			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/setup/jenis_biaya_pemeriksaan/jenis_biaya_view.php";
