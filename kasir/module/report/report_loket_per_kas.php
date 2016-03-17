@@ -41,7 +41,7 @@
      }
      
 
-	$sql = "select * from klinik.klinik_split order by split_id";
+	$sql = "select * from global.global_status_pasien order by status_id";
      $rs = $dtaccess->Execute($sql,DB_SCHEMA);
      $dataSplit = $dtaccess->FetchAll($rs);
      
@@ -61,19 +61,21 @@
      
 	$sql_where = implode(" and ",$sql_where);
 	
-     $sql = "select extract(month from a.fol_dibayar_when) as bulan, sum(b.folsplit_nominal) as tot_nominal, 
-               b.id_split 
+     $sql = "select extract(month from a.fol_dibayar_when) as bulan, sum(b.biaya_total) as tot_nominal, 
+               c.status_id
                from klinik.klinik_folio a 
-               join klinik.klinik_folio_split b on a.fol_id = b.id_fol";
+               left join klinik.klinik_biaya b on b.biaya_id = a.id_biaya
+               left join global.global_status_pasien c on cast(c.status_id as char) = b.biaya_jenis
+               ";
 	$sql .= " where ".$sql_where;
-     $sql .= " group by extract(month from a.fol_dibayar_when), b.id_split 
-               order by extract(month from a.fol_dibayar_when), b.id_split";
+     $sql .= " group by extract(month from a.fol_dibayar_when), c.status_id 
+               order by extract(month from a.fol_dibayar_when), c.status_id";
                 
      $rs = $dtaccess->Execute($sql);
      
 	while($row = $dtaccess->Fetch($rs)) {
           
-          $dataFolio[$row["bulan"]][$row["id_split"]] = $row["tot_nominal"];
+          $dataFolio[$row["bulan"]][$row["status_id"]] = $row["tot_nominal"];
           
 	}
 	
@@ -82,7 +84,7 @@
      $tbHeader[0][0][TABLE_WIDTH] = "15%";
 	
 	for($i=0,$n=count($dataSplit);$i<$n;$i++){
-		$tbHeader[0][$i+1][TABLE_ISI] = $dataSplit[$i]["split_nama"];
+		$tbHeader[0][$i+1][TABLE_ISI] = $dataSplit[$i]["status_nama"];
 		$tbHeader[0][$i+1][TABLE_WIDTH] = "10%";
 	}
 	
@@ -106,13 +108,13 @@
           
           unset($totBulan);
 		for($j=0,$k=count($dataSplit);$j<$k;$j++){
-			$tbContent[$baris][$counter][TABLE_ISI] = currency_format($dataFolio[$i][$dataSplit[$j]["split_id"]]);
+			$tbContent[$baris][$counter][TABLE_ISI] = currency_format($dataFolio[$i][$dataSplit[$j]["status_id"]]);
 			$tbContent[$baris][$counter][TABLE_ALIGN] = "right";
 			$counter++;
 			
-			$totSplit[$dataSplit[$j]["split_id"]] += $dataFolio[$i][$dataSplit[$j]["split_id"]];
-               $totBulan += $dataFolio[$i][$dataSplit[$j]["split_id"]];
-               $totalAll += $dataFolio[$i][$dataSplit[$j]["split_id"]];
+			$totSplit[$dataSplit[$j]["status_id"]] += $dataFolio[$i][$dataSplit[$j]["status_id"]];
+               $totBulan += $dataFolio[$i][$dataSplit[$j]["status_id"]];
+               $totalAll += $dataFolio[$i][$dataSplit[$j]["status_id"]];
 		}
 
           $tbContent[$baris][$counter][TABLE_ISI] = currency_format($totBulan);
@@ -128,7 +130,7 @@
 	$counter++;
 
 	for($i=0,$n=count($dataSplit);$i<$n;$i++){
-		$tbBottom[0][$counter][TABLE_ISI] = currency_format($totSplit[$dataSplit[$i]["split_id"]]);
+		$tbBottom[0][$counter][TABLE_ISI] = currency_format($totSplit[$dataSplit[$i]["status_id"]]);
 		$tbBottom[0][$counter][TABLE_ALIGN] = "right";
 		$counter++;
 	}
