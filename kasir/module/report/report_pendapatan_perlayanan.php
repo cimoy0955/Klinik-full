@@ -60,12 +60,10 @@
      
           
      $skr = date("d-m-Y");
-     if(!$_POST["tgl_awal"]) $_POST["tgl_awal"] = $skr;
-     if(!$_POST["tgl_akhir"]) $_POST["tgl_akhir"] = $skr; 
+     if(!$_POST["tgl_awal"]) $_POST["tgl_awal"] = $skr; 
      $sql_where[] = "a.fol_lunas = ".QuoteValue(DPE_CHAR,"y"); 
      
-    if($_POST["tgl_awal"]) $sql_where[] = "CAST(a.fol_dibayar_when as DATE) >= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_awal"]));
-    if($_POST["tgl_akhir"]) $sql_where[] = "CAST(a.fol_dibayar_when as DATE) <= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_akhir"]));
+    if($_POST["tgl_awal"]) $sql_where[] = "CAST(a.fol_dibayar_when as DATE) = ".QuoteValue(DPE_DATE,date_db($_POST["tgl_awal"]));
      
      
 		if($_POST['cust_usr_jenis']) $sql_where[] = "d.reg_jenis_pasien = ".QuoteValue(DPE_CHAR,$_POST["cust_usr_jenis"]);
@@ -90,8 +88,8 @@
      unset($rs_namabiaya);
      $m=0;
 
-     $tgl_nya = explode('-', $_POST["tgl_akhir"]);
-     $bln_nya = format_date_long($_POST["tgl_akhir"]);
+     $tgl_nya = explode('-', $_POST["tgl_awal"]);
+     $bln_nya = format_date_long($_POST["tgl_awal"]);
      $bln_nya = explode(' ', $bln_nya);
 	
 	$counter=0;
@@ -225,15 +223,10 @@ function CariLayanan(id){
           <td width="35%">
                <input type="text"  id="tgl_awal" name="tgl_awal" size="15" maxlength="10" value="<?php echo $_POST["tgl_awal"];?>"/>
                <img src="<?php echo $APLICATION_ROOT;?>images/b_calendar.png" width="16" height="16" align="middle" id="img_tgl_awal" style="cursor: pointer; border: 0px solid white;" title="Date selector" onMouseOver="this.style.background='red';" onMouseOut="this.style.background=''" />
-               -
-               <input type="text"  id="tgl_akhir" name="tgl_akhir" size="15" maxlength="10" value="<?php echo $_POST["tgl_akhir"];?>"/>
-               <img src="<?php echo $APLICATION_ROOT;?>images/b_calendar.png" width="16" height="16" align="middle" id="img_tgl_akhir" style="cursor: pointer; border: 0px solid white;" title="Date selector" onMouseOver="this.style.background='red';" onMouseOut="this.style.background=''" />
-               
           </td>
           <td width="10%">&nbsp;Jenis Pasien</td>
           <td width="40%">
 			<select name="cust_usr_jenis" id="cust_usr_jenis" onKeyDown="return tabOnEnter(this, event);" onchange="CariLayanan(document.getElementById('cust_usr_jenis').value)">
-                    <option value="" >[ Pilih Jenis Pasien ]</option>
                     <?php foreach($bayarPasien as $key => $value) { ?>
                          <option value="<?php echo $key;?>" <?php if($_POST["cust_usr_jenis"]==$key) echo "selected";?>><?php echo $value;?></option>
                     <?php } ?>
@@ -276,14 +269,6 @@ function CariLayanan(id){
         ifFormat       :    "<?php echo $formatCal;?>",       // format of the input field
         showsTime      :    false,            // will display a time selector
         button         :    "img_tgl_awal",   // trigger for the calendar (button ID)
-        singleClick    :    true,           // double-click mode
-        step           :    1                // show all years in drop-down boxes (instead of every other year as default)
-    });
-    Calendar.setup({
-        inputField     :    "tgl_akhir",      // id of the input field
-        ifFormat       :    "<?php echo $formatCal;?>",       // format of the input field
-        showsTime      :    false,            // will display a time selector
-        button         :    "img_tgl_akhir",   // trigger for the calendar (button ID)
         singleClick    :    true,           // double-click mode
         step           :    1                // show all years in drop-down boxes (instead of every other year as default)
     });
