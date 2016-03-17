@@ -214,10 +214,6 @@
           exit();    
      } 
 
-	$sql = "select * from klinik.klinik_split where split_flag like '".SPLIT_PERAWATAN."' order by split_id";
-     $rs = $dtaccess->Execute($sql,DB_SCHEMA);
-     $dataSplit = $dtaccess->FetchAll($rs);
-     
      /*
       * bikin option untuk combo box jenis layanan
       */

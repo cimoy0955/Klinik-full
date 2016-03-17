@@ -37,28 +37,13 @@
           return StripCurrency($num);
      }
 
-	$sql = "select * from klinik.klinik_biaya 
-            order by biaya_kode";//where biaya_jenis not like '%T%'
-          //and biaya_jenis not like '%V%'
+	$sql = "select * from klinik.klinik_biaya a
+            left join global.global_status_pasien b on a.biaya_jenis = cast(b.status_id as CHAR)
+            order by a.biaya_kode";
           
      $rs = $dtaccess->Execute($sql,DB_SCHEMA);
      $dataBiaya = $dtaccess->FetchAll($rs);
 //echo $sql;
-	$sql = "select * from klinik.klinik_split where split_flag like '".SPLIT_PERAWATAN."' order by split_id"; //
-     $rs = $dtaccess->Execute($sql,DB_SCHEMA);
-     $dataSplit = $dtaccess->FetchAll($rs);
-	
-     $sql = "select * from klinik.klinik_biaya_split"; 
-     $rs = $dtaccess->Execute($sql,DB_SCHEMA);
-     while($row = $dtaccess->Fetch($rs)) {
-		$_POST["txtNom"][$row["id_biaya"]][$row["id_split"]] = $row["bea_split_nominal"];
-	}
-
-     $sqlStatus = "select * from global_status_pasien order by status_id";
-     $rsStatus = $dtaccess->Execute($sqlStatus);
-     while($dataStatus = $dtaccess->Fetch($rsStatus)) {
-          $status_nya[$dataStatus["status_id"]] = $dataStatus["status_nama"];
-     }
      
 	$table = new InoTable("table1","100%","left",null,1,2,1,null);     
      $PageHeader = "Tabel Biaya";
@@ -137,7 +122,7 @@
           $tbContent[$j][$counter][TABLE_ALIGN] = "left";
           $counter++;
 		
-          $tbContent[$j][$counter][TABLE_ISI] = $status_nya[$dataBiaya[$i]["biaya_jenis"]];
+          $tbContent[$j][$counter][TABLE_ISI] = $dataBiaya[$i]["status_nama"];
           $tbContent[$j][$counter][TABLE_ALIGN] = "left";
           $counter++;
 	/* request user tgl 23 Des 2015
