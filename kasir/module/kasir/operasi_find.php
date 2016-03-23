@@ -52,7 +52,7 @@ function GetData($in_nama=null){
       $tbHeader[0][$counter][TABLE_ALIGN] = "center";
       $counter++;
       
-      $tbHeader[0][$counter][TABLE_ISI] = "Nama Obat";
+      $tbHeader[0][$counter][TABLE_ISI] = "Nama Operasi";
       $tbHeader[0][$counter][TABLE_WIDTH] = "64%";
       $tbHeader[0][$counter][TABLE_ALIGN] = "center";
       $counter++;
