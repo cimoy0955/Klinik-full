@@ -685,6 +685,63 @@ function isi02(id,kode,nama,total){
     document.getElementById("kotaksugest02").innerHTML = "";
 }
 
+var drz03;
+function lihat03(eval){
+
+    if(eval.length==0){
+        document.getElementById("kotaksugest03").style.visibility = "hidden";
+    }else{
+        drz03 = buatajax03();
+        var url="cari03.php";
+        drz03.onreadystatechange=stateChanged03;
+        var params = "q="+eval;
+        drz03.open("POST",url,true);
+        //beberapa http header harus kita set kalau menggunakan POST
+        drz03.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        drz03.setRequestHeader("Content-length", params.length);
+        drz03.setRequestHeader("Connection", "close");
+        drz03.send(params);
+    }
+
+}
+
+function buatajax03(){
+    if (window.XMLHttpRequest){
+        return new XMLHttpRequest();
+    }
+    if (window.ActiveXObject){
+        return new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    return null;
+}
+
+function stateChanged03(){
+
+	var data;
+    if (drz03.readyState==4 && drz03.status==200){
+        data=drz03.responseText;
+        if(data.length>0){
+            document.getElementById("kotaksugest03").innerHTML = data;
+            document.getElementById("kotaksugest03").style.visibility = "";
+        }else{
+            document.getElementById("kotaksugest03").innerHTML = "";
+            document.getElementById("kotaksugest03").style.visibility = "hidden";
+        }
+    }
+}
+
+function isi03(id,kode,nama,total){
+
+    document.getElementById("obat_id").value = id;
+    document.getElementById("obat_nama").value = nama;
+    document.getElementById("obat_kode").value = kode;
+    document.getElementById("txtJumlahObat").value = "1";
+    document.getElementById("txtHargaSatuanObat").value = formatCurrency(total);
+    document.getElementById("txtHargaTotalObat").value = formatCurrency(total);
+    document.getElementById("kotaksugest03").style.visibility = "hidden";
+    document.getElementById("kotaksugest03").innerHTML = "";
+}
+
 function cekTambahFolio(){
 	if ((document.getElementById("item_id").value == '' || document.getElementById("item_id").value == null) && (document.getElementById("obat_id").value == '' || document.getElementById("obat_id").value == null) && document.getElementById("operasi_id").value == '' || document.getElementById("operasi_id").value == null) {
 		alert("Isian tagihan masih kosong. Silahkan pilih tagihan sesuai dengan jenisnya.");
@@ -714,7 +771,7 @@ function cekTambahFolio(){
 	</tr>
 </table> 
 
-<form name="frmEdit" method="POST" action="<?php echo $_SERVER["PHP_SELF"]?>" >
+<form name="frmEdit" method="POST" action="<?php echo $_SERVER["PHP_SELF"]?>" autocomplete="off" >
 <table width="100%" border="1" cellpadding="4" cellspacing="1">
 <tr>
      <td width="100%">
@@ -843,10 +900,10 @@ function cekTambahFolio(){
 		    <table width="100%" border="0" cellpadding="1" cellspacing="1">
 			 <tr>
 				<td align="left" class="tablecontent">&nbsp;Kode Biaya Operasi&nbsp;</td>
-				<td align="left" class="tablecontent-odd"><?php echo $view->RenderTextBox("operasi_kode","operasi_kode","10","100",$_POST["operasi_kode"],"inputField",null,false,"onkeyup=\"lihat0(this.value);\""); ?>
+				<td align="left" class="tablecontent-odd"><?php echo $view->RenderTextBox("operasi_kode","operasi_kode","10","100",$_POST["operasi_kode"],"inputField",null,false,"onkeyup=\"lihat03(this.value);\""); ?>
 				  <a href="<?php echo $findPageOps?>&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Pilih Item">
 				  <img src="<?php echo $APLICATION_ROOT;?>images/b_select.png" border="0" align="middle" width="18" height="20" style="cursor:pointer" title="Pilih Item" alt="Pilih Item" /></a>
-				  <div id="kotaksugest0" style="position:absolute; background-color:#eeeeee;width:120px;visibility:hidden;z-index:100">
+				  <div id="kotaksugest03" style="position:absolute; background-color:#eeeeee;width:420px;visibility:hidden;z-index:100">
 				       </div>
 				</td>
 			 </tr>

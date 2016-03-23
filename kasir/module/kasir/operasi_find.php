@@ -27,7 +27,7 @@ function GetData($in_nama=null){
 	
 	if($in_nama) $sql_where[] = "UPPER(biaya_nama) like '%".strtoupper($in_nama)."%'"; 
 	 
-	 $sql_where[] = "biaya_kode like 'OP3%'";
+	 $sql_where[] = "biaya_kode like 'OP%'";
 	 
 	 $sql_where = implode(" and ",$sql_where);
 /* 
@@ -49,6 +49,11 @@ function GetData($in_nama=null){
 
       $tbHeader[0][$counter][TABLE_ISI] = "No";
       $tbHeader[0][$counter][TABLE_WIDTH] = "1%";
+      $tbHeader[0][$counter][TABLE_ALIGN] = "center";
+      $counter++;
+      
+      $tbHeader[0][$counter][TABLE_ISI] = "Kode";
+      $tbHeader[0][$counter][TABLE_WIDTH] = "15%";
       $tbHeader[0][$counter][TABLE_ALIGN] = "center";
       $counter++;
       
@@ -75,6 +80,11 @@ function GetData($in_nama=null){
 		$tbContent[$i][$counter][TABLE_ISI] = ($i+1);
 		$tbContent[$i][$counter][TABLE_ALIGN] = "center";
 		$tbContent[$i][$counter][TABLE_CLASS] = $class;
+		$counter++;
+		
+		$tbContent[$i][$counter][TABLE_ISI] = "&nbsp;".$dataTable[$i]["biaya_kode"];
+		$tbContent[$i][$counter][TABLE_ALIGN] = "left";
+		$tbContent[$i][$counter][TABLE_CLASS] = $class;                    
 		$counter++;
 		
 		$tbContent[$i][$counter][TABLE_ISI] = "&nbsp;".$dataTable[$i]["biaya_nama"];
