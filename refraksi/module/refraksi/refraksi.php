@@ -882,10 +882,10 @@ function DeleteTindakan(akhir){
 							<a href="<?php echo $susterPage;?>&el=0&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Cari Suster"><img src="<?php echo($APLICATION_ROOT);?>images/bd_insrow.png" border="0" align="middle" width="18" height="20" style="cursor:pointer" title="Cari Suster" alt="Cari Suster" /></a>						
 							<input type="hidden" id="id_suster_0" name="id_suster[]" value="<?php echo $_POST["id_suster"];?>"/>
 			               </td>
-						<td align="left" class="tablecontent-odd" width="60%">
+						<!-- <td align="left" class="tablecontent-odd" width="60%">
 							<input class="button" name="btnAdd" id="btnAdd" type="button" value="Tambah" onClick="SusterTambah();">
 							<input name="suster_tot" id="suster_tot" type="hidden" value="0">
-			               </td>
+			               </td> -->
 					</tr>
                     <?php } else  { ?>
                          <?php for($i=0,$n=count($_POST["id_suster"]);$i<$n;$i++) { ?>
@@ -897,7 +897,7 @@ function DeleteTindakan(akhir){
                                         <?php// }?>
                                         <input type="hidden" id="id_suster_<?php echo $i;?>" name="id_suster[]" value="<?php echo $_POST["id_suster"][$i];?>"/>
                                    </td>
-                                   <td align="left" class="tablecontent-odd" width="60%">
+                                   <!-- <td align="left" class="tablecontent-odd" width="60%">
                                         <?php //if($edit) {?>
                                              <?php if($i==0) { ?>
                                                   <input class="button" name="btnAdd" id="btnAdd" type="button" value="Tambah" onClick="SusterTambah();">
@@ -906,7 +906,7 @@ function DeleteTindakan(akhir){
                                              <?php } ?>
                                         <?php //}?>
                                         <input name="suster_tot" id="suster_tot" type="hidden" value="<?php echo $n;?>">
-                                   </td>
+                                   </td> -->
                               </tr>
                          <?php } ?>
                     <?php } ?>
