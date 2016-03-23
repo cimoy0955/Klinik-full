@@ -18,6 +18,7 @@
      
      $viewPage = "kategori_view.php";
      $editPage = "kategori_edit.php";
+     $hiddenPage = "kategori_view_hidden.php";
 	
      if(!$auth->IsAllowed("laboratorium",PRIV_READ)){
           die("access_denied");
@@ -127,6 +128,21 @@
           header("location:".$viewPage);
           exit();    
      } 
+
+
+     if ($_POST["btnEnable"]) {
+          $kegiatanId = & $_POST["cbEnable"];
+          
+          for($i=0,$n=count($kegiatanId);$i<$n;$i++){
+               $sql = "update lab_kategori set is_active = 'y'
+                         where kategori_id = ".QuoteValue(DPE_CHAR,$kegiatanId[$i]);
+               $dtaccess->Execute($sql,DB_SCHEMA_LAB);
+          }
+          
+          header("location:".$hiddenPage);
+          exit();    
+     }
+     
      
 ?>
 

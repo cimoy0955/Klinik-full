@@ -114,6 +114,8 @@
                     $counter++;
                }
 
+               $normalValue = "";
+
                if ($dataTable[$i]["kegiatan_nilai_normal_dewasa_laki"]) $normalValue = $dataTable[$i]["kegiatan_nilai_normal_dewasa_laki"];
                elseif (($dataTable[$i]["kegiatan_nilai_normal_dewasa_laki"]) && ($dataTable[$i]["kegiatan_nilai_normal_dewasa_wanita"])) $normalValue = "L: ".$dataTable[$i]["kegiatan_nilai_normal_dewasa_laki"]."<br />".
                                "P: ".$dataTable[$i]["kegiatan_nilai_normal_dewasa_wanita"];
