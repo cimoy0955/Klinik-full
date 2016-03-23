@@ -141,10 +141,9 @@ function cetak() {
 	<tr>
 		<td align="center" style="font-size:17px">
 		PEMERINTAH PROPINSI JAWA TIMUR<br />
-		<big><b>RSMM SURABAYA</b></big><br />
-		RUMAH SAKIT MATA MASYARAKAT<br /><br />
+		<span style="font-weight: bold; text-transform: uppercase;">Rumah Sakit Mata Masyarakat</span><br />
 		<small>Jl. Gayung Kebonsari Timur No. 49 Surabaya<br />
-    tlp. (031) 8283508-10 E-mail bkmm@diknesjatim.go.id
+    Tlp. (031) 9920 8000 e-mail: rsmmjawatimur@gmail.com
     </small>
     </td>
 	</tr>
