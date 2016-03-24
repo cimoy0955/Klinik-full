@@ -433,7 +433,7 @@
      $counterHeader++;
           
      $tbHeader[0][$counterHeader][TABLE_ISI] = "NIP";
-     $tbHeader[0][$counterHeader][TABLE_WIDTH] = "10%"; 
+     $tbHeader[0][$counterHeader][TABLE_WIDTH] = "16%"; 
      $tbHeader[0][$counterHeader][TABLE_ROWSPAN] = 2;    
      $counterHeader++;
      
