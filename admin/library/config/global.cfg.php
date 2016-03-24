@@ -80,10 +80,12 @@ $rawatStatus[STATUS_PROSES] = "Proses";
 DEFINE("PGW_JENIS_DOKTER",1);
 DEFINE("PGW_JENIS_SUSTER",2);
 DEFINE("PGW_JENIS_ADMIN",3);
+DEFINE("PGW_JENIS_REFRAKSIONIST",4);
 
 $jenisPegawai[PGW_JENIS_DOKTER] = "Dokter";
 $jenisPegawai[PGW_JENIS_SUSTER] = "Perawat";
 $jenisPegawai[PGW_JENIS_ADMIN] = "Admin";
+$jenisPegawai[PGW_JENIS_REFRAKSIONIST] = "Refraksionist";
 
 DEFINE("RAWAT_KEADAAN_BAIK","B");
 DEFINE("RAWAT_KEADAAN_LEMAH","L");
