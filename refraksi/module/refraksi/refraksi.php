@@ -6,6 +6,7 @@
      require_once($ROOT."library/datamodel.cls.php");
      require_once($ROOT."library/dateFunc.lib.php");
      require_once($ROOT."library/tree.cls.php");
+     require_once($ROOT."library/currFunc.lib.php");
      require_once($ROOT."library/inoLiveX.php");
      require_once($APLICATION_ROOT."library/view.cls.php");
      
@@ -207,20 +208,20 @@
           unset($rs);
           unset($row);
           
-          /*// --- tindakan tambahan
-          $sql = "select * from klinik.klinik_perawatan_tindakan a
+          // --- tindakan tambahan
+          $sql = "select * from klinik.klinik_refraksi_tindakan a
                     left join klinik.klinik_biaya b on a.id_tindakan = b.biaya_id
-                    where id_rawat = ".QuoteValue(DPE_CHAR,$_POST["rawat_id"])." 
-                    order by rawat_tindakan_urut";//a.id_tindakan = b.biaya_id 
+                    where id_ref = ".QuoteValue(DPE_CHAR,$_POST["ref_id"])." 
+                    order by ref_tindakan_urut";//a.id_tindakan = b.biaya_id 
           $rs = $dtaccess->Execute($sql);
           $i=0;
-          //echo $sql;
+          // echo $sql;
           while($row=$dtaccess->Fetch($rs)) {
                $_POST["tindakan_id"][$i] = $row["biaya_id"];
                $_POST["tindakan_nama"][$i] = $row["biaya_nama"];
             $_POST["tindakan_total"][$i] = currency_format($row["biaya_total"]);
                $i++;
-          }*/
+          }
      }
      
      // --- cari input refraksi pertama hari ini ---
@@ -635,6 +636,34 @@
 	       unset($dbField);
                
                
+               $dbTable = "klinik.klinik_refraksi_tindakan";
+               $dbField[0] = "ref_tindakan_id";   // PK
+               $dbField[1] = "id_ref";
+               $dbField[2] = "id_tindakan";
+               $dbField[3] = "ref_tindakan_total";
+               $dbField[4] = "ref_tindakan_bayar";
+               $dbField[5] = "ref_tindakan_urut";
+
+               for($i=0,$n=count($_POST["tindakan_id"]);$i<$n;$i++) {
+                    $dbValue[0] = QuoteValue(DPE_CHARKEY,$dtaccess->GetTransID());
+                    $dbValue[1] = QuoteValue(DPE_CHARKEY,$_POST["ref_id"]);
+                    $dbValue[2] = QuoteValue(DPE_CHARKEY,$_POST["tindakan_id"][$i]);
+                    $dbValue[3] = QuoteValue(DPE_NUMERIC,StripCurrency($_POST["tindakan_total"][$i]));
+                    $dbValue[4] = QuoteValue(DPE_NUMERIC,StripCurrency($_POST["tindakan_total"][$i])); 
+                    $dbValue[5] = QuoteValue(DPE_NUMERIC,$i);
+
+                    $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
+                    $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey);
+
+                    if($_POST["tindakan_id"][$i]) $dtmodel->Insert() or die("insert  error");
+
+                    unset($dtmodel);
+                    unset($dbValue);
+                    unset($dbKey);
+               }
+               unset($dbField);
+               unset($dbTable);
+
                $sql = "update klinik.klinik_registrasi set reg_status = '".$_POST["cmbNext"]."0', reg_tanggal = '".date('Y-m-d')."', reg_waktu = CURRENT_TIME  where reg_id = ".QuoteValue(DPE_CHAR,$_POST["id_reg"]);
                $dtaccess->Execute($sql); 
           }
@@ -1156,20 +1185,20 @@ function DeleteTindakan(akhir){
                <?php for($i=0,$n=count($_POST["tindakan_id"]);$i<$n;$i++) { ?>
                     <tr id="tr_tindakan_<?php echo $i;?>">
                          <td align="left" class="tablecontent-odd" width="70%">
-                              <?php echo $view->RenderTextBox("tindakan_nama[]","tindakan_nama_".$i,"30","100",$_POST["tindakan_nama"][$i],"inputField", "readonly",false);?>
-                              <a href="<?php echo $tindakanPage;?>&el=<?php echo $i;?>&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Cari Obat"><img src="<?php echo($APLICATION_ROOT);?>images/bd_insrow.png" border="0" align="middle" width="18" height="20" style="cursor:pointer" title="Cari Obat" alt="Cari Obat" /></a>
+                              <?php echo $view->RenderTextBox("tindakan_nama[]","tindakan_nama_".$i,"75","255",$_POST["tindakan_nama"][$i],"inputField", "readonly",false);?>
+                              <!-- <a href="<?php echo $tindakanPage;?>&el=<?php echo $i;?>&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Cari Obat"><img src="<?php echo($APLICATION_ROOT);?>images/bd_insrow.png" border="0" align="middle" width="18" height="20" style="cursor:pointer" title="Cari Obat" alt="Cari Obat" /></a> -->
                               <input type="hidden" id="tindakan_id_<?php echo $i;?>" name="tindakan_id[]" value="<?php echo $_POST["tindakan_id"][$i];?>"/>
                          </td>
                          <td align="left" width="70%" class="tablecontent-odd">
-                             <?php echo $view->RenderTextBox("tindakan_total[]","tindakan_total_".$i,"20","100",$_POST["tindakan_total"][$i],"curedit", "",false);?>
+                             <?php echo $view->RenderTextBox("tindakan_total[]","tindakan_total_".$i,"20","100",$_POST["tindakan_total"][$i],"curedit", "readonly",false);?>
                         </td>			
                          <td align="left" class="tablecontent-odd" width="30%">
-                              <?php if($i==0) { ?>
+                              <!-- <?php if($i==0) { ?>
                               <input class="button" name="btnAdd" id="btnAdd" type="button" value="Tambah" onClick="TambahTindakan();">
                               <?php } else { ?>
                               <input class="button" name="btnDel2[<?php echo $i;?>]" id="btnDel2_<?php echo $i;?>" type="button" value="Hapus" onClick="DeleteTindakan(<?php echo $i;?>);">
                               <?php } ?>
-                              <input name="hid_tot_tindakan" id="hid_tot_tindakan" type="hidden" value="<?php echo $n;?>">
+                              <input name="hid_tot_tindakan" id="hid_tot_tindakan" type="hidden" value="<?php echo $n;?>"> -->
                          </td>
                     </tr>
                <?php } ?>
