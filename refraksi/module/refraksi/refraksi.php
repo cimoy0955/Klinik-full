@@ -1186,19 +1186,23 @@ function DeleteTindakan(akhir){
                     <tr id="tr_tindakan_<?php echo $i;?>">
                          <td align="left" class="tablecontent-odd" width="70%">
                               <?php echo $view->RenderTextBox("tindakan_nama[]","tindakan_nama_".$i,"75","255",$_POST["tindakan_nama"][$i],"inputField", "readonly",false);?>
-                              <!-- <a href="<?php echo $tindakanPage;?>&el=<?php echo $i;?>&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Cari Obat"><img src="<?php echo($APLICATION_ROOT);?>images/bd_insrow.png" border="0" align="middle" width="18" height="20" style="cursor:pointer" title="Cari Obat" alt="Cari Obat" /></a> -->
+                              <?php if ($_x_mode!='Edit') {?>
+                                   <a href="<?php echo $tindakanPage;?>&el=<?php echo $i;?>&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Cari Obat"><img src="<?php echo($APLICATION_ROOT);?>images/bd_insrow.png" border="0" align="middle" width="18" height="20" style="cursor:pointer" title="Cari Obat" alt="Cari Obat" /></a>
+                              <?php } ?>
                               <input type="hidden" id="tindakan_id_<?php echo $i;?>" name="tindakan_id[]" value="<?php echo $_POST["tindakan_id"][$i];?>"/>
                          </td>
                          <td align="left" width="70%" class="tablecontent-odd">
                              <?php echo $view->RenderTextBox("tindakan_total[]","tindakan_total_".$i,"20","100",$_POST["tindakan_total"][$i],"curedit", "readonly",false);?>
                         </td>			
                          <td align="left" class="tablecontent-odd" width="30%">
-                              <!-- <?php if($i==0) { ?>
+                         <?php if ($_x_mode!='Edit') {?>
+                              <?php if($i==0) { ?>
                               <input class="button" name="btnAdd" id="btnAdd" type="button" value="Tambah" onClick="TambahTindakan();">
                               <?php } else { ?>
                               <input class="button" name="btnDel2[<?php echo $i;?>]" id="btnDel2_<?php echo $i;?>" type="button" value="Hapus" onClick="DeleteTindakan(<?php echo $i;?>);">
                               <?php } ?>
-                              <input name="hid_tot_tindakan" id="hid_tot_tindakan" type="hidden" value="<?php echo $n;?>"> -->
+                              <input name="hid_tot_tindakan" id="hid_tot_tindakan" type="hidden" value="<?php echo $n;?>">
+                         <?php }?>
                          </td>
                     </tr>
                <?php } ?>

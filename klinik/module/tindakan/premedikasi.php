@@ -235,6 +235,7 @@
           $sql = "select pgw_nama, pgw_id from klinik.klinik_premedikasi_suster a
                     join hris.hris_pegawai b on a.id_pgw = b.pgw_id where id_preme = ".QuoteValue(DPE_CHAR,$_POST["preme_id"]); 
           $rs = $dtaccess->Execute($sql);
+          // echo $sql;
           $i=0;
           while($row=$dtaccess->Fetch($rs)) {
                $_POST["id_suster"][$i] = $row["pgw_id"];
@@ -250,13 +251,12 @@
           $row=$dtaccess->Fetch($rs);
           $_POST["id_dokter"] = $row["pgw_id"];
           $_POST["preme_dokter_nama"] = $row["pgw_nama"];
-
-          $sql = "select pgw_nama, pgw_id from klinik.klinik_premedikasi_admin a
-                    join hris.hris_pegawai b on a.id_pgw = b.pgw_id where id_op = ".QuoteValue(DPE_CHAR,$_POST["op_id"]);
-          $rs = $dtaccess->Execute($sql);
           unset($rs);
           unset($row);
-                            
+
+          $sql = "select pgw_nama, pgw_id from klinik.klinik_premedikasi_admin a
+                    join hris.hris_pegawai b on a.id_pgw = b.pgw_id where id_preme = ".QuoteValue(DPE_CHAR,$_POST["preme_id"]);
+          $rs = $dtaccess->Execute($sql);
           $row=$dtaccess->Fetch($rs);
           $_POST["id_admin"] = $row["pgw_id"];
           $_POST["op_admin_nama"] = $row["pgw_nama"];
