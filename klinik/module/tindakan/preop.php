@@ -339,10 +339,10 @@
                unset($rs);
                unset($row);
 
-               $sql = "select pgw_nama, pgw_id from klinik.klinik_bedah_admin a
-                    join hris.hris_pegawai b on a.id_pgw = b.pgw_id where id_op = ".QuoteValue(DPE_CHAR,$_POST["op_id"]);
+               $sql = "select pgw_nama, pgw_id from klinik.klinik_preop_admin a
+                    join hris.hris_pegawai b on a.id_pgw = b.pgw_id where id_preop = ".QuoteValue(DPE_CHAR,$_POST["preop_id"]);
                $rs = $dtaccess->Execute($sql);
-                             
+                            // echo $sql; 
                $row=$dtaccess->Fetch($rs);
                $_POST["id_admin"] = $row["pgw_id"];
                $_POST["op_admin_nama"] = $row["pgw_nama"];
