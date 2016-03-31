@@ -827,7 +827,7 @@
      $dataOperasiJenis = $dtaccess->FetchAll($sql);
 
      // -- bikin combonya operasi Jenis
-     $optOperasiJenis[0] = $view->RenderOption("","[Pilih Jenis Operasi]",$show); 
+     $optOperasiJenis[0] = $view->RenderOption("--","[Pilih Jenis Operasi]",$show); 
      for($i=0,$n=count($dataOperasiJenis);$i<$n;$i++) {
           $show = ($_POST["op_jenis"]==$dataOperasiJenis[$i]["op_jenis_id"]) ? "selected":"";
           $optOperasiJenis[$i+1] = $view->RenderOption($dataOperasiJenis[$i]["op_jenis_id"],$dataOperasiJenis[$i]["op_jenis_nama"],$show); 
@@ -847,7 +847,7 @@
      $dataOperasiPaket= $dtaccess->FetchAll($sql);
 
      // -- bikin combonya operasi paket
-     $optOperasiPaket[0] = $view->RenderOption("","[Pilih Paket Operasi]",$show); 
+     $optOperasiPaket[0] = $view->RenderOption("--","[Pilih Paket Operasi]",$show); 
      for($i=0,$n=count($dataOperasiPaket);$i<$n;$i++) {
           $show = ($_POST["op_paket_biaya"]==$dataOperasiPaket[$i]["op_paket_id"]) ? "selected":"";
           $optOperasiPaket[$i+1] = $view->RenderOption($dataOperasiPaket[$i]["op_paket_id"],$dataOperasiPaket[$i]["op_paket_nama"],$show); 
@@ -1001,13 +1001,13 @@ function CheckData(frm) {
 function CheckSimpan(frm){
 	
 	if(frm.op_status.value=='y') {
-     	if(!frm.op_jenis.value) {
-     		alert('Jenis Operasi Harus di Pilih');
+     	if(frm.op_jenis.value=='--') {
+     		alert('Metode Operasi Harus di Pilih');
      		frm.op_jenis.focus();
      		return false;
      	}
      	
-     	if(!frm.op_paket_biaya.value) {
+     	if(frm.op_paket_biaya.value=='--') {
      		alert('Paket Biaya Harus di Pilih');
      		frm.op_paket_biaya.focus();
      		return false;
