@@ -240,6 +240,69 @@
 		$tmpJamSelesai = explode(":", $_POST["op_jam_selesai"]);
 		$_POST["op_selesai_jam"] = $tmpJamSelesai[0];
 		$_POST["op_selesai_menit"] = $tmpJamSelesai[1];
+
+          $sql = "select a.dokter_1,a.perawat_1,a.perawat_2,a.perawat_3,a.perawat_4,a.perawat_5,a.perawat_6,a.perawat_7,a.perawat_8,a.perawat_9,a.perawat_10,
+                    a.petugas_id, b.pgw_nama as dokter1, c.pgw_nama as perawat1 , 
+                    d.pgw_nama as perawat2, e.pgw_nama as perawat3 , f.pgw_nama as perawat4, i.pgw_nama as perawat5,j.pgw_nama as perawat6,
+                    k.pgw_nama as perawat7,l.pgw_nama as perawat8,m.pgw_nama as perawat9,n.pgw_nama as perawat10
+                    from global.global_petugas a
+                    left join hris.hris_pegawai b on b.pgw_id = a.dokter_1
+                    left join hris.hris_pegawai c on c.pgw_id = a.perawat_1
+                    left join hris.hris_pegawai d on d.pgw_id = a.perawat_2
+                    left join hris.hris_pegawai e on e.pgw_id = a.perawat_3
+                    left join hris.hris_pegawai f on f.pgw_id = a.perawat_4
+                    left join hris.hris_pegawai i on i.pgw_id = a.perawat_5
+                    left join hris.hris_pegawai j on j.pgw_id = a.perawat_6
+                    left join hris.hris_pegawai k on k.pgw_id = a.perawat_7
+                    left join hris.hris_pegawai l on l.pgw_id = a.perawat_8
+                    left join hris.hris_pegawai m on m.pgw_id = a.perawat_9
+                    left join hris.hris_pegawai n on n.pgw_id = a.perawat_10
+                    where id_app = ".QuoteValue(DPE_NUMERIC,'4');          
+      $rs = $dtaccess->Execute($sql);
+               $row=$dtaccess->Fetch($rs); 
+               $_POST["id_dokter"] = $row["dokter_1"];
+               $_POST["op_dokter_nama"] = $row["dokter1"];
+          if($row["perawat1"]){
+     $_POST["id_suster"][0] = $row["perawat_1"];
+               $_POST["op_suster_nama"][0] = $row["perawat1"];
+          }
+            if($row["perawat2"]){
+     $_POST["id_suster"][1] = $row["perawat_2"];
+               $_POST["op_suster_nama"][1] = $row["perawat2"];
+          }    
+               if($row["perawat3"]){
+               $_POST["id_suster"][2] = $row["perawat_3"];
+               $_POST["op_suster_nama"][2] = $row["perawat3"];
+          }    
+               if($row["perawat4"]){
+               $_POST["id_suster"][3] = $row["perawat_4"];
+               $_POST["op_suster_nama"][3] = $row["perawat4"];
+          }    
+               if($row["perawat5"]){
+               $_POST["id_suster"][4] = $row["perawat_5"];
+               $_POST["op_suster_nama"][4] = $row["perawat5"];
+          }
+               if($row["perawat6"]){
+               $_POST["id_suster"][5] = $row["perawat_6"];
+               $_POST["op_suster_nama"][5] = $row["perawat6"];
+          }
+               if($row["perawat7"]){
+               $_POST["id_suster"][6] = $row["perawat_7"];
+               $_POST["op_suster_nama"][6] = $row["perawat7"];
+          }
+               if($row["perawat8"]){
+               $_POST["id_suster"][7] = $row["perawat_8"];
+               $_POST["op_suster_nama"][7] = $row["perawat8"];
+          }
+               if($row["perawat9"]){
+               $_POST["id_suster"][8] = $row["perawat_9"];
+               $_POST["op_suster_nama"][8] = $row["perawat9"];
+          }
+               if($row["perawat10"]){
+               $_POST["id_suster"][9] = $row["perawat_10"];
+               $_POST["op_suster_nama"][9] = $row["perawat10"];
+          }    
+
 		
 	  if($_POST["op_id"]){
 	       $sql = "select pgw_nama, pgw_id from klinik.klinik_operasi_suster a
@@ -297,68 +360,7 @@ $sql = "select pgw_nama, pgw_id from klinik.klinik_operasi_admin a
 		$dataIna = $dtaccess->Fetch($sql);
 		$view->CreatePost($dataIna);
 
-          $sql = "select a.dokter_1,a.perawat_1,a.perawat_2,a.perawat_3,a.perawat_4,a.perawat_5,a.perawat_6,a.perawat_7,a.perawat_8,a.perawat_9,a.perawat_10,
-          a.petugas_id, b.pgw_nama as dokter1, c.pgw_nama as perawat1 , 
-d.pgw_nama as perawat2, e.pgw_nama as perawat3 , f.pgw_nama as perawat4, i.pgw_nama as perawat5,j.pgw_nama as perawat6,
-k.pgw_nama as perawat7,l.pgw_nama as perawat8,m.pgw_nama as perawat9,n.pgw_nama as perawat10
-from global.global_petugas a
-left join hris.hris_pegawai b on b.pgw_id = a.dokter_1
-left join hris.hris_pegawai c on c.pgw_id = a.perawat_1
-left join hris.hris_pegawai d on d.pgw_id = a.perawat_2
-left join hris.hris_pegawai e on e.pgw_id = a.perawat_3
-left join hris.hris_pegawai f on f.pgw_id = a.perawat_4
-left join hris.hris_pegawai i on i.pgw_id = a.perawat_5
-left join hris.hris_pegawai j on j.pgw_id = a.perawat_6
-left join hris.hris_pegawai k on k.pgw_id = a.perawat_7
-left join hris.hris_pegawai l on l.pgw_id = a.perawat_8
-left join hris.hris_pegawai m on m.pgw_id = a.perawat_9
-left join hris.hris_pegawai n on n.pgw_id = a.perawat_10
-where id_app = ".QuoteValue(DPE_NUMERIC,'4');		
-      $rs = $dtaccess->Execute($sql);
-			$row=$dtaccess->Fetch($rs); 
-			$_POST["id_dokter"] = $row["dokter_1"];
-			$_POST["op_dokter_nama"] = $row["dokter1"];
-		if($row["perawat1"]){
-    	$_POST["id_suster"][0] = $row["perawat_1"];
-			$_POST["op_suster_nama"][0] = $row["perawat1"];
-		}
-		  if($row["perawat2"]){
-    	$_POST["id_suster"][1] = $row["perawat_2"];
-			$_POST["op_suster_nama"][1] = $row["perawat2"];
-		}	
-			if($row["perawat3"]){
-			$_POST["id_suster"][2] = $row["perawat_3"];
-			$_POST["op_suster_nama"][2] = $row["perawat3"];
-		}	
-			if($row["perawat4"]){
-			$_POST["id_suster"][3] = $row["perawat_4"];
-			$_POST["op_suster_nama"][3] = $row["perawat4"];
-		}	
-			if($row["perawat5"]){
-			$_POST["id_suster"][4] = $row["perawat_5"];
-			$_POST["op_suster_nama"][4] = $row["perawat5"];
-		}
-			if($row["perawat6"]){
-			$_POST["id_suster"][5] = $row["perawat_6"];
-			$_POST["op_suster_nama"][5] = $row["perawat6"];
-		}
-			if($row["perawat7"]){
-			$_POST["id_suster"][6] = $row["perawat_7"];
-			$_POST["op_suster_nama"][6] = $row["perawat7"];
-		}
-			if($row["perawat8"]){
-			$_POST["id_suster"][7] = $row["perawat_8"];
-			$_POST["op_suster_nama"][7] = $row["perawat8"];
-		}
-			if($row["perawat9"]){
-			$_POST["id_suster"][8] = $row["perawat_9"];
-			$_POST["op_suster_nama"][8] = $row["perawat9"];
-		}
-			if($row["perawat10"]){
-			$_POST["id_suster"][9] = $row["perawat_10"];
-			$_POST["op_suster_nama"][9] = $row["perawat10"];
-		}	
-
+          
 
 	}
 
@@ -1771,10 +1773,19 @@ function isi10(nama,id,kode){
                     <?php echo $view->RenderComboBox("op_paket_biaya","op_paket_biaya",$optOperasiPaket,null,"style=\"font-family: monospace;\"",null);?>                              
                </td>
 	  </tr>
-          <tr>
-               <td align="left" class="tablecontent"><?php echo $view->RenderCheckBox("cbProsedur","cbProsedur","Prosedur","inputField",null,"onclick='SetDisplay(\"tbProsedur\")'");?>Prosedur Operasi</td>
+          <tr><?php if ($_POST["op_conj"] || $_POST["op_cauter"]) {
+               # code...
+               $show = "checked"; 
+               $display_proc_op = "display:block;";
+          } else {
+               # code...
+               $show = "";
+               $display_proc_op = "display:none;";
+          }
+          ?> 
+               <td align="left" class="tablecontent"><?php echo $view->RenderCheckBox("cbProsedur","cbProsedur","Prosedur","inputField",$show,"onclick='SetDisplay(\"tbProsedur\")'");?>Prosedur Operasi</td>
                <td align="left" class="tablecontent-odd"  colspan=3>
-                    <table width="100%" border="1" cellpadding="1" cellspacing="1" id="tbProsedur" style="display:none;">
+                    <table width="100%" border="1" cellpadding="1" cellspacing="1" id="tbProsedur" style="<?php echo $display_proc_op; ?>">
                          <tr>
                               <td align="left" class="tablecontent" width="20%">Conj. Flap</td>
                               <td align="left" class="tablecontent-odd"><?php echo $view->RenderComboBox("op_conj","op_conj",$optConj,null,null,null);?></td>
