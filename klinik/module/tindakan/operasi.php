@@ -407,6 +407,8 @@ where id_app = ".QuoteValue(DPE_NUMERIC,'4');
           $dbField[30] = "op_pesan_operator";
           $dbField[31] = "op_waktu";
           $dbField[32] = "id_op_metode";
+          $dbField[33] = "id_op_jenis";
+          $dbField[34] = "id_anes_jenis";
           
           if(!$_POST["op_id"]) $_POST["op_id"] = $dtaccess->GetTransID();
           $dbValue[0] = QuoteValue(DPE_CHAR,$_POST["op_id"]);   // PK
@@ -442,6 +444,8 @@ where id_app = ".QuoteValue(DPE_NUMERIC,'4');
           $dbValue[30] = QuoteValue(DPE_CHAR,$_POST["op_pesan_operator"]);
           $dbValue[31] = QuoteValue(DPE_DATE,date("Y-m-d H:i:s")); 
           $dbValue[32] = QuoteValue(DPE_NUMERICKEY,$_POST["id_op_metode"]);
+          $dbValue[33] = QuoteValue(DPE_NUMERICKEY,$_POST["id_op_jenis"]);
+          $dbValue[34] = QuoteValue(DPE_CHAR,$_POST["id_anes_jenis"]);
 
           $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
           $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey);
@@ -631,7 +635,39 @@ where id_app = ".QuoteValue(DPE_NUMERIC,'4');
                     }
                }               
           }
+          unset($dbField);
 
+          // --- insert prosedur ---
+          $sql = "delete from klinik.klinik_operasi_prosedur where id_op = ".QuoteValue(DPE_CHAR,$_POST["op_id"]);
+          $dtaccess->Execute($sql);
+          
+          $dbTable = "klinik.klinik_operasi_prosedur";
+          
+          $dbField[0] = "op_prosedur_id";
+          $dbField[1] = "id_op";
+          $dbField[2] = "id_prosedur";
+          if($_POST["op_prosedur_id"]){
+               foreach($_POST["op_prosedur_id"] as $key=>$value) {
+                    if($value) {
+                    
+                         $dbValue[0] = QuoteValue(DPE_CHARKEY,$dtaccess->GetTransID());
+                         $dbValue[1] = QuoteValue(DPE_CHARKEY,$_POST["op_id"]);
+                         $dbValue[2] = QuoteValue(DPE_CHARKEY,$value);
+          
+                         $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
+                         $dbKey[1] = 1; 
+                         
+                         $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey);
+          
+                         $dtmodel->Insert() or die("insert  error");
+                         
+                         unset($dtmodel);
+                         unset($dbValue);
+                         unset($dbKey);
+                    }
+               }               
+          }
+          unset($dbField);
 
 
 		// --- insert duop
@@ -983,7 +1019,7 @@ where id_app = ".QuoteValue(DPE_NUMERIC,'4');
      // -- bikin combonya operasi Jenis
      $optOperasiJenis[0] = $view->RenderOption("","[Pilih Metode Operasi]",$show); 
      for($i=0,$n=count($dataOperasiJenis);$i<$n;$i++) {
-          $show = ($_POST["op_jenis"]==$dataOperasiJenis[$i]["op_jenis_id"]) ? "selected":"";
+          $show = ($_POST["id_op_metode"]==$dataOperasiJenis[$i]["op_jenis_id"]) ? "selected":"";
           $optOperasiJenis[$i+1] = $view->RenderOption($dataOperasiJenis[$i]["op_jenis_id"],$dataOperasiJenis[$i]["op_jenis_nama"],$show); 
      }
 
@@ -1017,7 +1053,7 @@ where id_app = ".QuoteValue(DPE_NUMERIC,'4');
      $jenisOp[0] = $view->RenderOption("","[Pilih Jenis Operasi]",$show); 
      for($i=0,$n=count($dataMetodeOp);$i<$n;$i++) {
 		unset($show);
-          $show = ($_POST["id_op_metode"]==$dataMetodeOp[$i]["op_metode_id"]) ? "selected":"";
+          $show = ($_POST["id_op_jenis"]==$dataMetodeOp[$i]["op_metode_id"]) ? "selected":"";
           $jenisOp[$i+1] = $view->RenderOption($dataMetodeOp[$i]["op_metode_id"],$dataMetodeOp[$i]["op_metode_nama"],$show); 
      }
      
@@ -1131,7 +1167,7 @@ where id_app = ".QuoteValue(DPE_NUMERIC,'4');
      $dataAnestesisJenis = $dtaccess->FetchAll($sql);
      $optAnestesisJenis[0] = $view->RenderOption("","[Pilih Jenis Anestesis]",$show); 
      for($i=0,$n=count($dataAnestesisJenis);$i<$n;$i++) {
-          $show = ($_POST["rawat_anestesis_jenis"]==$dataAnestesisJenis[$i]["anes_jenis_id"]) ? "selected":"";
+          $show = ($_POST["id_anes_jenis"]==$dataAnestesisJenis[$i]["anes_jenis_id"]) ? "selected":"";
           $optAnestesisJenis[$i+1] = $view->RenderOption($dataAnestesisJenis[$i]["anes_jenis_id"],$dataAnestesisJenis[$i]["anes_jenis_nama"],$show); 
      }
 
@@ -1190,12 +1226,18 @@ function CheckData(frm) {
 function CheckSimpan(frm){
 	
 	if(frm.op_status.value=='y') {
-     	if(!frm.op_jenis.value) {
+     	if(!frm.id_op_jenis.value) {
      		alert('Jenis Operasi Harus di Pilih');
-     		frm.op_jenis.focus();
+     		frm.id_op_jenis.focus();
      		return false;
      	}
      	
+          if(!frm.id_op_metode.value) {
+               alert('Metode Operasi Harus di Pilih');
+               frm.id_op_metode.focus();
+               return false;
+          }
+          
      	if(!frm.op_paket_biaya.value) {
      		alert('Paket Biaya Harus di Pilih');
      		frm.op_paket_biaya.focus();
@@ -1350,9 +1392,9 @@ var data8;
 }
 
 function isi8(nama,id,kode){
-    document.getElementById("rawat_prosedur_nama_0").value = nama;
-    document.getElementById("rawat_prosedur_id_0").value = id;
-    document.getElementById("rawat_prosedur_kode_0").value = kode;
+    document.getElementById("op_prosedur_nama_0").value = nama;
+    document.getElementById("op_prosedur_id_0").value = id;
+    document.getElementById("op_prosedur_kode_0").value = kode;
     document.getElementById("kotaksugest8").style.visibility = "hidden";
     document.getElementById("kotaksugest8").innerHTML = "";
 }
@@ -1404,9 +1446,9 @@ var data9;
 
 function isi9(nama,id,kode){
 
-    document.getElementById("rawat_prosedur_nama_1").value = nama;
-    document.getElementById("rawat_prosedur_id_1").value = id;
-    document.getElementById("rawat_prosedur_kode_1").value = kode;
+    document.getElementById("op_prosedur_nama_1").value = nama;
+    document.getElementById("op_prosedur_id_1").value = id;
+    document.getElementById("op_prosedur_kode_1").value = kode;
     document.getElementById("kotaksugest9").style.visibility = "hidden";
     document.getElementById("kotaksugest9").innerHTML = "";
 }
@@ -1457,9 +1499,9 @@ var data10;
 }
 
 function isi10(nama,id,kode){
-    document.getElementById("rawat_prosedur_nama_2").value = nama;
-    document.getElementById("rawat_prosedur_id_2").value = id;
-    document.getElementById("rawat_prosedur_kode_2").value = kode;
+    document.getElementById("op_prosedur_nama_2").value = nama;
+    document.getElementById("op_prosedur_id_2").value = id;
+    document.getElementById("op_prosedur_kode_2").value = kode;
     document.getElementById("kotaksugest10").style.visibility = "hidden";
     document.getElementById("kotaksugest10").innerHTML = "";
 }
@@ -1661,7 +1703,7 @@ function isi10(nama,id,kode){
 	  <tr>
                <td align="left" class="tablecontent">Jenis Anestesi</td>
                <td align="left" class="tablecontent-odd" colspan="3"> 
-                    <?php echo $view->RenderComboBox("op_anestesi","op_anestesi",$optAnestesisJenis,null,null,null);?>               
+                    <?php echo $view->RenderComboBox("id_anes_jenis","id_anes_jenis",$optAnestesisJenis,null,null,null);?>               
                </td><!--
 	       <td align="left" width="20%" class="tablecontent">Tindakan Operasi</td>
                <td align="left" class="tablecontent-odd" width="20%"> 
@@ -1720,7 +1762,7 @@ function isi10(nama,id,kode){
                <td align="left" class="tablecontent-odd"><?php echo $view->RenderComboBox("id_op_jenis","id_op_jenis",$jenisOp,null,null,null);?></td>
                <td align="left" class="tablecontent">Metode Operasi</td>
                <td align="left" class="tablecontent-odd"  colspan=3> 
-               <?php echo $view->RenderComboBox("op_jenis","op_jenis",$optOperasiJenis,null,null,null);?>               
+               <?php echo $view->RenderComboBox("id_op_metode","id_op_metode",$optOperasiJenis,null,null,null);?>               
                </td>
           </tr>
 	  <tr>
@@ -1789,7 +1831,7 @@ function isi10(nama,id,kode){
                </td>
           </tr>
           <tr>
-               <td align="left" class="tablecontent"><?php echo $view->RenderCheckBox("cbProsedur","cbProsedur","Prosedur","inputField",null,"onclick='SetDisplay(\"tbKompDurop\")'");?>Komplikasi Durante OP</td>
+               <td align="left" class="tablecontent"><?php echo $view->RenderCheckBox("cbKompDurOP","cbKompDurOP","cbKompDurOP","inputField",null,"onclick='SetDisplay(\"tbKompDurop\")'");?>Komplikasi Durante OP</td>
                <td align="left" class="tablecontent-odd"  colspan=3>
 		    <table border="0" id="tbKompDurop" style="display:none;">
 			 <tr>
@@ -1836,37 +1878,37 @@ function isi10(nama,id,kode){
 		   <tr>
 			  <td align="center" class="tablecontent" width="5%">1</td>
 			  <td align="left" class="tablecontent-odd">
-                    <?php echo $view->RenderTextBox("rawat_prosedur_kode[0]","rawat_prosedur_kode_0","10","100",$_POST["rawat_prosedur_kode"][0],"inputField", null,false,"onkeyup=\"lookProc(this.value);\"");?>
-                    <input type="hidden" name="rawat_prosedur_id[0]" id="rawat_prosedur_id_0" value="<?php echo $_POST["rawat_prosedur_id"][0]?>" />                    
+                    <?php echo $view->RenderTextBox("op_prosedur_kode[0]","op_prosedur_kode_0","10","100",$_POST["op_prosedur_kode"][0],"inputField", null,false,"onkeyup=\"lookProc(this.value);\"");?>
+                    <input type="hidden" name="op_prosedur_id[0]" id="op_prosedur_id_0" value="<?php echo $_POST["op_prosedur_id"][0]?>" />                    
 			  <div id=kotaksugest8 style="position:absolute;background-color:#eeeeee;width:120px;visibility:hidden;z-index:100">
 			  </div>
 			  </td>
 			  <td align="left" class="tablecontent-odd"><div>      
-			  <input type="text" size= "50" name="rawat_prosedur_nama[0]" id="rawat_prosedur_nama_0" value="<?php echo $_POST["rawat_prosedur_nama"][0]?>" readonly />
+			  <input type="text" size= "50" name="op_prosedur_nama[0]" id="op_prosedur_nama_0" value="<?php echo $_POST["op_prosedur_nama"][0]?>" readonly />
 			  </div>
 		   </tr>
 		   <tr>
 			  <td align="center" class="tablecontent" width="5%">2</td>
 			  <td align="left" class="tablecontent-odd">
-                    <?php echo $view->RenderTextBox("rawat_prosedur_kode[1]","rawat_prosedur_kode_1","10","100",$_POST["rawat_prosedur_kode"][0],"inputField", null,false,"onkeyup=\"lookProc1(this.value);\"");?>
-                    <input type="hidden" name="rawat_prosedur_id[1]" id="rawat_prosedur_id_1" value="<?php echo $_POST["rawat_prosedur_id"][1]?>" />                    
+                    <?php echo $view->RenderTextBox("op_prosedur_kode[1]","op_prosedur_kode_1","10","100",$_POST["op_prosedur_kode"][0],"inputField", null,false,"onkeyup=\"lookProc1(this.value);\"");?>
+                    <input type="hidden" name="op_prosedur_id[1]" id="op_prosedur_id_1" value="<?php echo $_POST["op_prosedur_id"][1]?>" />                    
 			  <div id=kotaksugest9 style="position:absolute;background-color:#eeeeee;width:120px;visibility:hidden;z-index:100">
 			  </div>
 			  </td>
 			  <td align="left" class="tablecontent-odd"><div>      
-			  <input type="text" size= "50" name="rawat_prosedur_nama[1]" id="rawat_prosedur_nama_1" value="<?php echo $_POST["rawat_prosedur_nama"][1]?>" readonly />
+			  <input type="text" size= "50" name="op_prosedur_nama[1]" id="op_prosedur_nama_1" value="<?php echo $_POST["op_prosedur_nama"][1]?>" readonly />
 			  </div>
 		   </tr>
 		   <tr>
 			  <td align="center" class="tablecontent" width="5%">3</td>
 			  <td align="left" class="tablecontent-odd">
-                    <?php echo $view->RenderTextBox("rawat_prosedur_kode[2]","rawat_prosedur_kode_2","10","100",$_POST["rawat_prosedur_kode"][2],"inputField", null,false,"onkeyup=\"lookProc2(this.value);\"");?>
-                    <input type="hidden" name="rawat_prosedur_id[2]" id="rawat_prosedur_id_2" value="<?php echo $_POST["rawat_prosedur_id"][2]?>" />                    
+                    <?php echo $view->RenderTextBox("op_prosedur_kode[2]","op_prosedur_kode_2","10","100",$_POST["op_prosedur_kode"][2],"inputField", null,false,"onkeyup=\"lookProc2(this.value);\"");?>
+                    <input type="hidden" name="op_prosedur_id[2]" id="op_prosedur_id_2" value="<?php echo $_POST["op_prosedur_id"][2]?>" />                    
 			  <div id=kotaksugest10 style="position:absolute;background-color:#eeeeee;width:120px;visibility:hidden;z-index:100">
 			  </div>
 			  </td>
 			  <td align="left" class="tablecontent-odd"><div>      
-			  <input type="text" size= "50" name="rawat_prosedur_nama[2]" id="rawat_prosedur_nama_2" value="<?php echo $_POST["rawat_prosedur_nama"][2]?>" readonly />
+			  <input type="text" size= "50" name="op_prosedur_nama[2]" id="op_prosedur_nama_2" value="<?php echo $_POST["op_prosedur_nama"][2]?>" readonly />
 			  </div>
 		   </tr>
 	    </table>
