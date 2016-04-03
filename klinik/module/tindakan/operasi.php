@@ -352,6 +352,20 @@ $sql = "select pgw_nama, pgw_id from klinik.klinik_operasi_admin a
 				where a.id_op = ".QuoteValue(DPE_CHAR,$_POST["op_id"]);
 				//echo $sql;
 		$dataIcd = $dtaccess->FetchAll($sql);
+
+          $sql = "select *
+                    from klinik.klinik_operasi_prosedur a  
+                    join klinik.klinik_prosedur b on a.id_prosedur = b.prosedur_id 
+                    where a.id_op = ".QuoteValue(DPE_CHAR,$_POST["op_id"]);
+                    //echo $sql;
+          $dataProsedur = $dtaccess->FetchAll($sql);
+
+          for ($i=0; $i < count($dataProsedur); $i++) { 
+               # code...
+               $_POST["op_prosedur_kode"][$i]    = $dataProsedur[$i]["prosedur_kode"];
+               $_POST["op_prosedur_id"][$i]      = $dataProsedur[$i]["prosedur_kode"];
+               $_POST["op_prosedur_nama"][$i]    = $dataProsedur[$i]["prosedur_nama"];
+          }
 	  }
 
 		$sql = "select b.ina_kode as op_ina_kode, b.ina_nama as op_ina_nama 
@@ -640,36 +654,34 @@ $sql = "select pgw_nama, pgw_id from klinik.klinik_operasi_admin a
           unset($dbField);
 
           // --- insert prosedur ---
-          $sql = "delete from klinik.klinik_operasi_prosedur where id_op = ".QuoteValue(DPE_CHAR,$_POST["op_id"]);
-          $dtaccess->Execute($sql);
-          
-          $dbTable = "klinik.klinik_operasi_prosedur";
-          
-          $dbField[0] = "op_prosedur_id";
-          $dbField[1] = "id_op";
-          $dbField[2] = "id_prosedur";
           if($_POST["op_prosedur_id"]){
-               foreach($_POST["op_prosedur_id"] as $key=>$value) {
-                    if($value) {
+               $sql = "delete from klinik.klinik_operasi_prosedur where id_op = ".QuoteValue(DPE_CHAR,$_POST["op_id"]);
+               $dtaccess->Execute($sql);
+               
+               $dbTable = "klinik.klinik_operasi_prosedur";
+               
+               $dbField[0] = "op_prosedur_id";
+               $dbField[1] = "id_op";
+               $dbField[2] = "id_prosedur";
+
+               for($i=0;$i<count($_POST["op_prosedur_id"]);$i++) {
+                    $dbValue[0] = QuoteValue(DPE_CHARKEY,$dtaccess->GetTransID());
+                    $dbValue[1] = QuoteValue(DPE_CHARKEY,$_POST["op_id"]);
+                    $dbValue[2] = QuoteValue(DPE_CHARKEY,$_POST["op_prosedur_id"][$i]);
+     
+                    $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
+                    $dbKey[1] = 1; 
                     
-                         $dbValue[0] = QuoteValue(DPE_CHARKEY,$dtaccess->GetTransID());
-                         $dbValue[1] = QuoteValue(DPE_CHARKEY,$_POST["op_id"]);
-                         $dbValue[2] = QuoteValue(DPE_CHARKEY,$value);
-          
-                         $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
-                         $dbKey[1] = 1; 
-                         
-                         $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey);
-          
-                         $dtmodel->Insert() or die("insert  error");
-                         
-                         unset($dtmodel);
-                         unset($dbValue);
-                         unset($dbKey);
-                    }
+                    $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey);
+     
+                    $dtmodel->Insert() or die("insert  error");
+                    
+                    unset($dtmodel);
+                    unset($dbValue);
+                    unset($dbKey);
                }               
+               unset($dbField);
           }
-          unset($dbField);
 
 
 		// --- insert duop
@@ -1045,7 +1057,11 @@ $sql = "select pgw_nama, pgw_id from klinik.klinik_operasi_admin a
           //$opsHarga = substr($dataOperasiPaket[$i]["op_paket_total"], -2);
           $opsNama = $dataOperasiPaket[$i]["op_paket_nama"];
           $opsHarga = " Rp.".currency_format($dataOperasiPaket[$i]["op_paket_total"]);
-          $show .= ($_POST["op_paket_biaya"]==$dataOperasiPaket[$i]["op_paket_id"]) ? "selected" : "";
+          if($_POST["op_paket_biaya"]==$dataOperasiPaket[$i]["op_paket_id"]){
+               $show .= " selected";
+          }else{
+               $show = str_replace("selected", " ", $show);
+          }
           $optOperasiPaket[$i+1] = $view->RenderOption($dataOperasiPaket[$i]["op_paket_id"],$opsNama.";".$opsHarga, $show); 
      }
 
@@ -1535,7 +1551,7 @@ function isi10(nama,id,kode){
 </table> 
 
 
-<form name="frmEdit" method="POST" action="<?php echo $_SERVER["PHP_SELF"]?>" enctype="multipart/form-data" onSubmit="return CheckData(this)">
+<form name="frmEdit" method="POST" action="<?php echo $_SERVER["PHP_SELF"]?>" enctype="multipart/form-data" onSubmit="return CheckData(this)" autocomplete="off">
 <table width="100%" border="1" cellpadding="4" cellspacing="1">
 <tr>
      <td width="100%">
@@ -1773,7 +1789,9 @@ function isi10(nama,id,kode){
                     <?php echo $view->RenderComboBox("op_paket_biaya","op_paket_biaya",$optOperasiPaket,null,"style=\"font-family: monospace;\"",null);?>                              
                </td>
 	  </tr>
-          <tr><?php if ($_POST["op_conj"] || $_POST["op_cauter"]) {
+          <tr><?php 
+          $show = "";
+          if ($_POST["op_conj"] || $_POST["op_cauter"] || $_POST["op_corneal_enter_jam"] || $_POST["op_corneal_enter_diperluas"] || $_POST["op_corneal_enter_jam1"] || $_POST["op_corneal_enter_jam2"] || $_POST["op_indirectomy"] || $_POST["op_indirectomy_tipe"] || $_POST["op_indirectomy_jam"] || $_POST["op_nucleus_removal"] || $_POST["op_cortex_removal"] || $_POST["op_corneal_suture"] || $_POST["op_corneal_suture_ukuran"] || $_POST["op_suture_tipe"] || $_POST["op_coa"] || $_POST["op_obat"]) {
                # code...
                $show = "checked"; 
                $display_proc_op = "display:block;";
@@ -1841,10 +1859,22 @@ function isi10(nama,id,kode){
                     </table>
                </td>
           </tr>
+          <?php 
+          $show = "";
+          if (($_POST["id_durop_komp"][$dataDurop[0]["durop_komp_id"]] == "y") || ($_POST["id_durop_komp"][$dataDurop[1]["durop_komp_id"]] == "y") || ($_POST["id_durop_komp"][$dataDurop[2]["durop_komp_id"]] == "y") || ($_POST["id_durop_komp"][$dataDurop[3]["durop_komp_id"]] == "y")) {
+               # code...
+               $show = "checked"; 
+               $display_komp_durop = "display:block;";
+          } else {
+               # code...
+               $show = "";
+               $display_komp_durop = "display:none;";
+          }
+          ?> 
           <tr>
-               <td align="left" class="tablecontent"><?php echo $view->RenderCheckBox("cbKompDurOP","cbKompDurOP","cbKompDurOP","inputField",null,"onclick='SetDisplay(\"tbKompDurop\")'");?>Komplikasi Durante OP</td>
+               <td align="left" class="tablecontent"><?php echo $view->RenderCheckBox("cbKompDurOP","cbKompDurOP","cbKompDurOP","inputField",$show,"onclick='SetDisplay(\"tbKompDurop\")'");?>Komplikasi Durante OP</td>
                <td align="left" class="tablecontent-odd"  colspan=3>
-		    <table border="0" id="tbKompDurop" style="display:none;">
+		    <table border="0" id="tbKompDurop" style="<?php echo $display_komp_durop; ?>">
 			 <tr>
 			      <td colspan="2">
                     <?php for($i=0,$n=count($dataDurop);$i<$n;$i++) { ?>                    
@@ -1882,10 +1912,22 @@ function isi10(nama,id,kode){
                     <?php echo $view->RenderTextArea("op_pesan_operator","op_pesan_operator","3","40",$_POST["op_pesan_operator"]);?>               
                </td>
           </tr>
+          <?php
+          $show = "";
+          if ($_POST["op_prosedur_id"][0] || $_POST["op_prosedur_id"][1] || $_POST["op_prosedur_id"][2]) {
+               # code...
+               $show = "checked"; 
+               $display_prosedur = "display:block;";
+          } else {
+               # code...
+               $show = "";
+               $display_prosedur = "display:none;";
+          }
+          ?> 
 	  <tr>
-	       <td align="left" width="20%" class="tablecontent"><?php echo $view->RenderCheckBox("cbProsedur2","cbProsedur2","Prosedur2","inputField",null,"onclick='SetDisplay(\"tbProsedur2\")'");?>Prosedur</td>
+	       <td align="left" width="20%" class="tablecontent"><?php echo $view->RenderCheckBox("cbProsedur2","cbProsedur2","Prosedur2","inputField",$show,"onclick='SetDisplay(\"tbProsedur2\")'");?>Prosedur</td>
                <td align="left" class="tablecontent-odd" width="40%" colspan="3"> 
-                    <table border="1" cellpadding="4" cellspacing="1" id="tbProsedur2" style="display:none">
+                    <table border="1" cellpadding="4" cellspacing="1" id="tbProsedur2" style="<?php echo $display_prosedur; ?>">
 		   <tr>
 			  <td align="center" class="tablecontent" width="5%">1</td>
 			  <td align="left" class="tablecontent-odd">
@@ -1901,7 +1943,7 @@ function isi10(nama,id,kode){
 		   <tr>
 			  <td align="center" class="tablecontent" width="5%">2</td>
 			  <td align="left" class="tablecontent-odd">
-                    <?php echo $view->RenderTextBox("op_prosedur_kode[1]","op_prosedur_kode_1","10","100",$_POST["op_prosedur_kode"][0],"inputField", null,false,"onkeyup=\"lookProc1(this.value);\"");?>
+                    <?php echo $view->RenderTextBox("op_prosedur_kode[1]","op_prosedur_kode_1","10","100",$_POST["op_prosedur_kode"][1],"inputField", null,false,"onkeyup=\"lookProc1(this.value);\"");?>
                     <input type="hidden" name="op_prosedur_id[1]" id="op_prosedur_id_1" value="<?php echo $_POST["op_prosedur_id"][1]?>" />                    
 			  <div id=kotaksugest9 style="position:absolute;background-color:#eeeeee;width:120px;visibility:hidden;z-index:100">
 			  </div>

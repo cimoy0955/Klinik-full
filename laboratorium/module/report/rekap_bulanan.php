@@ -32,27 +32,26 @@
      $skr = date("d-m-Y");
      if(!$_POST["tanggal_awal"]) $_POST["tanggal_awal"] = $skr;
      if(!$_POST["tanggal_akhir"]) $_POST["tanggal_akhir"] = $skr;
-     $cetakPage = "rekap_bulanan_cetak.php?tanggal_awal="
-     .$_POST["tanggal_awal"]."&tanggal_akhir=".$_POST["tanggal_akhir"];
+     $cetakPage = "rekap_bulanan_cetak.php?tanggal_awal='"
+     .$_POST["tanggal_awal"]."'&tanggal_akhir='".$_POST["tanggal_akhir"]."'";
      
       $sql_where[] = "b.pemeriksaan_create >= ".QuoteValue(DPE_DATE,date_db($_POST["tanggal_awal"]));
-     $sql_where[] = "b.pemeriksaan_create <= ".QuoteValue(DPE_DATE,DateAdd(date_db($_POST["tanggal_akhir"]),1));
+     $sql_where[] = "b.pemeriksaan_create <= ".QuoteValue(DPE_DATE,date_db($_POST["tanggal_akhir"]));
      
           if ($sql_where[0]) 
 	$sql_where = implode(" and ",$sql_where);
      
     // if($_POST["_bulan"]) $sql_where[] = " extract(month from b.pemeriksaan_create) =".QuoteValue(DPE_CHAR,$_POST["_bulan"]);
   //   if($_POST["_tahun"]) $sql_where[] = " extract(year from b.pemeriksaan_create) =".QuoteValue(DPE_CHAR,$_POST["_tahun"]);
-	   $sql = "select e.bonus_id,e.bonus_nama,d.id_divisi,sum(a.periksa_det_total) as nominal_total, count(a.periksa_det_id) as periksa_total
+	   $sql = "select e.bonus_id,e.bonus_nama,sum(a.periksa_det_total) as nominal_total, count(a.periksa_det_id) as periksa_total
              from lab_pemeriksaan_detail a
              left join lab_pemeriksaan b on a.id_pemeriksaan = b.pemeriksaan_id
              left join lab_kegiatan c on a.id_kegiatan = c.kegiatan_id
-             left join lab_dokter d on b.id_dokter = d.dokter_id
              left join lab_bonus e on e.bonus_id = c.id_bonus";
        $sql .= " where ".$sql_where;       
     // if($sql_where) $sql .= " where ".implode(" and ",$sql_where);
-     $sql .= "group by d.id_divisi,e.bonus_nama,e.bonus_id
-            order by e.bonus_nama,d.id_divisi";
+     $sql .= "group by e.bonus_nama,e.bonus_id
+            order by e.bonus_nama";
     // echo $sql;       
      $rs = $dtaccess->Execute($sql,DB_SCHEMA_LAB);
 	   $dataTable = $dtaccess->FetchAll($rs);
@@ -71,7 +70,7 @@
 	   
      //*-- config table ---*//
      $table = new InoTable("table1","80%","left",null,0,2,1,null);     
-     $PageHeader = "Laporan Keuangan";
+     $PageHeader = "Laporan Rekap Keuangan";
 
 		// --- construct new table ---- //
 	$counter=0;
@@ -206,77 +205,86 @@
 	$tbBottom[0][$counter][TABLE_CLASS] = "tablecontent";
 	
 	$counter=0;	
-	$tbBottom[1][$counter][TABLE_ISI]     = '&nbsp;<input type="button" name="btnCetak" value="Cetak" class="button" onClick="document.location.href=\''.$cetakPage.'\'">&nbsp;&nbsp;';
+	$tbBottom[1][$counter][TABLE_ISI]     = '&nbsp;<input type="button" name="btnCetak" value="Cetak" class="button" onClick="cetakLaporan(\''.$_POST["tanggal_awal"].'\', \''.$_POST["tanggal_akhir"].'\')">&nbsp;&nbsp;';//
 	$tbBottom[1][$counter][TABLE_ALIGN]   = "right";
 	$tbBottom[1][$counter][TABLE_COLSPAN] = count($tbHeader[0]);
+	$tbBottom[1][$counter][TABLE_CLASS]   = "tableprint";
 	$counter++;
-	
-
-  //-- buat combo box --//
-  //-- bulan --//
-  for($i=1;$i<=count($monthName);$i++){
-    $opt_bulan[$i] = $view->RenderOption($i,$monthName[$i],($i==$bln_skr)?"selected":"");
-  }
-	//-- tahun --//
-	$opt_tahun[] = $view->RenderOption("2009","2009",("2009"==$thn_skr)?"selected":"");
-	$opt_tahun[] = $view->RenderOption("2010","2010",("2010"==$thn_skr)?"selected":"");
-	$opt_tahun[] = $view->RenderOption("2011","2011",("2011"==$thn_skr)?"selected":"");
-	$opt_tahun[] = $view->RenderOption("2012","2012",("2012"==$thn_skr)?"selected":"");
-	
 	
 ?>
 
 <?php echo $view->RenderBody("inosoft.css",true); ?>
-<table width="100%" border="1" cellpadding="0" cellspacing="0">
-     <tr class="tableheader">
-          <td>&nbsp;<?php echo $PageHeader;?></td>
-     </tr>
-</table>
-
-<br />
-
-
-<form name="frmFind" method="POST" action="<?php echo $_SERVER["PHP_SELF"]?>">
-<table align="center" border=0 cellpadding=2 cellspacing=1 width="100%" class="tblForm" id="tblSearching">
-     <tr>
-          <td width="10%" class="tablecontent">&nbsp;Periode : </td>
-          <td width="30%" class="tablecontent" colspan="3">
-			<?php echo $view->RenderTextBox("tanggal_awal","tanggal_awal","12","12",$_POST["tanggal_awal"],"inputField", "readonly",false);?>
-			<img src="<?php echo $APLICATION_ROOT;?>images/b_calendar.png" width="16" height="16" align="middle" id="img_awal" style="cursor: pointer; border: 0px solid white;" title="Date selector" onMouseOver="this.style.background='red';" onMouseOut="this.style.background=''"/>
-               - 
-			<?php echo $view->RenderTextBox("tanggal_akhir","tanggal_akhir","12","12",$_POST["tanggal_akhir"],"inputField", "readonly",false);?>
-			<img src="<?php echo $APLICATION_ROOT;?>images/b_calendar.png" width="16" height="16" align="middle" id="img_akhir" style="cursor: pointer; border: 0px solid white;" title="Date selector" onMouseOver="this.style.background='red';" onMouseOut="this.style.background=''"/></td>
-          <td>
-               <input type="submit" name="btnLanjut" value="Lanjut" class="button">
-          </td>
-     </tr>
-</table>
-</form>
-
 <script type="text/javascript">
-    Calendar.setup({
-        inputField     :    "tanggal_awal",      // id of the input field
-        ifFormat       :    "<?=$formatCal;?>",       // format of the input field
-        showsTime      :    false,            // will display a time selector
-        button         :    "img_awal",   // trigger for the calendar (button ID)
-        singleClick    :    true,           // double-click mode
-        step           :    1                // show all years in drop-down boxes (instead of every other year as default)
-    });
-    
-    Calendar.setup({
-        inputField     :    "tanggal_akhir",      // id of the input field
-        ifFormat       :    "<?=$formatCal;?>",       // format of the input field
-        showsTime      :    false,            // will display a time selector
-        button         :    "img_akhir",   // trigger for the calendar (button ID)
-        singleClick    :    true,           // double-click mode
-        step           :    1                // show all years in drop-down boxes (instead of every other year as default)
-    });
+	var _wnd_new;
+
+	function BukaWindow(url,judul)
+	{
+	    if(!_wnd_new) {
+				_wnd_new = window.open(url,judul,'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=850,height=600,top=35;left=150');
+		} else {
+			if (_wnd_new.closed) {
+				_wnd_new = window.open(url,judul,'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=850,height=600,top=35;left=150');
+			} else {
+				_wnd_new.focus();
+			}
+		}
+	     return false;
+	}
+
+	function cetakLaporan(tgl_awal, tgl_akhir){
+		BukaWindow('rekap_bulanan_cetak.php?tanggal_awal='+tgl_awal+'&tanggal_akhir='+tgl_akhir,'Cetak Laporan Rekap Keuangan Laboratorium');
+	}
+
 </script>
+	<table width="100%" border="1" cellpadding="0" cellspacing="0">
+	     <tr class="tableheader">
+	          <td>&nbsp;<?php echo $PageHeader;?></td>
+	     </tr>
+	</table>
+
+	<br />
+
+	<form name="frmFind" method="POST" action="<?php echo $_SERVER["PHP_SELF"]?>">
+	<table align="center" border=0 cellpadding=2 cellspacing=1 width="100%" class="tblForm" id="tblSearching">
+	     <tr>
+	          <td width="10%" class="tablecontent">&nbsp;Periode : </td>
+	          <td width="30%" class="tablecontent" colspan="3">
+				<?php echo $view->RenderTextBox("tanggal_awal","tanggal_awal","12","12",$_POST["tanggal_awal"],"inputField", "readonly",false);?>
+				<img src="<?php echo $APLICATION_ROOT;?>images/b_calendar.png" width="16" height="16" align="middle" id="img_awal" style="cursor: pointer; border: 0px solid white;" title="Date selector" onMouseOver="this.style.background='red';" onMouseOut="this.style.background=''"/>
+	               - 
+				<?php echo $view->RenderTextBox("tanggal_akhir","tanggal_akhir","12","12",$_POST["tanggal_akhir"],"inputField", "readonly",false);?>
+				<img src="<?php echo $APLICATION_ROOT;?>images/b_calendar.png" width="16" height="16" align="middle" id="img_akhir" style="cursor: pointer; border: 0px solid white;" title="Date selector" onMouseOver="this.style.background='red';" onMouseOut="this.style.background=''"/></td>
+	          <td>
+	               <input type="submit" name="btnLanjut" value="Lanjut" class="button">
+	          </td>
+	     </tr>
+	</table>
+	</form>
+	<script type="text/javascript">
+	    Calendar.setup({
+	        inputField     :    "tanggal_awal",      // id of the input field
+	        ifFormat       :    "<?=$formatCal;?>",       // format of the input field
+	        showsTime      :    false,            // will display a time selector
+	        button         :    "img_awal",   // trigger for the calendar (button ID)
+	        singleClick    :    true,           // double-click mode
+	        step           :    1                // show all years in drop-down boxes (instead of every other year as default)
+	    });
+	    
+	    Calendar.setup({
+	        inputField     :    "tanggal_akhir",      // id of the input field
+	        ifFormat       :    "<?=$formatCal;?>",       // format of the input field
+	        showsTime      :    false,            // will display a time selector
+	        button         :    "img_akhir",   // trigger for the calendar (button ID)
+	        singleClick    :    true,           // double-click mode
+	        step           :    1                // show all years in drop-down boxes (instead of every other year as default)
+	    });
+	</script>
+
 
 
 		
 <BR/>
-<?php echo $table->RenderView($tbHeader,$tbContent,$tbBottom); ?>
+	<?php echo $table->RenderView($tbHeader,$tbContent,$tbBottom); ?>
 
 </body>
 </html>
