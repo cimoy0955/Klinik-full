@@ -42,7 +42,7 @@
 	$sql_where = implode(" and ",$sql_where);
      
      $sql = "select * from laboratorium.lab_hasil_bonus a
-             left join laboratorium.lab_dokter b on b.dokter_id = a.id_dokter
+             left join hris.hris_pegawai b on cast(b.pgw_id as char) = a.id_dokter
              left join laboratorium.lab_kegiatan c on c.kegiatan_id = a.id_kegiatan 
              left join laboratorium.lab_kategori d on d.kategori_id = c.id_kategori
              left join laboratorium.lab_bonus e on c.id_bonus = e.bonus_id";
