@@ -12,7 +12,7 @@
      $dtaccess = new DataAccess();
      $enc = new TextEncrypt();     
      $auth = new CAuth();
-     $table = new InoTable("table","100%","left");
+     $table = new InoTable("table","90%","left");
  
      $thisPage = "report_loket.php";
 
@@ -62,10 +62,10 @@
      $skr = date("d-m-Y");
      if(!$_POST["tgl_awal"]) $_POST["tgl_awal"] = $skr;
      if(!$_POST["tgl_akhir"]) $_POST["tgl_akhir"] = $skr; 
-     $sql_where[] = "c.fol_lunas = ".QuoteValue(DPE_CHAR,"y"); 
+     $sql_where[] = "a.fol_lunas = ".QuoteValue(DPE_CHAR,"y"); 
      
-    if($_POST["tgl_awal"]) $sql_where[] = "CAST(c.fol_dibayar_when as DATE) >= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_awal"]));
-    if($_POST["tgl_akhir"]) $sql_where[] = "CAST(c.fol_dibayar_when as DATE) <= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_akhir"]));
+    if($_POST["tgl_awal"]) $sql_where[] = "CAST(a.fol_dibayar_when as DATE) >= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_awal"]));
+    if($_POST["tgl_akhir"]) $sql_where[] = "CAST(a.fol_dibayar_when as DATE) <= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_akhir"]));
      
      
 		if($_POST['cust_usr_jenis']) $sql_where[] = "d.reg_jenis_pasien = ".QuoteValue(DPE_CHAR,$_POST["cust_usr_jenis"]);
@@ -75,26 +75,34 @@
      
 	$sql_where = implode(" and ",$sql_where);
 	
-     $sql = "select a.status_nama, sum(c.fol_dibayar) as total_layanan from global.global_status_pasien a
-              LEFT JOIN klinik.klinik_biaya b on b.biaya_jenis = cast(a.status_id as char)
-              LEFT JOIN klinik.klinik_folio c on c.id_biaya = b.biaya_id
-              LEFT JOIN klinik.klinik_registrasi d on d.reg_id = c.id_reg";
+  // --- cari data sub total folio
+     $sql = "select cast(fol_dibayar_when as date), status_id, sum(fol_dibayar) as sub_total 
+            from klinik.klinik_folio a 
+            left join klinik.klinik_biaya b on b.biaya_id = a.id_biaya 
+            left join global.global_status_pasien c on CAST(c.status_id as char) = b.biaya_jenis 
+            left join klinik.klinik_registrasi d on d.reg_id = a.id_reg";
     $sql .= " where ".$sql_where; 
-  $sql .= " group by a.status_nama ";
+  $sql .= " group by 1, 2 order by 1, 2";
    // echo $sql;
      $dataFolio = $dtaccess->FetchAll($sql);
-
-     /*$sql = " select biaya_id, biaya_nama from klinik.klinik_biaya";
-     $rs_namabiaya = $dtaccess->Execute($sql);
-     while($dataBiayanya = $dtaccess->Fetch($rs_namabiaya)){
-        $namaBiaya[$dataBiayanya['biaya_id']] = $dataBiayanya['biaya_nama'];
+     for ($i=0; $i < count($dataFolio); $i++) { 
+        if (!$dataFolio[$i]["status_id"]) {
+          $dataFolio[$i]["status_id"] = 8;
+        }
+        $viewData[$dataFolio[$i]["fol_dibayar_when"]][$dataFolio[$i]["status_id"]] = $dataFolio[$i]["sub_total"];
      }
-     unset($rs_namabiaya);*/
-     $m=0;
 
-     $tgl_nya = explode('-', $_POST["tgl_akhir"]);
-     $bln_nya = format_date_long($_POST["tgl_akhir"]);
-     $bln_nya = explode(' ', $bln_nya);
+    // --- cari data status kas nya
+     $sql = "select status_id, status_nama from global.global_status_pasien order by status_id";
+     $rs_dataKas = $dtaccess->Execute($sql);
+     $dataKas = $dtaccess->FetchAll($rs_dataKas);
+     // unset($rs_namabiaya);
+     
+     // --- dari data folio per tanggal
+     $sql = "select distinct(cast(fol_dibayar_when as date)) from klinik.klinik_folio where fol_lunas = 'y' and CAST(fol_dibayar_when as DATE) between ".QuoteValue(DPE_DATE,date_db($_POST["tgl_awal"]))." and ".QuoteValue(DPE_DATE,date_db($_POST["tgl_akhir"]));
+     $dataTanggal = $dtaccess->FetchAll($sql);
+     // echo $sql;
+
 	
 	$counter=0;
 		
@@ -104,54 +112,85 @@
      $tbHeader[0][1][TABLE_ISI] = "Tanggal";
      $tbHeader[0][1][TABLE_WIDTH] = "25%";
 	
-     $tbHeader[0][2][TABLE_ISI] = "Nama Layanan";
+     $tbHeader[0][2][TABLE_ISI] = "Pos Kas";
      $tbHeader[0][2][TABLE_WIDTH] = "25%"; 
 	
-     $tbHeader[0][$n+5][TABLE_ISI] = "Total";
-     $tbHeader[0][$n+5][TABLE_WIDTH] = "25%";
+     $tbHeader[0][3][TABLE_ISI] = "Total";
+     $tbHeader[0][3][TABLE_WIDTH] = "25%";
 	
-     
-     for($i=0,$counter=0,$n=count($dataFolio);$i<$n;$i++,$counter=0){
-      if($i==0){
-	       $tbContent[$i][$counter][TABLE_ISI] = '&nbsp;'.$bln_nya[1];
-	       $tbContent[$i][$counter][TABLE_ALIGN] = "left";
-	       $counter++;
-	 
-	       $tbContent[$i][$counter][TABLE_ISI] = "&nbsp".$tgl_nya[0];
-	       $tbContent[$i][$counter][TABLE_ALIGN] = "left";
-	       $counter++;
-	     }else{
-        $tbContent[$i][$counter][TABLE_ISI] = '&nbsp;';
-         $tbContent[$i][$counter][TABLE_ALIGN] = "right";
-         $counter++;
-   
-         $tbContent[$i][$counter][TABLE_ISI] = '&nbsp;';
-         $tbContent[$i][$counter][TABLE_ALIGN] = "left";
-         $counter++;
-       }
-          $tbContent[$i][$counter][TABLE_ISI] = $namaBiaya[$dataFolio[$i]["id_biaya"]];
-          $tbContent[$i][$counter][TABLE_ALIGN] = "left";
-          $counter++;
-        
-          $tbContent[$i][$counter][TABLE_ISI] = 'Rp. '.currency_format($dataFolio[$i]["total_layanan"]);
-          $tbContent[$i][$counter][TABLE_ALIGN] = "right";
-          $counter++;
-	     $nDibayar += $dataFolioPerLayanan[$i]["jumlah_dibayar"];
-       $totDibayar += $dataFolioPerLayanan[$i]["dibayarnya"];
+     $i=0;
+     $k=0;
+     $grandTotal = 0;
+     while ( $i < count($dataTanggal)) {
+        $tgl_nya = explode('-', $dataTanggal[$i]["fol_dibayar_when"]);
+        $bln_nya = format_date_long($dataTanggal[$i]["fol_dibayar_when"]);
+        $bln_nya = explode(' ', $bln_nya);
+        $subtotal = 0;
+        for ($j=0, $counter=0; $j <= count($dataKas); $j++, $k++, $counter=0) { 
+          if ( $j == 0 ) {
+            $tbContent[$k][$counter][TABLE_ISI] = '&nbsp;'.$bln_nya[1];
+            $tbContent[$k][$counter][TABLE_ALIGN] = "left";
+            $tbContent[$k][$counter][TABLE_VALIGN] = "top";
+            $tbContent[$k][$counter][TABLE_ROWSPAN] = 11;
+            $counter++;
+
+            $tbContent[$k][$counter][TABLE_ISI] = "&nbsp;".$tgl_nya[2];
+            $tbContent[$k][$counter][TABLE_ALIGN] = "left";
+            $tbContent[$k][$counter][TABLE_VALIGN] = "top";
+            $tbContent[$k][$counter][TABLE_ROWSPAN] = 11;
+            $counter++;
+          }
+
+          if ($j < count($dataKas)) {
+            $tbContent[$k][$counter][TABLE_ISI] = "&nbsp;".$dataKas[$j]["status_nama"];
+            $tbContent[$k][$counter][TABLE_ALIGN] = "left";
+            $counter++;
+          
+            $tbContent[$k][$counter][TABLE_ISI] = 'Rp. '.currency_format($viewData[$dataTanggal[$i]["fol_dibayar_when"]][$dataKas[$j]["status_id"]]).'&nbsp;';
+            $tbContent[$k][$counter][TABLE_ALIGN] = "right";
+            $counter++;
+            $subtotal += $viewData[$dataTanggal[$i]["fol_dibayar_when"]][$dataKas[$j]["status_id"]];
+            $subtotalkas[$dataKas[$j]["status_id"]] += $viewData[$dataTanggal[$i]["fol_dibayar_when"]][$dataKas[$j]["status_id"]];
+          }
+
+          if ($j == count($dataKas)) {
+            $tbContent[$k][$counter][TABLE_ISI] = "&nbsp;Total";
+            $tbContent[$k][$counter][TABLE_ALIGN] = "left";
+            $counter++;
+          
+            $tbContent[$k][$counter][TABLE_ISI] = 'Rp. '.currency_format($subtotal)."&nbsp;";
+            $tbContent[$k][$counter][TABLE_ALIGN] = "right";
+            $counter++;
+            $grandTotal += $subtotal;
+          }
+          
+        }
+        $i++;
      }
-     
-    
-     
 
-     $tbBottom[3][0][TABLE_ISI] = "Total";
-     $tbBottom[3][0][TABLE_WIDTH] = "30%";
-     $tbBottom[3][0][TABLE_COLSPAN] = 3;
-     $tbBottom[3][0][TABLE_ALIGN] = "center";
-     $tbBottom[3][1][TABLE_ISI] = 'Rp. '.currency_format($totDibayar);
-     $tbBottom[3][1][TABLE_WIDTH] = "30%";
-     $tbBottom[3][1][TABLE_ALIGN] = "right";
+      for ($l=0, $counterBottom=0; $l <= count($dataKas); $l++, $counterBottom=0) { 
+        if ($l < count($dataKas)) {
+          $tbBottom[$l][$counterBottom][TABLE_ISI] = "&nbsp;".$dataKas[$l]["status_nama"];
+          $tbBottom[$l][$counterBottom][TABLE_ALIGN] = "left";
+          $tbBottom[$l][$counterBottom][TABLE_COLSPAN] = "3";
+          $counterBottom++;
 
-     $tableHeader = "Report Pendapatan Berdasarkan Jenis Kas";
+          $tbBottom[$l][$counterBottom][TABLE_ISI] = "Rp&nbsp;".currency_format($subtotalkas[$dataKas[$l]["status_id"]])."&nbsp;";
+          $tbBottom[$l][$counterBottom][TABLE_ALIGN] = "right";
+          $counterBottom++;       
+        }else{
+          $tbBottom[$l][$counterBottom][TABLE_ISI] = "&nbsp;Total";
+          $tbBottom[$l][$counterBottom][TABLE_ALIGN] = "left";
+          $tbBottom[$l][$counterBottom][TABLE_COLSPAN] = "3";
+          $counterBottom++;
+
+          $tbBottom[$l][$counterBottom][TABLE_ISI] = "Rp&nbsp;".currency_format($grandTotal)."&nbsp;";
+          $tbBottom[$l][$counterBottom][TABLE_ALIGN] = "right";
+          $counterBottom++;       
+        }
+      }
+
+     $tableHeader = "Laporan Kasir Per Jenis Kas";
 
 	if($_POST["btnExcel"]){
           header('Content-Type: application/vnd.ms-excel');
@@ -201,7 +240,7 @@ function CariLayanan(id){
 <form name="frmView" method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>" onSubmit="return CheckSimpan(this);">
 <table align="center" border=0 cellpadding=2 cellspacing=1 width="100%" id="tblSearching">
      <tr class="tablecontent">
-          <td width="15%">&nbsp;Tanggal</td>
+          <td width="10%">&nbsp;Tanggal</td>
           <td width="35%">
                <input type="text"  id="tgl_awal" name="tgl_awal" size="15" maxlength="10" value="<?php echo $_POST["tgl_awal"];?>"/>
                <img src="<?php echo $APLICATION_ROOT;?>images/b_calendar.png" width="16" height="16" align="middle" id="img_tgl_awal" style="cursor: pointer; border: 0px solid white;" title="Date selector" onMouseOver="this.style.background='red';" onMouseOut="this.style.background=''" />
@@ -210,7 +249,9 @@ function CariLayanan(id){
                <img src="<?php echo $APLICATION_ROOT;?>images/b_calendar.png" width="16" height="16" align="middle" id="img_tgl_akhir" style="cursor: pointer; border: 0px solid white;" title="Date selector" onMouseOver="this.style.background='red';" onMouseOut="this.style.background=''" />
                
           </td>
-          <td width="10%">&nbsp;Jenis Pasien</td>
+          <td width="10%">&nbsp;</td>
+          <td width="45%">&nbsp;</td>
+          <!-- <td width="10%">&nbsp;Jenis Pasien</td>
           <td width="40%">
 			<select name="cust_usr_jenis" id="cust_usr_jenis" onKeyDown="return tabOnEnter(this, event);" onchange="CariLayanan(document.getElementById('cust_usr_jenis').value)">
                     <option value="" >[ Pilih Jenis Pasien ]</option>
@@ -218,26 +259,8 @@ function CariLayanan(id){
                          <option value="<?php echo $key;?>" <?php if($_POST["cust_usr_jenis"]==$key) echo "selected";?>><?php echo $value;?></option>
                     <?php } ?>
 			</select>
-          </td> 
+          </td>  -->
      </tr>
-     <!-- <tr class="tablecontent">
-		<td>&nbsp;Layanan</td>
-          <td colspan="3">
-			<div id="div_layanan">
-				<?php if($_POST["cust_usr_jenis"] && $_POST["cust_usr_jenis"]!=PASIEN_BAYAR_SWADAYA) {
-					echo $bayarNama[BIAYA_KARTU];
-				} else { ?>
-					<select name="id_biaya">
-						 <option value="">[ Pilih Layanan Biaya ]</option>
-						 <?php for($i=0,$n=count($dataBiaya);$i<$n;$i++) { ?>
-							 <option value="<?php echo $dataBiaya[$i]["biaya_id"];?>" <?php if($_POST["id_biaya"]==$dataBiaya[$i]["biaya_id"]) echo "selected";?>><?php echo $rawatStatus[$dataBiaya[$i]["biaya_jenis"]]." - ".$dataBiaya[$i]["biaya_nama"];?></option>
-						 <?php } ?>
-							 <option value="<?php echo STATUS_OPERASI;?>" <?php if($_POST["id_biaya"]==STATUS_OPERASI) echo "selected";?>><?php echo $biayaStatus[STATUS_OPERASI];?></option>
-					 </select>
-				<?php } ?>
-			</div>
-		</td>
-	</tr> -->
 	<tr>
           <td class="tablecontent" colspan="6">
                <input type="submit" name="btnLanjut" value="Lanjut" class="button">
@@ -271,13 +294,13 @@ function CariLayanan(id){
 <?php } ?>
 
 <?php if($_POST["btnExcel"]) {?>
-     <table width="100%" border="1" cellpadding="0" cellspacing="0">
+     <table width="90%" border="1" cellpadding="0" cellspacing="0">
           <tr class="tableheader">
-               <td align="center" colspan="<?php echo (count($dataSplit)+6)?>"><strong>BUKU PENERIMAAN BIAYA PELAYANAN KASIR<br/>BKMM PROP. JATIM<br/>BUKU PENERIMAAN UMUM TAHUN <?php echo $dataTable[0]["tahun"]?></strong></td>
+               <td align="center" colspan="<?php echo (count($dataSplit)+6)?>"><strong>LAPORAN KASIR PERJENIS KAS</strong></td>
           </tr>
      </table>
 <?php }?>
-
+<?php echo "Tahun:&nbsp;".$tgl_nya[0]; ?><br />
 <?php echo $table->RenderView($tbHeader,$tbContent,$tbBottom); ?>
 
 
