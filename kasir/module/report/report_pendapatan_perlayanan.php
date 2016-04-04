@@ -73,19 +73,13 @@
      
 	$sql_where = implode(" and ",$sql_where);
 	
-     $sql = "select a.id_biaya, sum(a.fol_dibayar) as dibayarnya, count(a.fol_id) as jumlah_dibayar from klinik.klinik_folio a
+     $sql = "select a.id_biaya, a.fol_nama, sum(a.fol_dibayar) as dibayarnya, count(a.fol_id) as jumlah_dibayar from klinik.klinik_folio a
               join klinik.klinik_registrasi d on d.reg_id = a.id_reg and a.id_cust_usr = d.id_cust_usr ";
     $sql .= " where ".$sql_where; 
-  $sql .= " group by a.id_biaya";
+  $sql .= " group by a.id_biaya, a.fol_nama";
   // echo $sql;
      $dataFolioPerLayanan = $dtaccess->FetchAll($sql);
 
-     $sql = " select biaya_id, biaya_nama from klinik.klinik_biaya";
-     $rs_namabiaya = $dtaccess->Execute($sql);
-     while($dataBiayanya = $dtaccess->Fetch($rs_namabiaya)){
-        $namaBiaya[$dataBiayanya['biaya_id']] = $dataBiayanya['biaya_nama'];
-     }
-     unset($rs_namabiaya);
      $m=0;
 
      $tgl_nya = explode('-', $_POST["tgl_awal"]);
@@ -125,7 +119,7 @@
          $tbContent[$i][$counter][TABLE_ALIGN] = "left";
          $counter++;
        }
-          $tbContent[$i][$counter][TABLE_ISI] = $namaBiaya[$dataFolioPerLayanan[$i]["id_biaya"]];
+          $tbContent[$i][$counter][TABLE_ISI] = $dataFolioPerLayanan[$i]["fol_nama"];
           $tbContent[$i][$counter][TABLE_ALIGN] = "left";
           $counter++;
         

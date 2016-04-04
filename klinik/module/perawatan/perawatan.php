@@ -373,19 +373,20 @@
 
             // --- terapi obat
           $sql = "select * from klinik.klinik_perawatan_terapi a
-                    left join klinik.klinik_biaya_baru b on a.id_item = b.biaya_id
+                    left join stocks.tb_item b on a.id_item = b.id
+                    left join stocks.item_price c on c.item_kode = b.item_kode
                     where id_rawat = ".QuoteValue(DPE_CHAR,$_POST["rawat_id"])." 
                     order by rawat_item_urut";
+                    echo $sql;
           $rs = $dtaccess->Execute($sql);
           $i=0;
-          //echo $sql;
+          
           while($row=$dtaccess->Fetch($rs)) {
                $_POST["id_item"][$i] = $row["biaya_id"];
-               $_POST["item_nama"][$i] = $row["biaya_nama"];
-               $_POST["txtDosis_1"][$i] = currency_format($row["terapi_jumlah_item"]);
+               $_POST["item_nama"][$i] = $row["item_nama"];
+               $_POST["txtDosis_1"][$i] = $row["terapi_jumlah_item"];
 	       $_POST["id_fisik"][$i] = $row["id_fisik"];
-	       if($_POST["reg_jenis_pasien"]=='3') $_POST["txtJumlah_1"][$i] = currency_format($row["biaya_jual"]);
-	       else $_POST["txtJumlah_1"][$i] = currency_format($row["biaya_beli"]);
+	       $_POST["txtJumlah_1"][$i] = currency_format($row["price_list_rate"]);
                $i++;
           }
 	  
@@ -3369,7 +3370,7 @@ function showKtr(ckbox) {
                               <a href="<?php echo $terapiPage;?>&el=<?php echo $i;?>&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Cari Obat"><img src="<?php echo($APLICATION_ROOT);?>images/bd_insrow.png" border="0" align="middle" width="18" height="20" style="cursor:pointer" title="Cari Obat" alt="Cari Obat" /></a>
                               <input type="hidden" id="id_item_<?php echo $i;?>" name="id_item[]" value="<?php echo $_POST["id_item"][$i];?>"/>
                          </td>
-                         <td align="center" class="tablecontent-odd"><?php echo $view->RenderTextBox("txtDosis_1[0]","txtDosis_1_0","3","25",$_POST["txtDosis_1"][0],"curedit", "",true);?><!--<span id="sp_item_<?php /*echo $i;*/?>"><?php /*echo GetDosis($_POST["id_fisik"][$i],$i,$_POST["id_dosis"][$i]);*/?></span>--></td>
+                         <td align="center" class="tablecontent-odd"><?php echo $view->RenderTextBox("txtDosis_1[$i]","txtDosis_1_".$i,"3","25",$_POST["txtDosis_1"][$i],"curedit", "",true);?><!--<span id="sp_item_<?php /*echo $i;*/?>"><?php /*echo GetDosis($_POST["id_fisik"][$i],$i,$_POST["id_dosis"][$i]);*/?></span>--></td>
                          <td align="left" width="70%" class="tablecontent-odd">
                              <?php echo $view->RenderTextBox("txtJumlah_1[]","txtJumlah_1_".$i,"20","100",$_POST["txtJumlah_1"][$i],"curedit", "",false);?>
                         </td>			
