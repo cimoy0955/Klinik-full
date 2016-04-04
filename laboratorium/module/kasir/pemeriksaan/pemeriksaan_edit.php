@@ -239,7 +239,7 @@
                $dbValue[1] = QuoteValue(DPE_CHARKEY,$dataKegiatan[$i]["id_reg"]);
                $dbValue[2] = QuoteValue(DPE_CHARKEY,$dataKegiatan[$i]["kegiatan_nama"]);
                $dbValue[3] = QuoteValue(DPE_NUMERIC,StripCurrency($dataKegiatan[$i]["kegiatan_biaya"]));
-               $dbValue[4] = QuoteValue(DPE_CHARKEY,'ZA');
+               $dbValue[4] = QuoteValue(DPE_CHARKEY,STATUS_LABORATORIUM);
                $dbValue[5] = QuoteValue(DPE_CHARKEY,$dataKegiatan[$i]["id_cust_usr"]);
                $dbValue[6] = QuoteValue(DPE_DATE,date("Y-m-d H:i:s"));
                $dbValue[7] = QuoteValue(DPE_CHARKEY,"n");
@@ -526,6 +526,7 @@ function TotalSemua(elm,biaya)
           </td>
         </tr>
      </table>
+     <?php echo $view->RenderHidden("id_cust_usr","id_cust_usr",$_POST["id_cust_usr"]);
 </form>
 <?php } ?>
 <?php echo $view->RenderBodyEnd(); ?>

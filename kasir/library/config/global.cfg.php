@@ -17,6 +17,7 @@ DEFINE("STATUS_PREMEDIKASI","K");
 DEFINE("STATUS_RAWATINAP","I");
 DEFINE("STATUS_CEKOUT","C");
 DEFINE("STATUS_APOTEK","T");
+DEFINE("STATUS_LABORATORIUM","L");
 
 $rawatStatus[STATUS_REGISTRASI] = "Registrasi";
 $rawatStatus[STATUS_REFRAKSI] = "Refraksi";
@@ -32,6 +33,7 @@ $rawatStatus[STATUS_PREMEDIKASI] = "Premedikasi";
 $rawatStatus[STATUS_RAWATINAP] = "Rawat Inap";
 $rawatStatus[STATUS_CEKOUT] = "Check Out";
 $rawatStatus[STATUS_APOTEK] = "Apotek";
+$rawatStatus[STATUS_LABORATORIUM] = "Laboratorium";
 
 $biayaStatus[STATUS_REGISTRASI] = "Registrasi";
 $biayaStatus[STATUS_REFRAKSI] = "Refraksi";
@@ -44,6 +46,7 @@ $biayaStatus[STATUS_DIAGNOSTIK] = "Diagnostik";
 $biayaStatus[STATUS_DIAGNOSTIK_TIPE] = "Tipe Diagnostik"; 
 $biayaStatus[STATUS_PREMEDIKASI] = "Premedikasi";
 $biayaStatus[STATUS_RAWATINAP] = "Rawat Inap";
+$biayaStatus[STATUS_LABORATORIUM] = "Laboratorium";
  
 $ruangProses[STATUS_REFRAKSI] = "Refraksi";
 $ruangProses[STATUS_PEMERIKSAAN] = "Pemeriksaan";
@@ -54,6 +57,7 @@ $ruangProses[STATUS_DIAGNOSTIK] = "Diagnostik";
 $ruangProses[STATUS_DIAGNOSTIK_TIPE] = "Tipe Diagnostik"; 
 $ruangProses[STATUS_PREMEDIKASI] = "Premedikasi";
 $ruangProses[STATUS_RAWATINAP] = "Rawat Inap";
+$ruangProses[STATUS_LABORATORIUM] = "Laboratorium";
 
 DEFINE("STATUS_ANTRI","0");
 DEFINE("STATUS_PROSES","1");

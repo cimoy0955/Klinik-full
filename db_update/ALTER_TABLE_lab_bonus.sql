@@ -1,0 +1,1 @@
+ALTER TABLE "laboratorium"."lab_bonus" ADD COLUMN "bonus_persen" SmallInt DEFAULT 0;

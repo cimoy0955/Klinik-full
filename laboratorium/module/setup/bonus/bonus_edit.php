@@ -89,10 +89,12 @@
                
                $dbField[0] = "bonus_id";   // PK
                $dbField[1] = "bonus_nama"; 
+               $dbField[2] = "bonus_persen";
 			
                if(!$bonusId) $bonusId = $dtaccess->GetTransId();   
                $dbValue[0] = QuoteValue(DPE_CHAR,$bonusId);
                $dbValue[1] = QuoteValue(DPE_CHAR,$_POST["bonus_nama"]); 
+               $dbValue[2] = QuoteValue(DPE_NUMERIC,$_POST["bonus_persen"]);
 			
                $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
                $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey,DB_SCHEMA_LAB);
@@ -196,6 +198,12 @@ function CaptureEvent(evt){
                <td align="right" class="tablecontent" width="20%"><strong>Nama</strong>&nbsp;</td>
                <td width="80%">
 				            <?php echo $view->RenderTextBox("bonus_nama","bonus_nama","60","100",$_POST["bonus_nama"],"inputField", null,false);?>                    
+               </td>
+          </tr>
+          <tr>
+               <td align="right" class="tablecontent" width="20%"><strong>Persentase Bonus</strong>&nbsp;</td>
+               <td width="80%">
+                                <?php echo $view->RenderTextBox("bonus_persen","bonus_persen","15","3",$_POST["bonus_persen"],"inputField", null,true);?> &nbsp;%                   
                </td>
           </tr>
           <tr>

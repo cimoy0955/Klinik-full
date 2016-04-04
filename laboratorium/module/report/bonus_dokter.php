@@ -33,22 +33,22 @@
      $cetakPage = "bonus_dokter_cetak.php?tanggal_awal="
      .$_POST["tanggal_awal"]."&tanggal_akhir=".$_POST["tanggal_akhir"];
       
-	   $sql_where[] = "a.bonus_hasil_tanggal >= ".QuoteValue(DPE_DATE,date_db($_POST["tanggal_awal"]));
-     $sql_where[] = "a.bonus_hasil_tanggal <= ".QuoteValue(DPE_DATE,DateAdd(date_db($_POST["tanggal_akhir"]),1));
+	   $sql_where[] = "b.pemeriksaan_create between ".QuoteValue(DPE_DATE,date_db($_POST["tanggal_awal"]))." and ".QuoteValue(DPE_DATE,date_db($_POST["tanggal_akhir"]));
      
      //$sql_where[] = "c.item_nama is not null";
      
        if ($sql_where[0]) 
 	$sql_where = implode(" and ",$sql_where);
      
-     $sql = "select * from laboratorium.lab_hasil_bonus a
-             left join hris.hris_pegawai b on cast(b.pgw_id as char) = a.id_dokter
-             left join laboratorium.lab_kegiatan c on c.kegiatan_id = a.id_kegiatan 
-             left join laboratorium.lab_kategori d on d.kategori_id = c.id_kategori
-             left join laboratorium.lab_bonus e on c.id_bonus = e.bonus_id";
+     $sql = "select * from laboratorium.lab_pemeriksaan_detail a 
+     	left join laboratorium.lab_pemeriksaan b on a.id_pemeriksaan = b.pemeriksaan_id 
+     	left join laboratorium.lab_kegiatan c on a.id_kegiatan = c.kegiatan_id 
+     	left join laboratorium.lab_bonus d on c.id_bonus = d.bonus_id 
+     	left join global.global_customer_user e on b.id_cust_usr = e.cust_usr_id
+     	left join hris.hris_pegawai f on b.id_dokter = f.pgw_id";
       $sql .= " where ".$sql_where;
-     $sql .= " order by a.bonus_hasil_tanggal asc";        
-     //echo $sql;        
+     $sql .= " order by b.pemeriksaan_create asc";        
+     // echo $sql;        
      $rs = $dtaccess->Execute($sql,DB_SCHEMA_LAB);
 	   $dataTable = $dtaccess->FetchAll($rs);
 	   
@@ -102,22 +102,22 @@
 	for($i=0,$m=0,$counter=0,$n=count($dataTable);$i<$n;$i++,$m++,$counter=0){
 	   
 	  
-	  if($dataTable[$i]["bonus_hasil_id"]!=$dataTable[$i-1]["bonus_hasil_id"] && $dataTable[$i]["pasien_nama"]!=$dataTable[$i-1]["pasien_nama"]){
+	  if($dataTable[$i]["pemeriksaan_id"]!=$dataTable[$i-1]["pemeriksaan_id"] && $dataTable[$i]["cust_usr_id"]!=$dataTable[$i-1]["cust_usr_id"]){
 
 	  
 		$tbContent[$m][$counter][TABLE_ISI] = $i+1;
 		$tbContent[$m][$counter][TABLE_ALIGN] = "right";
 		$counter++;
 	  
-	  $tbContent[$m][$counter][TABLE_ISI] = format_date($dataTable[$i]["bonus_hasil_tanggal"]);
+	  $tbContent[$m][$counter][TABLE_ISI] = FormatFromTimeStamp($dataTable[$i]["pemeriksaan_create"]);
 		$tbContent[$m][$counter][TABLE_ALIGN] = "center";
 		$counter++;
 		
-		$tbContent[$m][$counter][TABLE_ISI] = $dataTable[$i]["dokter_nama"];
+		$tbContent[$m][$counter][TABLE_ISI] = $dataTable[$i]["pgw_nama"];
 		$tbContent[$m][$counter][TABLE_ALIGN] = "center";
 		$counter++;
 
-		$tbContent[$m][$counter][TABLE_ISI] = $dataTable[$i]["pasien_nama"];
+		$tbContent[$m][$counter][TABLE_ISI] = $dataTable[$i]["cust_usr_nama"];
 		$tbContent[$m][$counter][TABLE_ALIGN] = "center";
 		$counter++;
 		
@@ -143,12 +143,14 @@
 		$tbContent[$m][$counter][TABLE_ISI] = "&nbsp;".$dataTable[$i]["bonus_nama"];
 		$tbContent[$m][$counter][TABLE_ALIGN] = "left";
 		$counter++;
-    		
-    $tbContent[$m][$counter][TABLE_ISI] = "Rp.&nbsp;".currency_format($dataTable[$i]["bonus_hasil_nominal"]);
+    	
+    	$bonusnya = 0;
+    	$bonusnya = $dataTable[$i]["periksa_det_total"] * ($dataTable[$i]["bonus_persen"]/100);
+    $tbContent[$m][$counter][TABLE_ISI] = "Rp.&nbsp;".currency_format($bonusnya);
 		$tbContent[$m][$counter][TABLE_ALIGN] = "right";
 		$counter++;	
 		
-		$jml += $dataTable[$i]["bonus_hasil_nominal"];
+		$jml += $bonusnya;
 		
 	}
 
