@@ -377,7 +377,7 @@
                     left join stocks.item_price c on c.item_kode = b.item_kode
                     where id_rawat = ".QuoteValue(DPE_CHAR,$_POST["rawat_id"])." 
                     order by rawat_item_urut";
-                    echo $sql;
+                    // echo $sql;
           $rs = $dtaccess->Execute($sql);
           $i=0;
           
