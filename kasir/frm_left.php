@@ -161,6 +161,12 @@
 			$menu[$countMenu]["status"] = true;        
 			$countMenu++;
 			
+			$menu[$countMenu]["head"] = "Report Kasir per Jenis Kas Bulanan";
+			$menu[$countMenu]["priv"] = "report_kasir";
+			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/report/report_kasir_perkas_bulanan.php";
+			$menu[$countMenu]["status"] = true;        
+			$countMenu++;
+			
 			$menu[$countMenu]["head"] = "Rekap Kasir";
 			$menu[$countMenu]["priv"] = "report_kasir";
 			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/report/report_rekap_loket.php";
