@@ -193,8 +193,7 @@ function CheckSimpan(frm) {
                 <?php foreach ($namaBulan as $bulanNum => $bulanNama) {
                     $newMonth = str_pad($bulanNum, 2, "0", STR_PAD_LEFT);
                   ?>
-
-                 <option value="<?php echo $newMonth;?>" <?php ($newMonth==$_POST["q_bulan"]) ? "selected" : "" ;?> ><?php echo $bulanNama;?></option>
+                 <option value="<?php echo $newMonth;?>" <?php echo ($newMonth==$_POST["q_bulan"]) ? "selected" : "" ;?> ><?php echo $bulanNama;?></option>
                 <?php }?>
                </select>
           </td>
@@ -223,7 +222,7 @@ function CheckSimpan(frm) {
           </tr>
      </table>
 <?php }?>
-<?php echo "Tahun:&nbsp;".$tgl_nya[0]; ?><br />
+<?php echo "Tahun:&nbsp;".$_POST["in_tahun"]; ?><br />
 <?php echo $table->RenderView($tbHeader,$tbContent,$tbBottom); ?>
 
 
