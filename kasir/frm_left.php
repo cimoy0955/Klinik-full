@@ -128,6 +128,18 @@
 			$menu[$countMenu]["status"] = true;        
 			$countMenu++;
 
+			$menu[$countMenu]["head"] = "Cetak Rekapitulasi Setoran";
+			$menu[$countMenu]["priv"] = "kasir";
+			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/report/cetak_setoran.php";
+			$menu[$countMenu]["status"] = true;        
+			$countMenu++;
+
+			$menu[$countMenu]["head"] = "Cetak Surat Tanda Setoran (STS)";
+			$menu[$countMenu]["priv"] = "kasir";
+			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/report/cetak_surat_tanda_setoran.php";
+			$menu[$countMenu]["status"] = true;        
+			$countMenu++;
+
 			break;
 			
 		case "report":
