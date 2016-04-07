@@ -58,7 +58,7 @@
      $rs = $dtaccess->Execute($sql,DB_SCHEMA);
      $dataSplit = $dtaccess->FetchAll($rs);
      
-          
+     $_POST['cust_usr_jenis'] = "3";
      $skr = date("d-m-Y");
      if(!$_POST["tgl_awal"]) $_POST["tgl_awal"] = $skr; 
      $sql_where[] = "a.fol_lunas = ".QuoteValue(DPE_CHAR,"y"); 
@@ -218,14 +218,16 @@ function CariLayanan(id){
                <input type="text"  id="tgl_awal" name="tgl_awal" size="15" maxlength="10" value="<?php echo $_POST["tgl_awal"];?>"/>
                <img src="<?php echo $APLICATION_ROOT;?>images/b_calendar.png" width="16" height="16" align="middle" id="img_tgl_awal" style="cursor: pointer; border: 0px solid white;" title="Date selector" onMouseOver="this.style.background='red';" onMouseOut="this.style.background=''" />
           </td>
-          <td width="10%">&nbsp;Jenis Pasien</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <!-- <td width="10%">&nbsp;Jenis Pasien</td>
           <td width="40%">
 			<select name="cust_usr_jenis" id="cust_usr_jenis" onKeyDown="return tabOnEnter(this, event);" onchange="CariLayanan(document.getElementById('cust_usr_jenis').value)">
                     <?php foreach($bayarPasien as $key => $value) { ?>
                          <option value="<?php echo $key;?>" <?php if($_POST["cust_usr_jenis"]==$key) echo "selected";?>><?php echo $value;?></option>
                     <?php } ?>
 			</select>
-          </td> 
+          </td>  -->
      </tr>
      <!-- <tr class="tablecontent">
 		<td>&nbsp;Layanan</td>

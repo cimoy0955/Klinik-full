@@ -61,14 +61,13 @@
           
      $skr = date("d-m-Y");
      if(!$_POST["tgl_awal"]) $_POST["tgl_awal"] = $skr;
-     if(!$_POST["tgl_akhir"]) $_POST["tgl_akhir"] = $skr; 
      $sql_where[] = "a.fol_lunas = ".QuoteValue(DPE_CHAR,"y"); 
      
-    if($_POST["tgl_awal"]) $sql_where[] = "CAST(a.fol_dibayar_when as DATE) >= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_awal"]));
-    if($_POST["tgl_akhir"]) $sql_where[] = "CAST(a.fol_dibayar_when as DATE) <= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_akhir"]));
+    if($_POST["tgl_awal"]) $sql_where[] = "CAST(a.fol_dibayar_when as DATE) = ".QuoteValue(DPE_DATE,date_db($_POST["tgl_awal"]));
      
-     
-		$sql_where[] = "d.reg_jenis_pasien = ".QuoteValue(DPE_CHAR,PASIEN_BAYAR_SWADAYA);
+    $sql_where[] = "d.reg_jenis_pasien <> ".QuoteValue(DPE_NUMERIC,PASIEN_BAYAR_SWADAYA);
+    $sql_where[] = "d.reg_jenis_pasien <> ".QuoteValue(DPE_NUMERIC,PASIEN_KOMPLIMEN);
+    $sql_where[] = "d.reg_jenis_pasien <> ".QuoteValue(DPE_NUMERIC,PASIEN_BAYAR_LAIN);
 	
  //     if($_POST["id_biaya"] && $_POST["id_biaya"]!=STATUS_OPERASI) $sql_where[] = "a.id_biaya = ".QuoteValue(DPE_CHAR,$_POST["id_biaya"]);
 	// if($_POST["id_biaya"]==STATUS_OPERASI) $sql_where[] = "a.fol_jenis = ".QuoteValue(DPE_CHAR,$_POST["id_biaya"]);
@@ -97,42 +96,28 @@
      $rs_dataKas = $dtaccess->Execute($sql);
      $dataKas = $dtaccess->FetchAll($rs_dataKas);
      // unset($rs_namabiaya);
-     
-     // --- dari data folio per tanggal
-     $sql = "select distinct(cast(fol_dibayar_when as date)) from klinik.klinik_folio a left join klinik.klinik_registrasi d on d.reg_id = a.id_reg where fol_lunas = 'y' and CAST(fol_dibayar_when as DATE) between ".QuoteValue(DPE_DATE,date_db($_POST["tgl_awal"]))." and ".QuoteValue(DPE_DATE,date_db($_POST["tgl_akhir"]))." and d.reg_jenis_pasien = ".QuoteValue(DPE_CHAR,PASIEN_BAYAR_SWADAYA);
-     $dataTanggal = $dtaccess->FetchAll($sql);
-     // echo $sql;
 
 	
 	$counter=0;
 		
-     $tbHeader[0][0][TABLE_ISI] = "Bulan";
+     $tbHeader[0][0][TABLE_ISI] = "Tanggal";
      $tbHeader[0][0][TABLE_WIDTH] = "25%";
 	
-     $tbHeader[0][1][TABLE_ISI] = "Tanggal";
-     $tbHeader[0][1][TABLE_WIDTH] = "25%";
+     $tbHeader[0][1][TABLE_ISI] = "Pos Kas";
+     $tbHeader[0][1][TABLE_WIDTH] = "25%"; 
 	
-     $tbHeader[0][2][TABLE_ISI] = "Pos Kas";
-     $tbHeader[0][2][TABLE_WIDTH] = "25%"; 
+     $tbHeader[0][2][TABLE_ISI] = "Total";
+     $tbHeader[0][2][TABLE_WIDTH] = "25%";
 	
-     $tbHeader[0][3][TABLE_ISI] = "Total";
-     $tbHeader[0][3][TABLE_WIDTH] = "25%";
-	
-     $i=0;
+
      $k=0;
      $grandTotal = 0;
-     while ( $i < count($dataTanggal)) {
-        $tgl_nya = explode('-', $dataTanggal[$i]["fol_dibayar_when"]);
-        $bln_nya = format_date_long($dataTanggal[$i]["fol_dibayar_when"]);
+        $tgl_nya = explode('-', date_db($_POST["tgl_awal"]));
+        $bln_nya = format_date_long($_POST["tgl_awal"]);
         $bln_nya = explode(' ', $bln_nya);
         $subtotal = 0;
         for ($j=0, $counter=0; $j <= count($dataKas); $j++, $k++, $counter=0) { 
           if ( $j == 0 ) {
-            $tbContent[$k][$counter][TABLE_ISI] = '&nbsp;'.$bln_nya[1];
-            $tbContent[$k][$counter][TABLE_ALIGN] = "left";
-            $tbContent[$k][$counter][TABLE_VALIGN] = "top";
-            $tbContent[$k][$counter][TABLE_ROWSPAN] = 11;
-            $counter++;
 
             $tbContent[$k][$counter][TABLE_ISI] = "&nbsp;".$tgl_nya[2];
             $tbContent[$k][$counter][TABLE_ALIGN] = "left";
@@ -146,11 +131,11 @@
             $tbContent[$k][$counter][TABLE_ALIGN] = "left";
             $counter++;
           
-            $tbContent[$k][$counter][TABLE_ISI] = 'Rp. '.currency_format($viewData[$dataTanggal[$i]["fol_dibayar_when"]][$dataKas[$j]["status_id"]]).'&nbsp;';
+            $tbContent[$k][$counter][TABLE_ISI] = 'Rp. '.currency_format($viewData[date_db($_POST["tgl_awal"])][$dataKas[$j]["status_id"]]).'&nbsp;';
             $tbContent[$k][$counter][TABLE_ALIGN] = "right";
             $counter++;
-            $subtotal += $viewData[$dataTanggal[$i]["fol_dibayar_when"]][$dataKas[$j]["status_id"]];
-            $subtotalkas[$dataKas[$j]["status_id"]] += $viewData[$dataTanggal[$i]["fol_dibayar_when"]][$dataKas[$j]["status_id"]];
+            $subtotal += $viewData[date_db($_POST["tgl_awal"])][$dataKas[$j]["status_id"]];
+            $subtotalkas[$dataKas[$j]["status_id"]] += $viewData[date_db($_POST["tgl_awal"])][$dataKas[$j]["status_id"]];
           }
 
           if ($j == count($dataKas)) {
@@ -165,14 +150,13 @@
           }
           
         }
-        $i++;
-     }
+        
 
       for ($l=0, $counterBottom=0; $l <= count($dataKas); $l++, $counterBottom=0) { 
         if ($l < count($dataKas)) {
           $tbBottom[$l][$counterBottom][TABLE_ISI] = "&nbsp;".$dataKas[$l]["status_nama"];
           $tbBottom[$l][$counterBottom][TABLE_ALIGN] = "left";
-          $tbBottom[$l][$counterBottom][TABLE_COLSPAN] = "3";
+          $tbBottom[$l][$counterBottom][TABLE_COLSPAN] = "2";
           $counterBottom++;
 
           $tbBottom[$l][$counterBottom][TABLE_ISI] = "Rp&nbsp;".currency_format($subtotalkas[$dataKas[$l]["status_id"]])."&nbsp;";
@@ -181,7 +165,7 @@
         }else{
           $tbBottom[$l][$counterBottom][TABLE_ISI] = "&nbsp;Total";
           $tbBottom[$l][$counterBottom][TABLE_ALIGN] = "left";
-          $tbBottom[$l][$counterBottom][TABLE_COLSPAN] = "3";
+          $tbBottom[$l][$counterBottom][TABLE_COLSPAN] = "2";
           $counterBottom++;
 
           $tbBottom[$l][$counterBottom][TABLE_ISI] = "Rp&nbsp;".currency_format($grandTotal)."&nbsp;";
@@ -190,7 +174,7 @@
         }
       }
 
-     $tableHeader = "Laporan Kasir Per Jenis Kas SWADANA";
+     $tableHeader = "Laporan Kasir Per Jenis Kas BPJS";
 
 	if($_POST["btnExcel"]){
           header('Content-Type: application/vnd.ms-excel');
@@ -244,22 +228,9 @@ function CariLayanan(id){
           <td width="35%">
                <input type="text"  id="tgl_awal" name="tgl_awal" size="15" maxlength="10" value="<?php echo $_POST["tgl_awal"];?>"/>
                <img src="<?php echo $APLICATION_ROOT;?>images/b_calendar.png" width="16" height="16" align="middle" id="img_tgl_awal" style="cursor: pointer; border: 0px solid white;" title="Date selector" onMouseOver="this.style.background='red';" onMouseOut="this.style.background=''" />
-               -
-               <input type="text"  id="tgl_akhir" name="tgl_akhir" size="15" maxlength="10" value="<?php echo $_POST["tgl_akhir"];?>"/>
-               <img src="<?php echo $APLICATION_ROOT;?>images/b_calendar.png" width="16" height="16" align="middle" id="img_tgl_akhir" style="cursor: pointer; border: 0px solid white;" title="Date selector" onMouseOver="this.style.background='red';" onMouseOut="this.style.background=''" />
-               
           </td>
           <td width="10%">&nbsp;</td>
           <td width="45%">&nbsp;</td>
-          <!-- <td width="10%">&nbsp;Jenis Pasien</td>
-          <td width="40%">
-			<select name="cust_usr_jenis" id="cust_usr_jenis" onKeyDown="return tabOnEnter(this, event);" onchange="CariLayanan(document.getElementById('cust_usr_jenis').value)">
-                    <option value="" >[ Pilih Jenis Pasien ]</option>
-                    <?php foreach($bayarPasien as $key => $value) { ?>
-                         <option value="<?php echo $key;?>" <?php if($_POST["cust_usr_jenis"]==$key) echo "selected";?>><?php echo $value;?></option>
-                    <?php } ?>
-			</select>
-          </td>  -->
      </tr>
 	<tr>
           <td class="tablecontent" colspan="6">
@@ -282,14 +253,6 @@ function CariLayanan(id){
         singleClick    :    true,           // double-click mode
         step           :    1                // show all years in drop-down boxes (instead of every other year as default)
     });
-    Calendar.setup({
-        inputField     :    "tgl_akhir",      // id of the input field
-        ifFormat       :    "<?php echo $formatCal;?>",       // format of the input field
-        showsTime      :    false,            // will display a time selector
-        button         :    "img_tgl_akhir",   // trigger for the calendar (button ID)
-        singleClick    :    true,           // double-click mode
-        step           :    1                // show all years in drop-down boxes (instead of every other year as default)
-    });
 </script>
 <?php } ?>
 
@@ -301,6 +264,7 @@ function CariLayanan(id){
      </table>
 <?php }?>
 <?php echo "Tahun:&nbsp;".$tgl_nya[0]; ?><br />
+<?php echo "Bulan:&nbsp;".$bln_nya[1]; ?><br />
 <?php echo $table->RenderView($tbHeader,$tbContent,$tbBottom); ?>
 
 

@@ -1885,7 +1885,7 @@ function setINAKelas(args) {
           </tr>
           <tr>
                <td width= "20%" align="left" class="tablecontent">Tanggal Pembayaran</td>
-               <td width= "80%" align="left" class="tablecontent-odd"><label><input type="text" id="fol_tanggal" name="fol_tanggal" size="15" maxlength="10" value="<?php echo FormatFromTimeStamp($_GET["waktu"]);?>" onKeyDown="return tabOnEnter(this, event);"/>
+               <td width= "80%" align="left" class="tablecontent-odd"><label><input type="text" id="fol_tanggal" name="fol_tanggal" size="15" maxlength="10" value="<?php echo date('d-m-Y');?>" onKeyDown="return tabOnEnter(this, event);"/>
                <img src="<?php echo $APLICATION_ROOT;?>images/b_calendar.png" width="16" height="16" align="middle" id="img_fol_tanggal" style="cursor: pointer; border: 0px solid white;" title="Date selector" onMouseOver="this.style.background='red';" onMouseOut="this.style.background=''" /></label></td>
           </tr>
            <script>

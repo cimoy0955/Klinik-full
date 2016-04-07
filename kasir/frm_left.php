@@ -137,6 +137,18 @@
 			$menu[$countMenu]["status"] = true;        
 			$countMenu++;
                
+			$menu[$countMenu]["head"] = "Report Penerimaan Biaya Umum";
+			$menu[$countMenu]["priv"] = "report_kasir";
+			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/report/report_buku_penerimaan_umum.php";
+			$menu[$countMenu]["status"] = true;        
+			$countMenu++;
+               
+			$menu[$countMenu]["head"] = "Report Penerimaan Biaya BPJS";
+			$menu[$countMenu]["priv"] = "report_kasir";
+			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/report/report_buku_penerimaan_bpjs.php";
+			$menu[$countMenu]["status"] = true;        
+			$countMenu++;
+               
 			$menu[$countMenu]["head"] = "Report Kasir All Item";
 			$menu[$countMenu]["priv"] = "report_kasir";
 			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/report/report_loket2.php";
@@ -155,9 +167,21 @@
 			$menu[$countMenu]["status"] = true;        
 			$countMenu++;
 			
-			$menu[$countMenu]["head"] = "Report Kasir per Jenis Kas";
+			$menu[$countMenu]["head"] = "Report Kasir per Jenis Kas Swadana";
 			$menu[$countMenu]["priv"] = "report_kasir";
 			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/report/report_kasir_perkas.php";
+			$menu[$countMenu]["status"] = true;        
+			$countMenu++;
+			
+			$menu[$countMenu]["head"] = "Report Kasir per Jenis Kas BPJS";
+			$menu[$countMenu]["priv"] = "report_kasir";
+			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/report/report_kasir_perkas_bpjs.php";
+			$menu[$countMenu]["status"] = true;        
+			$countMenu++;
+			
+			$menu[$countMenu]["head"] = "Rincian Pendapatan Kas Perhari";
+			$menu[$countMenu]["priv"] = "report_kasir";
+			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/report/report_kasir_rincian_perhari.php";
 			$menu[$countMenu]["status"] = true;        
 			$countMenu++;
 			
