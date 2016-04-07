@@ -90,7 +90,7 @@
      //*-- config table ---*//
      $tableHeader = "&nbsp;Rekap Tahunan Pasien OK berdasar Jenis Tagihan Pasien";
 
-     if($_POST["btnLanjut"]){
+     if($_POST["btnLanjut"] || $_POST["btnExcel"]){
                // --- construct new table ---- //
                $counterHeader = 0;
                     

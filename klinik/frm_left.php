@@ -370,6 +370,12 @@
 			$menu[$countMenu]["status"] = true;        
 			$countMenu++;
 	
+			$menu[$countMenu]["head"] = "Rekap OK berdasarkan Lensa";
+			$menu[$countMenu]["priv"] = "operasi";
+			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/tindakan/rekap_ok_dokter_lensa_tahunan.php";
+			$menu[$countMenu]["status"] = true;        
+			$countMenu++;
+	
 	/*		$menu[$countMenu]["head"] = "Rekap Pasien";
 			$menu[$countMenu]["priv"] = "report_registrasi";
 			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/registrasi/rekap_pasien.php";

@@ -1030,7 +1030,7 @@ $sql = "select pgw_nama, pgw_id from klinik.klinik_operasi_admin a
      $sql = "select op_jenis_id, op_jenis_nama from klinik.klinik_operasi_jenis order by op_jenis_nama";
      $dataOperasiJenis = $dtaccess->FetchAll($sql);
 
-     // -- bikin combonya operasi Jenis
+     // -- bikin combonya operasi metode
      $optOperasiJenis[0] = $view->RenderOption("","[Pilih Metode Operasi]",$show); 
      for($i=0,$n=count($dataOperasiJenis);$i<$n;$i++) {
           $show = ($_POST["id_op_metode"]==$dataOperasiJenis[$i]["op_jenis_id"]) ? "selected":"";
