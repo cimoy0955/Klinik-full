@@ -254,6 +254,15 @@
           unset($rs);
           unset($row);
            
+          $sql = "select pgw_nama, pgw_id from klinik.klinik_diagnostik_dokter a
+                    join hris.hris_pegawai b on a.id_pgw = b.pgw_id where id_diag = ".QuoteValue(DPE_CHAR,$_POST["diag_id"])." and diag_dokter_periksa = ".QuoteValue(DPE_CHAR,'lpi');
+          $rs = $dtaccess->Execute($sql);
+          $row=$dtaccess->Fetch($rs);
+          $_POST["diag_lpi_dokter_nama"] = $row["pgw_nama"];
+          $_POST["id_lpi_dokter"] = $row["pgw_id"];
+          unset($rs);
+          unset($row);
+           
      }
 
      // --- cari input diagnostik pertama hari ini ---
@@ -427,6 +436,8 @@ where id_app = ".QuoteValue(DPE_NUMERIC,'5');
           $dbField[34] = "diag_lab_darah_lengkap";
           $dbField[35] = "diag_slt";
           $dbField[36] = "diag_lpi";
+          $dbField[37] = "diag_nc_tonometri";
+          $dbField[38] = "diag_nc_biometri";
 	  
           
           if(!$_POST["diag_id"]) $_POST["diag_id"] = $dtaccess->GetTransID();
@@ -468,6 +479,8 @@ where id_app = ".QuoteValue(DPE_NUMERIC,'5');
           $dbValue[34] = QuoteValue(DPE_CHAR,$_POST["diag_lab_darah_lengkap"]);
           $dbValue[35] = QuoteValue(DPE_CHAR,$_POST["diag_slt"]);
           $dbValue[36] = QuoteValue(DPE_CHAR,$_POST["diag_lpi"]);
+          $dbValue[37] = QuoteValue(DPE_CHAR,$_POST["diag_nc_tonometri"]);
+          $dbValue[38] = QuoteValue(DPE_CHAR,$_POST["diag_nc_biometri"]);
           
           $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
           $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey);
@@ -688,6 +701,32 @@ where id_app = ".QuoteValue(DPE_NUMERIC,'5');
                $dbValue[1] = QuoteValue(DPE_CHAR,$_POST["diag_id"]);
                $dbValue[2] = QuoteValue(DPE_NUMERICKEY,$_POST["id_rap_dokter"]);
                $dbValue[3] = QuoteValue(DPE_CHAR,"rap");
+               
+               //if($row_edit["cust_id"]) $custId = $row_edit["cust_id"];
+               $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
+               $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey,DB_SCHEMA_KLINIK);
+               
+               $dtmodel->Insert() or die("insert error"); 
+               
+               unset($dtmodel);
+               unset($dbField);
+               unset($dbValue);
+               unset($dbKey);
+          }
+
+          if($_POST["id_lpi_dokter"]) {
+               
+               $dbTable = "klinik_diagnostik_dokter";
+               
+               $dbField[0] = "diag_dokter_id";   // PK
+               $dbField[1] = "id_diag";
+               $dbField[2] = "id_pgw";
+               $dbField[3] = "diag_dokter_periksa";
+                      
+               $dbValue[0] = QuoteValue(DPE_CHAR,$dtaccess->GetTransID());
+               $dbValue[1] = QuoteValue(DPE_CHAR,$_POST["diag_id"]);
+               $dbValue[2] = QuoteValue(DPE_NUMERICKEY,$_POST["id_lpi_dokter"]);
+               $dbValue[3] = QuoteValue(DPE_CHAR,"lpi");
                
                //if($row_edit["cust_id"]) $custId = $row_edit["cust_id"];
                $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value

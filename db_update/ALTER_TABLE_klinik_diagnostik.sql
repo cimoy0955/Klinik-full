@@ -1,0 +1,2 @@
+ALTER TABLE "klinik"."klinik_diagnostik" ADD COLUMN "diag_nc_tonometri" Character Varying( 255 ) COLLATE "pg_catalog"."default";
+ALTER TABLE "klinik"."klinik_diagnostik" ADD COLUMN "diag_nc_biometri" Character Varying( 255 ) COLLATE "pg_catalog"."default";
