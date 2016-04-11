@@ -76,7 +76,7 @@ function GetData($in_nama){
 	
 	return $str;
 }
-echo $elnya;
+// echo $elnya;
 
 ?>
 <?php echo $view->RenderBody("inosoft.css",true); ?>
