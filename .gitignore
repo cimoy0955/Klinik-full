@@ -11,3 +11,8 @@ library/crack.cls.php
 library/host.cfg.php
 library/config/host.cfg.php
 heal.sublime-workspace
+diagnostik/images/
+klinik/images/
+poli_anak/images/
+refraksi/images/
+rawat_inap/images/
