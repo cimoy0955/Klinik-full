@@ -198,22 +198,22 @@
 		return true;
 	}
 	
-     if(!$_POST["btnSave"] && !$_POST["btnUpdate"]) {
-          // --- buat cari suster yg tugas hari ini --- 
-          $sql = "select distinct pgw_nama, pgw_id 
-                    from klinik.klinik_premedikasi_suster a 
-                    join hris.hris_pegawai b on a.id_pgw = b.pgw_id 
-                    join klinik.klinik_premedikasi c on c.preme_id = a.id_preme 
-                    where cast(c.preme_waktu as date) = ".QuoteValue(DPE_DATE,date("Y-m-d")); 
-          $rs = $dtaccess->Execute($sql);
+     // if(!$_POST["btnSave"] && !$_POST["btnUpdate"] && $_x_mode == "New") {
+     //      // --- buat cari suster yg tugas hari ini --- 
+     //      $sql = "select distinct pgw_nama, pgw_id 
+     //                from klinik.klinik_premedikasi_suster a 
+     //                join hris.hris_pegawai b on a.id_pgw = b.pgw_id 
+     //                join klinik.klinik_premedikasi c on c.preme_id = a.id_preme 
+     //                where cast(c.preme_waktu as date) = ".QuoteValue(DPE_DATE,date("Y-m-d")); 
+     //      $rs = $dtaccess->Execute($sql);
           
-          $i=0;     
-          while($row=$dtaccess->Fetch($rs)) {
-               if(!$_POST["id_suster"][$i]) $_POST["id_suster"][$i] = $row["pgw_id"];
-               if(!$_POST["preme_suster_nama"][$i]) $_POST["preme_suster_nama"][$i] = $row["pgw_nama"];
-               $i++;
-          }
-     }
+     //      $i=0;     
+     //      while($row=$dtaccess->Fetch($rs)) {
+     //           if(!$_POST["id_suster"][$i]) $_POST["id_suster"][$i] = $row["pgw_id"];
+     //           if(!$_POST["preme_suster_nama"][$i]) $_POST["preme_suster_nama"][$i] = $row["pgw_nama"];
+     //           $i++;
+     //      }
+     // }
 
      if ($_GET["id"]) {
           // === buat ngedit ---          
@@ -225,13 +225,12 @@
           }
          
           $sql = "select a.id_reg,preme_id from klinik.klinik_premedikasi a 
-				where preme_id = ".QuoteValue(DPE_CHAR,$_POST["preme_id"]); 
+                    where preme_id = ".QuoteValue(DPE_CHAR,$_POST["preme_id"]); 
           $row_edit = $dtaccess->Fetch($sql);
           
           $_GET["id_reg"] = $row_edit["id_reg"]; 
           $_POST["preme_id"] = $row_edit["preme_id"]; 
-		
-
+          
           $sql = "select pgw_nama, pgw_id from klinik.klinik_premedikasi_suster a
                     join hris.hris_pegawai b on a.id_pgw = b.pgw_id where id_preme = ".QuoteValue(DPE_CHAR,$_POST["preme_id"]); 
           $rs = $dtaccess->Execute($sql);
@@ -262,9 +261,10 @@
           $_POST["op_admin_nama"] = $row["pgw_nama"];
           unset($rs);
           unset($row);
-		
+          
      }
-	
+     
+
      // --- cari input premedikasi pertama hari ini ---
      $sql = "select a.preme_id 
                from klinik.klinik_premedikasi a 
@@ -364,43 +364,43 @@
 		$_POST["preme_tonometri_weight_os"] = $dataPreme["preme_tonometri_weight_os"];
 		$_POST["preme_tonometri_pressure_os"] = $dataPreme["preme_tonometri_pressure_os"];
 
-		if(!$dataPreme) {
+		/*if(!$dataPreme) {
 		 $sql = "select a.dokter_1,a.perawat_1,a.perawat_2,a.perawat_3,a.perawat_4,a.perawat_5,
-      a.petugas_id, b.pgw_nama as dokter1, c.pgw_nama as perawat1 , 
-d.pgw_nama as perawat2, e.pgw_nama as perawat3 , f.pgw_nama as perawat4, g.pgw_nama as perawat5
-from global.global_petugas a
-left join hris.hris_pegawai b on b.pgw_id = a.dokter_1
-left join hris.hris_pegawai c on c.pgw_id = a.perawat_1
-left join hris.hris_pegawai d on d.pgw_id = a.perawat_2
-left join hris.hris_pegawai e on e.pgw_id = a.perawat_3
-left join hris.hris_pegawai f on f.pgw_id = a.perawat_4
-left join hris.hris_pegawai g on g.pgw_id = a.perawat_5
-where id_app = ".QuoteValue(DPE_NUMERIC,'6');		
-      $rs = $dtaccess->Execute($sql);
-			$row=$dtaccess->Fetch($rs); 
-			$_POST["id_dokter"] = $row["dokter_1"];
-			$_POST["preme_dokter_nama"] = $row["dokter1"];
-		if($row["perawat1"]){
-    	$_POST["id_suster"][0] = $row["perawat_1"];
-			$_POST["preme_suster_nama"][0] = $row["perawat1"];
-		}
-		  if($row["perawat2"]){
-    	$_POST["id_suster"][1] = $row["perawat_2"];
-			$_POST["preme_suster_nama"][1] = $row["perawat2"];
-		}	
-			if($row["perawat3"]){
-			$_POST["id_suster"][2] = $row["perawat_3"];
-			$_POST["preme_suster_nama"][2] = $row["perawat3"];
-		}	
-			if($row["perawat4"]){
-			$_POST["id_suster"][3] = $row["perawat_4"];
-			$_POST["preme_suster_nama"][3] = $row["perawat4"];
-		}	
-			if($row["perawat5"]){
-			$_POST["id_suster"][4] = $row["perawat_5"];
-			$_POST["preme_suster_nama"][4] = $row["perawat5"];
-		}	
-    }
+               a.petugas_id, b.pgw_nama as dokter1, c.pgw_nama as perawat1 , 
+               d.pgw_nama as perawat2, e.pgw_nama as perawat3 , f.pgw_nama as perawat4, g.pgw_nama as perawat5
+               from global.global_petugas a
+               left join hris.hris_pegawai b on b.pgw_id = a.dokter_1
+               left join hris.hris_pegawai c on c.pgw_id = a.perawat_1
+               left join hris.hris_pegawai d on d.pgw_id = a.perawat_2
+               left join hris.hris_pegawai e on e.pgw_id = a.perawat_3
+               left join hris.hris_pegawai f on f.pgw_id = a.perawat_4
+               left join hris.hris_pegawai g on g.pgw_id = a.perawat_5
+               where id_app = ".QuoteValue(DPE_NUMERIC,'6');		
+           $rs = $dtaccess->Execute($sql);
+     			$row=$dtaccess->Fetch($rs); 
+     			$_POST["id_dokter"] = $row["dokter_1"];
+     			$_POST["preme_dokter_nama"] = $row["dokter1"];
+     		if($row["perawat1"]){
+         	$_POST["id_suster"][0] = $row["perawat_1"];
+     			$_POST["preme_suster_nama"][0] = $row["perawat1"];
+     		}
+     		  if($row["perawat2"]){
+         	$_POST["id_suster"][1] = $row["perawat_2"];
+     			$_POST["preme_suster_nama"][1] = $row["perawat2"];
+     		}	
+     			if($row["perawat3"]){
+     			$_POST["id_suster"][2] = $row["perawat_3"];
+     			$_POST["preme_suster_nama"][2] = $row["perawat3"];
+     		}	
+     			if($row["perawat4"]){
+     			$_POST["id_suster"][3] = $row["perawat_4"];
+     			$_POST["preme_suster_nama"][3] = $row["perawat4"];
+     		}	
+     			if($row["perawat5"]){
+     			$_POST["id_suster"][4] = $row["perawat_5"];
+     			$_POST["preme_suster_nama"][4] = $row["perawat5"];
+     		}	
+         }*/
 
 	}
 
@@ -1001,7 +1001,7 @@ function SusterDelete(akhir){
                <td width="20%"  class="tablecontent" align="left">Perawat</td>
                <td align="left" class="tablecontent-odd" width="80%">
 				<table width="100%" border="0" cellpadding="1" cellspacing="1" id="tb_suster">
-                         <?php if(!$_POST["preme_suster_nama"]) { ?>
+                         <?php if(!$_POST["id_suster"]) { ?>
 					<tr id="tr_suster_0">
 						<td align="left" class="tablecontent-odd" width="70%">
 							<?php echo $view->RenderTextBox("preme_suster_nama[]","preme_suster_nama_0","30","100",$_POST["preme_suster_nama"][0],"inputField", "readonly",false);?>
@@ -1272,7 +1272,7 @@ function SusterDelete(akhir){
 					</tr>
 					<tr>
 						<td align="left" class="tablecontent">Darah Lengkap</td>
-						<td align="left" class="tablecontent-odd"><?php echo $view->RenderLabel("preop_lab_darah_lengkap","preop_lab_darah_lengkap",$dataPreOp["preop_lab_darah_lengkap"],"inputField", null,null);?><td>
+						<td align="left" class="tablecontent-odd"><?php echo $view->RenderLabel("preop_lab_darah_lengkap","preop_lab_darah_lengkap",$dataPreOp["preop_lab_darah_lengkap"],"inputField", null,null);?></td>
 					</tr>
 					<tr>
 						<td align="left" width="20%" class="tablecontent">Tonometri OD</td>
