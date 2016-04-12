@@ -70,10 +70,8 @@
           }
      }
       
-     
-     if(!$_POST["ruang_proses"] || $_POST["ruang_proses"]==STATUS_PEMERIKSAAN) {
-          
           //--- untuk cari point pegawai di pemeriksaan -----
+     if(!$_POST["ruang_proses"] || $_POST["ruang_proses"]==STATUS_PEMERIKSAAN) {
           if($_POST["tgl_awal"]) $sql_rawat[] = "rawat_tanggal >= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_awal"]));  
           if($_POST["tgl_akhir"]) $sql_rawat[] = "rawat_tanggal <= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_akhir"]));
           
@@ -95,8 +93,10 @@
                if($rawatSusPgw[$RawatSuster[$i]["rawat_tanggal"]][$RawatSuster[$i]["id_pgw"]]==1) {
                     $rawatSusTotPgw[$RawatSuster[$i]["rawat_tanggal"]]++; 
                }
-               
-               $point[$RawatSuster[$i]["id_pgw"]][$RawatSuster[$i]["rawat_tanggal"]] = $rawatSusTgl[$RawatSuster[$i]["rawat_tanggal"]]/$rawatSusTotPgw[$RawatSuster[$i]["rawat_tanggal"]];
+          }
+
+          for($i=0,$n=count($RawatSuster);$i<$n;$i++) {
+               $point[$RawatSuster[$i]["id_pgw"]][$RawatSuster[$i]["rawat_tanggal"]] += $rawatSusTgl[$RawatSuster[$i]["rawat_tanggal"]]/$rawatSusTotPgw[$RawatSuster[$i]["rawat_tanggal"]];
                $ruang[$RawatSuster[$i]["id_pgw"]] = $ruangProses[STATUS_PEMERIKSAAN];
           }
           
@@ -113,7 +113,6 @@
                $ruang[$RawatDokter[$i]["id_pgw"]] = $ruangProses[STATUS_PEMERIKSAAN];
           }
 
-
           $sql = " select count(id_rawat) as total, id_pgw, rawat_tanggal
                          from klinik.klinik_perawatan a
                          join klinik.klinik_perawatan_admin b on b.id_rawat = a.rawat_id ";
@@ -128,8 +127,8 @@
           }
      }
      
-     if(!$_POST["ruang_proses"] || $_POST["ruang_proses"]==STATUS_DIAGNOSTIK) {
           //--- untuk cari point pegawai di diagnostik -----
+     if(!$_POST["ruang_proses"] || $_POST["ruang_proses"]==STATUS_DIAGNOSTIK) {
           if($_POST["tgl_awal"]) $sql_diag[] = "cast(diag_waktu as date) >= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_awal"]));  
           if($_POST["tgl_akhir"]) $sql_diag[] = "cast(diag_waktu as date) <= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_akhir"]));
           
@@ -150,11 +149,12 @@
                
                if($DiagSusPgw[$DiagSuster[$i]["diag_tanggal"]][$DiagSuster[$i]["id_pgw"]]==1) {
                     $DiagSusTotPgw[$DiagSuster[$i]["diag_tanggal"]]++; 
-               }
-               
-               $point[$DiagSuster[$i]["id_pgw"]][$DiagSuster[$i]["diag_tanggal"]] = $DiagSusTgl[$DiagSuster[$i]["diag_tanggal"]]/$DiagSusTotPgw[$DiagSuster[$i]["diag_tanggal"]];
+               }    
+          }
+
+          for($i=0,$n=count($DiagSuster);$i<$n;$i++) {
+               $point[$DiagSuster[$i]["id_pgw"]][$DiagSuster[$i]["diag_tanggal"]] += $DiagSusTgl[$DiagSuster[$i]["diag_tanggal"]]/$DiagSusTotPgw[$DiagSuster[$i]["diag_tanggal"]];
                $ruang[$DiagSuster[$i]["id_pgw"]] = $ruangProses[STATUS_DIAGNOSTIK];
-               
           }
           
           $sql = " select count(id_diag) as total, id_pgw, cast(diag_waktu as date) as diag_tanggal 
@@ -184,8 +184,8 @@
           }
      }
      
-     if(!$_POST["ruang_proses"] || $_POST["ruang_proses"]==STATUS_PREOP) {
           //--- untuk cari point pegawai di preop -----
+     if(!$_POST["ruang_proses"] || $_POST["ruang_proses"]==STATUS_PREOP) {
           if($_POST["tgl_awal"]) $sql_preop[] = "cast(preop_waktu as date) >= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_awal"]));  
           if($_POST["tgl_akhir"]) $sql_preop[] = "cast(preop_waktu as date) <= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_akhir"]));
           
@@ -206,12 +206,13 @@
                
                if($PreopSusPgw[$PreopSuster[$i]["preop_tanggal"]][$PreopSuster[$i]["id_pgw"]]==1) {
                     $PreopSusTotPgw[$PreopSuster[$i]["preop_tanggal"]]++; 
-               }
-               
-               $point[$PreopSuster[$i]["id_pgw"]][$PreopSuster[$i]["preop_tanggal"]] = $PreopSusTgl[$PreopSuster[$i]["preop_tanggal"]]/$PreopSusTotPgw[$PreopSuster[$i]["preop_tanggal"]];
+               }    
+          }
+          for($i=0,$n=count($PreopSuster);$i<$n;$i++) {
+               $point[$PreopSuster[$i]["id_pgw"]][$PreopSuster[$i]["preop_tanggal"]] += $PreopSusTgl[$PreopSuster[$i]["preop_tanggal"]]/$PreopSusTotPgw[$PreopSuster[$i]["preop_tanggal"]];
                $ruang[$PreopSuster[$i]["id_pgw"]] = $ruangProses[STATUS_PREOP];
           }
-          
+
           $sql = " select count(id_preop) as total, id_pgw, cast(preop_waktu as date) as preop_tanggal 
                          from klinik.klinik_preop a
                          join klinik.klinik_preop_dokter b on b.id_preop = a.preop_id ";
@@ -237,10 +238,23 @@
                $point[$PreopAdmin[$i]["id_pgw"]][$PreopAdmin[$i]["preop_tanggal"]] += $PreopAdmin[$i]["total"];
                $ruang[$PreopAdmin[$i]["id_pgw"]] = $ruangProses[STATUS_PREOP];
           }
+
+          $sql = " select count(id_preop) as total, id_pgw, cast(preop_waktu as date) as preop_tanggal
+                         from klinik.klinik_preop a
+                         join klinik.klinik_jadwal_admin b on b.id_preop = a.preop_id ";
+          $sql.= " where ".implode(" and ",$sql_preop);
+          $sql .= " group by id_pgw, cast(preop_waktu as date)"; 
+          $rs = $dtaccess->Execute($sql);
+          $PreopAdmin = $dtaccess->FetchAll($rs);
+          
+          for($i=0,$n=count($PreopAdmin);$i<$n;$i++) { 
+               $point[$PreopAdmin[$i]["id_pgw"]][$PreopAdmin[$i]["preop_tanggal"]] += $PreopAdmin[$i]["total"];
+               $ruang[$PreopAdmin[$i]["id_pgw"]] = $ruangProses[STATUS_PREOP];
+          }
      }
      
-     if(!$_POST["ruang_proses"] || $_POST["ruang_proses"]==STATUS_PREMEDIKASI) {
           //--- untuk cari point pegawai di premedikasi -----
+     if(!$_POST["ruang_proses"] || $_POST["ruang_proses"]==STATUS_PREMEDIKASI) {
           if($_POST["tgl_awal"]) $sql_preme[] = "cast(preme_waktu as date) >= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_awal"]));  
           if($_POST["tgl_akhir"]) $sql_preme[] = "cast(preme_waktu as date) <= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_akhir"]));
           
@@ -262,12 +276,13 @@
                if($PremeSusPgw[$PremeSuster[$i]["preme_tanggal"]][$PremeSuster[$i]["id_pgw"]]==1) {
                     $PremeSusTotPgw[$PremeSuster[$i]["preme_tanggal"]]++; 
                }
-               
-               $point[$PremeSuster[$i]["id_pgw"]][$PremeSuster[$i]["preme_tanggal"]] = $PremeSusTgl[$PremeSuster[$i]["preme_tanggal"]]/$PremeSusTotPgw[$PremeSuster[$i]["preme_tanggal"]];
-               $ruang[$PremeSuster[$i]["id_pgw"]] = $ruangProses[STATUS_PREMEDIKASI];
-               
           }
           
+          for($i=0,$n=count($PremeSuster);$i<$n;$i++) {
+               $point[$PremeSuster[$i]["id_pgw"]][$PremeSuster[$i]["preme_tanggal"]] += $PremeSusTgl[$PremeSuster[$i]["preme_tanggal"]]/$PremeSusTotPgw[$PremeSuster[$i]["preme_tanggal"]];
+               $ruang[$PremeSuster[$i]["id_pgw"]] = $ruangProses[STATUS_PREMEDIKASI];
+          }
+
           $sql = " select count(id_preme) as total, id_pgw, cast(preme_waktu as date) as preme_tanggal 
                          from klinik.klinik_premedikasi a
                          join klinik.klinik_premedikasi_dokter b on b.id_preme = a.preme_id ";
@@ -295,9 +310,9 @@
           }
      }
      
+          //--- untuk cari point pegawai di operasi -----
      if(!$_POST["ruang_proses"] || $_POST["ruang_proses"]==STATUS_OPERASI) {
           
-          //--- untuk cari point pegawai di operasi -----
           if($_POST["tgl_awal"]) $sql_op[] = "cast(op_waktu as date) >= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_awal"]));  
           if($_POST["tgl_akhir"]) $sql_op[] = "cast(op_waktu as date) <= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_akhir"]));
           
@@ -318,9 +333,10 @@
                
                if($OpSusPgw[$OpSuster[$i]["op_tanggal"]][$OpSuster[$i]["id_pgw"]]==1) {
                     $OpSusTotPgw[$OpSuster[$i]["op_tanggal"]]++; 
-               }
-               
-               $point[$OpSuster[$i]["id_pgw"]][$OpSuster[$i]["op_tanggal"]] = $OpSusTgl[$OpSuster[$i]["op_tanggal"]]/$OpSusTotPgw[$OpSuster[$i]["op_tanggal"]];
+               }    
+          }
+          for($i=0,$n=count($OpSuster);$i<$n;$i++) {
+               $point[$OpSuster[$i]["id_pgw"]][$OpSuster[$i]["op_tanggal"]] += $OpSusTgl[$OpSuster[$i]["op_tanggal"]]/$OpSusTotPgw[$OpSuster[$i]["op_tanggal"]];
                $ruang[$OpSuster[$i]["id_pgw"]] = $ruangProses[STATUS_OPERASI];
           }
           
@@ -351,8 +367,8 @@
           }
      }
        
-     if(!$_POST["ruang_proses"] || $_POST["ruang_proses"]==STATUS_BEDAH) {
           //--- untuk cari point pegawai di bedah minor -----
+     if(!$_POST["ruang_proses"] || $_POST["ruang_proses"]==STATUS_BEDAH) {
           if($_POST["tgl_awal"]) $sql_bedah[] = "op_tanggal >= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_awal"]));  
           if($_POST["tgl_akhir"]) $sql_bedah[] = "op_tanggal <= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_akhir"]));
           
@@ -366,11 +382,56 @@
           for($i=0,$n=count($BedahDokter);$i<$n;$i++) { 
                $point[$BedahDokter[$i]["id_dokter"]][$BedahDokter[$i]["op_tanggal"]]++;
                $ruang[$BedahDokter[$i]["id_dokter"]] = $ruangProses[STATUS_BEDAH];
-               
-               $point[$BedahDokter[$i]["id_suster"]][$BedahDokter[$i]["op_tanggal"]]++; 
-               $ruang[$BedahDokter[$i]["id_suster"]] = $ruangProses[STATUS_BEDAH];
           }
 
+          $sql = " select id_op, id_pgw, op_tanggal 
+                         from klinik.klinik_perawatan_operasi a
+                         join klinik.klinik_operasi_suster b on b.id_op = a.op_id ";
+          $sql.= " where ".implode(" and ",$sql_bedah);
+          $sql .= " order by op_tanggal, id_op, id_pgw "; 
+          $rs = $dtaccess->Execute($sql);
+          $BedahSuster = $dtaccess->FetchAll($rs);
+          
+          for($i=0,$n=count($BedahSuster);$i<$n;$i++) {
+               if($BedahSuster[$i]["id_op"]!=$BedahSuster[$i-1]["id_op"]) { 
+                    $BedahSusTgl[$BedahSuster[$i]["op_tanggal"]]++;
+               } 
+               
+               $BedahSusPgw[$BedahSuster[$i]["op_tanggal"]][$BedahSuster[$i]["id_pgw"]]++;
+               
+               if($BedahSusPgw[$BedahSuster[$i]["op_tanggal"]][$BedahSuster[$i]["id_pgw"]]==1) {
+                    $BedahSusTotPgw[$BedahSuster[$i]["op_tanggal"]]++; 
+               }    
+          }
+          for($i=0,$n=count($BedahSuster);$i<$n;$i++) {
+               $point[$BedahSuster[$i]["id_pgw"]][$BedahSuster[$i]["op_tanggal"]] += $BedahSusTgl[$BedahSuster[$i]["op_tanggal"]]/$BedahSusTotPgw[$BedahSuster[$i]["op_tanggal"]];
+               $ruang[$BedahSuster[$i]["id_pgw"]] = $ruangProses[STATUS_BEDAH];
+          }
+          
+          $sql = " select id_op, id_pgw, op_tanggal 
+                         from klinik.klinik_perawatan_operasi a
+                         join klinik.klinik_perawatan_operasi_suster_asisten b on b.id_op = a.op_id ";
+          $sql.= " where ".implode(" and ",$sql_bedah);
+          $sql .= " order by op_tanggal, id_op, id_pgw "; 
+          $rs = $dtaccess->Execute($sql);
+          $BedahSusterAsisten = $dtaccess->FetchAll($rs);
+          
+          for($i=0,$n=count($BedahSusterAsisten);$i<$n;$i++) {
+               if($BedahSusterAsisten[$i]["id_op"]!=$BedahSusterAsisten[$i-1]["id_op"]) { 
+                    $BedahSusAsistenTgl[$BedahSusterAsisten[$i]["op_tanggal"]]++;
+               } 
+               
+               $BedahSusAsistenPgw[$BedahSusterAsisten[$i]["op_tanggal"]][$BedahSusterAsisten[$i]["id_pgw"]]++;
+               
+               if($BedahSusAsistenPgw[$BedahSusterAsisten[$i]["op_tanggal"]][$BedahSusterAsisten[$i]["id_pgw"]]==1) {
+                    $BedahSusTotAsistenPgw[$BedahSusterAsisten[$i]["op_tanggal"]]++; 
+               }    
+          }
+          for($i=0,$n=count($BedahSusterAsisten);$i<$n;$i++) {
+               $point[$BedahSusterAsisten[$i]["id_pgw"]][$BedahSusterAsisten[$i]["op_tanggal"]] += $BedahSusAsistenTgl[$BedahSusterAsisten[$i]["op_tanggal"]]/$BedahSusTotAsistenPgw[$BedahSusterAsisten[$i]["op_tanggal"]];
+               $ruang[$BedahSusterAsisten[$i]["id_pgw"]] = $ruangProses[STATUS_BEDAH];
+          }
+          
           $sql = " select count(id_op) as total, id_pgw, op_tanggal 
                          from klinik.klinik_perawatan_operasi a
                          join klinik.klinik_bedah_admin b on b.id_op = a.op_id ";
@@ -381,15 +442,32 @@
           
           for($i=0,$n=count($BedahAdmin);$i<$n;$i++) { 
                $point[$BedahAdmin[$i]["id_pgw"]][$BedahAdmin[$i]["op_tanggal"]] += $BedahAdmin[$i]["total"];
-               $ruang[$BedahAdmin[$i]["id_pgw"]] = $ruangProses[STATUS_OPERASI];
+               $ruang[$BedahAdmin[$i]["id_pgw"]] = $ruangProses[STATUS_BEDAH];
           }
-          
      }
-     
+       
+          //--- untuk cari point pegawai di laboratorium -----
+     if(!$_POST["ruang_proses"] || $_POST["ruang_proses"]==STATUS_LABORATORIUM) {
+          if($_POST["tgl_awal"]) $sql_lab[] = "cast(pemeriksaan_create as date) >= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_awal"]));  
+          if($_POST["tgl_akhir"]) $sql_lab[] = "cast(pemeriksaan_create as date) <= ".QuoteValue(DPE_DATE,date_db($_POST["tgl_akhir"]));
+          
+          $sql = " select pemeriksaan_id, id_dokter, cast(pemeriksaan_create as date) as pemeriksaan_tanggal
+                         from laboratorium.lab_pemeriksaan a ";
+          $sql.= " where ".implode(" and ",$sql_lab);
+          $sql .= " order by id_dokter, pemeriksaan_tanggal"; 
+          $rs = $dtaccess->Execute($sql); 
+          $LabDokter = $dtaccess->FetchAll($rs);
+          
+          for($i=0,$n=count($LabDokter);$i<$n;$i++) { 
+               $point[$LabDokter[$i]["id_dokter"]][$LabDokter[$i]["pemeriksaan_create"]]++;
+               $ruang[$LabDokter[$i]["id_dokter"]] = $ruangProses[STATUS_LABORATORIUM];
+          }
+
+     }
+
      //--- untuk cari data pegawai ----- 
      if($_POST["pgw_jenis_pegawai"]) $sql_where[] = "pgw_jenis_pegawai = ".QuoteValue(DPE_NUMERIC,$_POST["pgw_jenis_pegawai"]);
-     if($_POST["pgw_kode"]) $sql_where[] = "pgw_nip = ".QuoteValue(DPE_CHAR,$_POST["pgw_kode"]);
-     
+
      $sql = " select pgw_id, pgw_nip, pgw_nama, pgw_jenis_pegawai 
                     from hris.hris_pegawai a ";
                     
@@ -548,12 +626,6 @@ function CheckSimpan(frm) {
 <form name="frmView" method="POST" action="<?php echo $_SERVER["PHP_SELF"]; ?>" onSubmit="return CheckSimpan(this);">
 <?php if(!$_POST["btnExcel"]) { ?>
 <table align="center" border=0 cellpadding=2 cellspacing=1 width="100%" class="tblForm" id="tblSearching">
-     <!-- <tr>
-          <td width="15%" class="tablecontent">&nbsp;Kode Pegawai</td>
-          <td width="35%" class="tablecontent-odd">
-               <?php echo $view->RenderTextBox("pgw_kode","pgw_kode","15","30",$_POST["pgw_kode"],null);?>
-          </td>  
-     </tr> -->
      <tr>
           <td align="left" class="tablecontent" width="15%">&nbsp;Ruang Proses</td>
           <td width="85%" class="tablecontent-odd"> 

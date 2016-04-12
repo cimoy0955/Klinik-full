@@ -959,7 +959,7 @@ $sql = "select pgw_nama, pgw_id from klinik.klinik_operasi_admin a
      	
 		
           if($_POST["btnSave"]) {
-               if($_POST["op_status"]=='y') $status = STATUS_SELESAI;                                
+               if($_POST["op_status"]=='y') $status = $_POST["cmbNext"];                                
                elseif ($_POST["op_status"]=='n') $status = STATUS_OPERASI_JADWAL."0";
                
                
@@ -1986,7 +1986,7 @@ function isi10(nama,id,kode){
      <?php if(!$_GET["id"]) {
 	 //-- untuk combo box tahap berikutnya --//
 	 $count=0;	
-	 $optionsNext[$count] = $view->RenderOption(STATUS_SELESAI,$rawatStatus[STATUS_APOTEK],$show); $count++;
+	 $optionsNext[$count] = $view->RenderOption(STATUS_APOTEK,$rawatStatus[STATUS_APOTEK],$show); $count++;
 	 $optionsNext[$count] = $view->RenderOption(STATUS_RAWATINAP,$rawatStatus[STATUS_RAWATINAP],$show); $count++;
 	 $optionsNext[$count] = $view->RenderOption(STATUS_BEDAH,$rawatStatus[STATUS_BEDAH],$show); $count++;
 	 $optionsNext[$count] = $view->RenderOption(STATUS_PEMERIKSAAN,$rawatStatus[STATUS_PEMERIKSAAN],$show); $count++;
