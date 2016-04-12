@@ -26,7 +26,7 @@
      }
 
      $sql = "select a.* from klinik.klinik_operasi_jenis a 
-               order by a.op_jenis_id ";
+               order by a.op_jenis_nama ";
      $rs = $dtaccess->Execute($sql);
      $dataTable = $dtaccess->FetchAll($rs);
      
