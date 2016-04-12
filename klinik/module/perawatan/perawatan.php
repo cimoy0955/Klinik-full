@@ -382,7 +382,7 @@
           $i=0;
           
           while($row=$dtaccess->Fetch($rs)) {
-               $_POST["id_item"][$i] = $row["biaya_id"];
+               $_POST["id_item"][$i] = $row["id_item"];
                $_POST["item_nama"][$i] = $row["item_nama"];
                $_POST["txtDosis_1"][$i] = $row["terapi_jumlah_item"];
 	       $_POST["id_fisik"][$i] = $row["id_fisik"];
@@ -1011,6 +1011,9 @@ $_POST["id_visus_koreksi_os"] = $dataRefraksi["id_visus_koreksi_os"];
                unset($dbKey);
           }
 	  unset($dbField);
+
+       $sql = "delete from klinik.klinik_perawatan_tindakan where id_rawat = ".QuoteValue(DPE_CHAR,$_POST["rawat_id"]);
+          $dtaccess->Execute($sql); 
 	  
 	  $dbTable = "klinik.klinik_perawatan_tindakan";
 	  $dbField[0] = "rawat_tindakan_id";   // PK
