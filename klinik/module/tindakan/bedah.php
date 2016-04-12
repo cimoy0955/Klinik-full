@@ -1,4 +1,8 @@
 <?php
+/*   Catatan 13 April 2016:
+ *   Inputan petugas injeksi disimpan di tabel klinik.klinik_operasi_suster
+ *   Inputan asisten perawan disimpan di tabel klinik.klinik_perawatan_operasi_suster_asisten
+ */
      require_once("root.inc.php");
      require_once($ROOT."library/bitFunc.lib.php");
      require_once($ROOT."library/auth.cls.php");
@@ -256,7 +260,8 @@
           $_POST["item_nama_cok"][$i] = $dataTerapi[$i]["item_nama"];
           $_POST["id_item_cok"][$i] = $dataTerapi[$i]["id_item"];
           $_POST["txtDosis_cok_1"][$i] = $dataTerapi[$i]["terapi_jumlah"];
-          $_POST["txtJumlah_cok_1"][$i] = $dataTerapi[$i]["terapi_nominal_total"];
+          $_POST["txtSatuan"][$i] = currency_format($dataTerapi[$i]["terapi_nominal_satuan"]);
+          $_POST["txtJumlah_cok_1"][$i] = currency_format($dataTerapi[$i]["terapi_nominal_total"]);
      }
      $_POST["terapi_id"] = $dataTerapi["terapi_id"];
 
@@ -364,9 +369,8 @@
           $sql = "select * from klinik.klinik_perawatan_duranteop a
                     where id_op = ".QuoteValue(DPE_CHAR,$_POST["op_id"]);
           $rs = $dtaccess->Execute($sql);
-          while($row=$dtaccess->Fetch($rs)) {
-               $_POST["id_durop_komp"][$row["id_durop_komp"]] = "y";
-          }
+          $dataDuranteop = $dtaccess->Fetch($rs);
+          $_POST["id_durop_komp"] = $dataDuranteop["id_durop_komp"];
 
 
           $sql = "select * from klinik.klinik_perawatan_injeksi a
@@ -855,8 +859,8 @@ unset($dbTable,$dbField,$dbValue,$dbKey);
                   $dbValue[2] = QuoteValue(DPE_CHAR,$_POST["id_reg"]);
                   $dbValue[3] = QuoteValue(DPE_CHAR,$_POST["id_item_cok"][$i]);
                   $dbValue[4] = QuoteValue(DPE_NUMERIC,$_POST["txtDosis_cok_1"][$i]);
-                  $dbValue[5] = QuoteValue(DPE_NUMERIC,StripCurrency($_POST["txtJumlah_cok_1"][$i]));
-                  $dbValue[6] = QuoteValue(DPE_NUMERIC,(StripCurrency($_POST["txtJumlah_cok_1"][$i])*$_POST["txtDosis_cok_1"][$i]));
+                  $dbValue[5] = QuoteValue(DPE_NUMERIC,StripCurrency($_POST["txtSatuan"][$i]));
+                  $dbValue[6] = QuoteValue(DPE_NUMERIC,StripCurrency($_POST["txtJumlah_cok_1"][$i]));
                   
                   //if($row_edit["cust_id"]) $custId = $row_edit["cust_id"];
                   $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
@@ -974,14 +978,14 @@ unset($dbTable,$dbField,$dbValue,$dbKey);
 				   $dbValue[0] = QuoteValue(DPE_CHAR,$folId);
 				   $dbValue[1] = QuoteValue(DPE_CHAR,$_POST["id_reg"]);
 				   $dbValue[2] = QuoteValue(DPE_CHAR,$_POST["item_nama_cok"][$i]);
-				   $dbValue[3] = QuoteValue(DPE_NUMERIC,(StripCurrency($_POST["txtJumlah_cok_1"][$i])*$_POST["txtDosis_cok_1"][$i]));
+				   $dbValue[3] = QuoteValue(DPE_NUMERIC,StripCurrency($_POST["txtJumlah_cok_1"][$i]));
 				   $dbValue[4] = QuoteValue(DPE_CHAR,$_POST["id_item_cok"][$i]);
 				   $dbValue[5] = QuoteValue(DPE_CHAR,STATUS_BEDAH);
 				   $dbValue[6] = QuoteValue(DPE_NUMERICKEY,$_POST["id_cust_usr"]);
 				   $dbValue[7] = QuoteValue(DPE_DATE,$folWaktu);
 				   $dbValue[8] = QuoteValue(DPE_CHAR,'n');
 				   $dbValue[9] = QuoteValue(DPE_NUMERIC,$_POST["txtDosis_cok_1"][$i]);
-				   $dbValue[10] = QuoteValue(DPE_NUMERIC,StripCurrency($_POST["txtJumlah_cok_1"][$i]));
+				   $dbValue[10] = QuoteValue(DPE_NUMERIC,StripCurrency($_POST["txtSatuan"][$i]));
 
 				   //if($row_edit["cust_id"]) $custId = $row_edit["cust_id"];
 				   $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
@@ -1250,25 +1254,24 @@ unset($dbTable,$dbField,$dbValue,$dbKey);
      $sql = "select * from klinik.klinik_injeksi order by injeksi_id";
      $dataInjeksi = $dtaccess->FetchAll($sql);
 
+      //-- untuk combo box tahap berikutnya --//
+      $count=0;
+     $optionsNext[$count] = $view->RenderOption(STATUS_PEMERIKSAAN,$rawatStatus[STATUS_PEMERIKSAAN],$show); $count++;
+     $optionsNext[$count] = $view->RenderOption(STATUS_PREOP,$rawatStatus[STATUS_PREOP],$show); $count++;
+     $optionsNext[$count] = $view->RenderOption(STATUS_RAWATINAP,$rawatStatus[STATUS_RAWATINAP],$show); $count++;
+     $optionsNext[$count] = $view->RenderOption(STATUS_LABORATORIUM,$rawatStatus[STATUS_LABORATORIUM],$show); $count++;
+     $optionsNext[$count] = $view->RenderOption(STATUS_APOTEK,$rawatStatus[STATUS_APOTEK]." & ".$rawatStatus[STATUS_SELESAI],$show); $count++;
 
      // --- nyari datanya komplikasi durante ---
      $sql = "select durop_komp_id, durop_komp_nama from klinik.klinik_duranteop_komplikasi";
      $dataDurop = $dtaccess->FetchAll($sql);
-
-      //-- untuk combo box tahap berikutnya --//
-      $count=0;
-    	$optionsNext[$count] = $view->RenderOption(STATUS_PEMERIKSAAN,$rawatStatus[STATUS_PEMERIKSAAN],$show); $count++;
-    	$optionsNext[$count] = $view->RenderOption(STATUS_PREOP,$rawatStatus[STATUS_PREOP],$show); $count++;
-    	$optionsNext[$count] = $view->RenderOption(STATUS_RAWATINAP,$rawatStatus[STATUS_RAWATINAP],$show); $count++;
-     $optionsNext[$count] = $view->RenderOption(STATUS_LABORATORIUM,$rawatStatus[STATUS_LABORATORIUM],$show); $count++;
-	$optionsNext[$count] = $view->RenderOption(STATUS_APOTEK,$rawatStatus[STATUS_APOTEK]." & ".$rawatStatus[STATUS_SELESAI],$show); $count++;
-
 	//-- user request 28 Mar 14 --//
 	//-- combo box for durante OP --//
      $optDurop[] = $view->RenderOption("--","--",$show);
 	for($i=0,$n=count($dataDurop);$i<$n;$i++){
-	  if($_POST["id_durop_komp"]) $show = ($_POST["id_durop_komp"]==$dataDurop[$i]["durop_komp_id"])?"selected":"";
-	  elseif(!$_POST["id_durop_komp"] && $dataDurop[$i]["durop_komp_id"]==5) $show = "selected";
+	  /*if($_POST["id_durop_komp"]) 
+	  elseif(!$_POST["id_durop_komp"] && $dataDurop[$i]["durop_komp_id"]==5) $show = "selected";*/
+       $show = ($_POST["id_durop_komp"]==$dataDurop[$i]["durop_komp_id"])?"selected":"";
 	  $optDurop[] = $view->RenderOption($dataDurop[$i]["durop_komp_id"],$dataDurop[$i]["durop_komp_nama"],$show);
 	  unset($show);
 	}
@@ -1297,6 +1300,11 @@ function ProsesPerawatan(id,status) {
 	timer();
 }
 
+function hitungNominal(jml,el){
+     var satuan = stripCurrency(document.getElementById('txtSatuan_'+el).value) * 1;
+     jml = jml * 1;
+     document.getElementById('txtJumlah_cok_1_'+el).value = formatCurrency(jml * satuan);
+}
 
 function CheckData(frm) {
 
@@ -1323,7 +1331,7 @@ function Tambah(){
           'tr', { class  : 'tablecontent-odd',id:'tr_terapi_cok_'+akhir+'' },
                 ['td', { align: 'left', style: 'color: black;' },
                     [
-                         'input', {type:'text', value:'', size:20, maxLength:100, name:'item_nama_cok[]', id:'item_nama_cok_'+akhir},[],
+                         'input', {type:'text', value:'', size:30, maxLength:100, name:'item_nama_cok[]', id:'item_nama_cok_'+akhir},[],
                          'a',{ href:'<?php echo $terapiPage;?>&el='+akhir+'&TB_iframe=true&height=400&width=450&modal=true',class:'thickbox', title:'Cari Obat'},
                          [
                               'img', {src:'<?php echo $APLICATION_ROOT?>images/bd_insrow.png', hspace:2, height:20, width:18, align:'middle', style:'cursor:pointer', border:0}
@@ -1332,9 +1340,13 @@ function Tambah(){
                     ],
                'td', { align: 'center', style: 'color: black;' },
                     [
+                         'input', {type:'text', value:'', size:20, maxLength:100, name:'txtSatuan[]', id:'txtSatuan_'+akhir}
+                    ],
+               'td', { align: 'center', style: 'color: black;' },
+                    [
                          'input', {type:'text', value:'', size:3, maxLength:25, name:'txtDosis_cok_1[]', id:'txtDosis_cok_1_'+akhir}
                     ],
-              'td',  { align: 'center', style: 'color: black;' },
+              'td',  { align: 'left', style: 'color: black;' },
                       [
                  'input', {type:'text', value:'', size:20, maxLength:100, name:'txtJumlah_cok_1[]', id:'txtJumlah_cok_1_'+akhir},[],
                       ],
@@ -1346,9 +1358,13 @@ function Tambah(){
      );
 
      $('#btnDel1_cok_'+akhir+'').click( function() { ItemDelete(akhir) } );
+     $('#txtDosis_cok_1_'+akhir+'').keyup( function() { hitungNominal(this.value, akhir) });
      $('#txtDosis_cok_1_'+akhir+'').css("text-align","right");
      $('#txtJumlah_cok_1_'+akhir+'').css("text-align","right");
+     $('#txtSatuan_'+akhir+'').css("text-align","right");
      document.getElementById('item_nama_cok_'+akhir).readOnly = true;
+     document.getElementById('txtSatuan_'+akhir).readOnly = true;
+     document.getElementById('txtJumlah_cok_1_'+akhir).readOnly = true;
 
      document.getElementById('hid_tot_terapi').value = akhir;
      tb_init('a.thickbox');
@@ -1498,7 +1514,7 @@ function AsistenSusterTambah(){
           'tr', { class  : 'tablecontent-odd',id:'tr_asisten_suster_'+akhir+'' },
                 ['td', { align: 'left', style: 'color: black;' },
                     [
-                         'input', {type:'text', value:'', size:30, maxLength:100, name:'op_asisten_suster_terapi_nama[]', id:'op_asisten_suster_terapi_nama_'+akhir},[],
+                         'input', {type:'text', value:'', size:40, maxLength:100, name:'op_asisten_suster_terapi_nama[]', id:'op_asisten_suster_terapi_nama_'+akhir},[],
                          'a',{ href:'<?php echo $asistenSusterPage;?>&el='+akhir+'&TB_iframe=true&height=400&width=450&modal=true',class:'thickbox', title:'Cari Asisten Suster'},
                          [
                               'img', {src:'<?php echo $APLICATION_ROOT?>images/bd_insrow.png', hspace:2, height:20, width:18, align:'middle', style:'cursor:pointer', border:0}
@@ -2128,19 +2144,16 @@ function isi11(nama,id,kode){
                               <tr id="tr_suster_<?php echo $i;?>">
                                    <td align="left" class="tablecontent-odd" width="70%">
                                         <?php echo $view->RenderTextBox("op_suster_terapi_nama[]","op_suster_terapi_nama_".$i,"30","100",$_POST["op_suster_terapi_nama"][$i],"inputField", "readonly",false);?>
-								<?php if($edit) { ?>
-									<a href="<?php echo $susterPage;?>&el=<?php echo $i;?>&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Cari Suster"><img src="<?php echo($APLICATION_ROOT);?>images/bd_insrow.png" border="0" align="middle" width="18" height="20" style="cursor:pointer" title="Cari Suster" alt="Cari Suster" /></a>
-								<?php } ?>
+								<a href="<?php echo $susterPage;?>&el=<?php echo $i;?>&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Cari Suster"><img src="<?php echo($APLICATION_ROOT);?>images/bd_insrow.png" border="0" align="middle" width="18" height="20" style="cursor:pointer" title="Cari Suster" alt="Cari Suster" /></a>
                                         <input type="hidden" id="id_suster_terapi_<?php echo $i;?>" name="id_suster_terapi[]" value="<?php echo $_POST["id_suster_terapi"][$i];?>"/>
                                    </td>
                                    <td align="left" class="tablecontent-odd" width="30%">
-								<?php if($edit) { ?>
-									<?php if($i==0) { ?>
-									<input class="button" name="btnAdd" id="btnAdd" type="button" value="Tambah" onClick="SusterTambah();">
-									<?php } else { ?>
-									<input class="button" name="btnDel[<?php echo $i;?>]" id="btnDel_<?php echo $i;?>" type="button" value="Hapus" onClick="SusterDelete(<?php echo $i;?>);">
+								<?php if($i==0) { ?>
+								<input class="button" name="btnAdd" id="btnAdd" type="button" value="Tambah" onClick="SusterTambah();">
+								<?php } else { ?>
+								<input class="button" name="btnDel[<?php echo $i;?>]" id="btnDel_<?php echo $i;?>" type="button" value="Hapus" onClick="SusterDelete(<?php echo $i;?>);">
 									<?php } ?>
-								<?php } ?>
+
                                         <input name="suster_tot" id="suster_tot" type="hidden" value="<?php echo $n;?>">
                                    </td>
                               </tr>
@@ -2167,19 +2180,19 @@ function isi11(nama,id,kode){
      <legend><strong>Data Laporan Operasi</strong></legend>
      <table width="100%" border="1" cellpadding="4" cellspacing="1">
           <tr>
-               <td align="left" width="20%" class="tablecontent">Dokter</td>
-               <td align="left" class="tablecontent-odd" width="30%">
+               <td align="left" width="15%" class="tablecontent">Dokter</td>
+               <td align="left" class="tablecontent-odd" width="25%">
                     <?php echo $view->RenderTextBox("op_dokter_nama","op_dokter_nama","20","100",$_POST["op_dokter_nama"],"inputField", "readonly",false);?>
                     <a href="<?php echo $dokterPage;?>TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Cari Dokter"><img src="<?php echo($APLICATION_ROOT);?>images/bd_insrow.png" border="0" align="middle" width="18" height="20" style="cursor:pointer" title="Cari Dokter" alt="Cari Dokter" /></a>
                     <input type="hidden" id="id_dokter" name="id_dokter" value="<?php echo $_POST["id_dokter"];?>"/>
                </td>
-               <td width="20%" class="tablecontent" align="left">Asisten Perawat</td>
-               <td align="left" class="tablecontent-odd" width="30%" colspan=6>
+               <td width="10%" class="tablecontent" align="left">Asisten Perawat</td>
+               <td align="left" class="tablecontent-odd" width="40%" colspan=6>
 				<table width="100%" border="1" cellpadding="1" cellspacing="1" id="tb_asisten_suster">
                          <?php if(!$_POST["op_asisten_suster_terapi_nama"]) { ?>
 					<tr id="tr_asisten_suster_0">
 						<td align="left" class="tablecontent-odd" width="75%">
-							<?php echo $view->RenderTextBox("op_asisten_suster_terapi_nama[]","op_asisten_suster_terapi_nama_0","30","100",$_POST["op_asisten_suster_terapi_nama"][0],"inputField", "readonly",false);?>
+							<?php echo $view->RenderTextBox("op_asisten_suster_terapi_nama[]","op_asisten_suster_terapi_nama_0","40","100",$_POST["op_asisten_suster_terapi_nama"][0],"inputField", "readonly",false);?>
 							<a href="<?php echo $asistenSusterPage;?>&el=0&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Cari Asisten Suster"><img src="<?php echo($APLICATION_ROOT);?>images/bd_insrow.png" border="0" align="middle" width="18" height="20" style="cursor:pointer" title="Cari Suster" alt="Cari Asisten Suster" /></a>
 							<input type="hidden" id="id_asisten_suster_terapi_0" name="id_asisten_suster_terapi[]" value="<?php echo $_POST["id_asisten_suster_terapi"];?>"/>
 			               </td>
@@ -2191,20 +2204,17 @@ function isi11(nama,id,kode){
                     <?php } else  { ?>
                          <?php for($i=0,$n=count($_POST["id_asisten_suster_terapi"]);$i<$n;$i++) { ?>
                               <tr id="tr_asisten_suster_<?php echo $i;?>">
-                                   <td align="left" class="tablecontent-odd" width="60%">
-                                        <?php echo $view->RenderTextBox("op_asisten_suster_terapi_nama[]","op_asisten_suster_terapi_nama_".$i,"30","100",$_POST["op_asisten_suster_terapi_nama"][$i],"inputField", "readonly",false);?>
-								<?php if($edit) { ?>
-									<a href="<?php echo $asistenSusterPage;?>&el=<?php echo $i;?>&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Cari Asisten Suster"><img src="<?php echo($APLICATION_ROOT);?>images/bd_insrow.png" border="0" align="middle" width="18" height="20" style="cursor:pointer" title="Cari Asisten Suster" alt="Cari Asisten Suster" /></a>
-								<?php } ?>
+                                   <td align="left" class="tablecontent-odd" width="75%">
+                                        <?php echo $view->RenderTextBox("op_asisten_suster_terapi_nama[]","op_asisten_suster_terapi_nama_".$i,"40","100",$_POST["op_asisten_suster_terapi_nama"][$i],"inputField", "readonly",false);?>
+								
+								<a href="<?php echo $asistenSusterPage;?>&el=<?php echo $i;?>&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Cari Asisten Suster"><img src="<?php echo($APLICATION_ROOT);?>images/bd_insrow.png" border="0" align="middle" width="18" height="20" style="cursor:pointer" title="Cari Asisten Suster" alt="Cari Asisten Suster" /></a>
                                         <input type="hidden" id="id_asisten_suster_terapi_<?php echo $i;?>" name="id_asisten_suster_terapi[]" value="<?php echo $_POST["id_asisten_suster_terapi"][$i];?>"/>
                                    </td>
-                                   <td align="left" class="tablecontent-odd" width="40%">
-								<?php if($edit) { ?>
-									<?php if($i==0) { ?>
-									<input class="button" name="btnAdd" id="btnAdd" type="button" value="Tambah" onClick="AsistenSusterTambah();">
-									<?php } else { ?>
-									<input class="button" name="btnDel[<?php echo $i;?>]" id="btnDel_<?php echo $i;?>" type="button" value="Hapus" onClick="AsistenSusterDelete(<?php echo $i;?>);">
-									<?php } ?>
+                                   <td align="left" class="tablecontent-odd" width="25%">
+								<?php if($i==0) { ?>
+								<input class="button" name="btnAdd" id="btnAdd" type="button" value="Tambah" onClick="AsistenSusterTambah();">
+								<?php } else { ?>
+								<input class="button" name="btnDel[<?php echo $i;?>]" id="btnDel_<?php echo $i;?>" type="button" value="Hapus" onClick="AsistenSusterDelete(<?php echo $i;?>);">
 								<?php } ?>
                                         <input name="asisten_suster_tot" id="asisten_suster_tot" type="hidden" value="<?php echo $n;?>">
                                    </td>
@@ -2216,8 +2226,8 @@ function isi11(nama,id,kode){
                </td>
           </tr>
           <tr>
-               <td width="20%"  class="tablecontent" align="left">Administrasi</td>
-               <td align="left" class="tablecontent-odd" width="80%"  colspan=3>
+               <td width="15%"  class="tablecontent" align="left">Administrasi</td>
+               <td align="left" class="tablecontent-odd" width="85%"  colspan=3>
                     <table width="100%" border="0" cellpadding="1" cellspacing="1" id="tb_admin">
                          <tr id="tr_admin_0">
                               <td align="left" class="tablecontent-odd" width="40%">
@@ -2407,21 +2417,23 @@ function isi11(nama,id,kode){
      <legend><strong>Terapi</strong></legend>
      <table width="100%" border="1" cellpadding="4" cellspacing="1" id="tb_terapi_cok">
           <tr class="subheader">
-               <td width="30%" align="center">Nama Obat</td>
-               <td width="30%" align="center">Jumlah</td>
-               <td width="30%" align="center">Nominal</td>
+               <td width="25%" align="center">Nama Obat</td>
+               <td width="25%" align="center">Harga Satuan</td>
+               <td width="15%" align="center">Jumlah</td>
+               <td width="25%" align="center">Nominal</td>
                <td width="10%" align="center">&nbsp;</td>
           </tr>
           <?php if(!$_POST["item_nama_cok"]) { ?>
                <tr id="tr_terapi_cok_0">
                     <td align="left" class="tablecontent-odd" width="50%">
-                         <?php echo $view->RenderTextBox("item_nama_cok[0]","item_nama_cok_0","20","100",$_POST["item_nama_cok"][0],"inputField", "readonly",false);?>
+                         <?php echo $view->RenderTextBox("item_nama_cok[]","item_nama_cok_0","30","100",$_POST["item_nama_cok"][],"inputField", "readonly",false);?>
                          <a href="<?php echo $terapiPage;?>&el=0&jenis=<?php echo $dataPasien["reg_jenis_pasien"];?>&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Cari Obat"><img src="<?php echo($APLICATION_ROOT);?>images/bd_insrow.png" border="0" align="middle" width="18" height="20" style="cursor:pointer" /></a>
                          <input type="hidden" name="id_item_cok[]" id="id_item_cok_0" value="<?php echo $_POST["id_item"]?>" />
                     </td>
-                    <td align="center" class="tablecontent-odd"><!--<span id="sp_item_0">--><?php echo $view->RenderTextBox("txtDosis_cok_1[0]","txtDosis_cok_1_0","3","25",$_POST["txtDosis_cok_1"][0],"curedit", "",true);?><!--</span>--></td>
+                    <td align="center" class="tablecontent-odd"><?php echo $view->RenderTextBox("txtSatuan[]","txtSatuan_0","20","100",$_POST["txtSatuan"][],"curedit", "readonly",true);?></td>
+                    <td align="center" class="tablecontent-odd"><?php echo $view->RenderTextBox("txtDosis_cok_1[]","txtDosis_cok_1_0","3","25",$_POST["txtDosis_cok_1"][],"curedit", "",true,"onkeyup=\"hitungNominal(this.value,".$i.");\"");?></td>
                     <td align="center" width="70%" class="tablecontent-odd">
-                             <?php echo $view->RenderTextBox("txtJumlah_cok_1[0]","txtJumlah_cok_1_0","20","100",$_POST["txtJumlah_cok_1"][0],"curedit", "",false);?>
+                             <?php echo $view->RenderTextBox("txtJumlah_cok_1[]","txtJumlah_cok_1_0","20","100",$_POST["txtJumlah_cok_1"][],"curedit", "",false);?>
                         </td>
                     <td align="center" class="tablecontent-odd">
                          <input class="button" name="btnAdd_cok" id="btnAdd_cok" type="button" value="Tambah" onClick="Tambah();">
@@ -2434,13 +2446,14 @@ function isi11(nama,id,kode){
                          <td align="left" class="tablecontent-odd" width="50%">
                               <?php echo $view->RenderTextBox("item_nama_cok[]","item_nama_cok_".$i,"30","100",$_POST["item_nama_cok"][$i],"inputField", "readonly",false);?>
                               <a href="<?php echo $terapiPage;?>&el=<?php echo $i;?>&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Cari Obat"><img src="<?php echo($APLICATION_ROOT);?>images/bd_insrow.png" border="0" align="middle" width="18" height="20" style="cursor:pointer" title="Cari Obat" alt="Cari Obat" /></a>
-                              <input type="hidden" id="id_item_cok_<?php echo $i;?>" name="id_item_cok[]" value="<?php echo $_POST["id_item_cok"][$i];?>"/>
+                              <input type="hidden" id="id_item_cok_<?php echo $i;?>" name="id_item_cok[<?php echo $i;?>]" value="<?php echo $_POST["id_item_cok"][$i];?>"/>
                          </td>
-                         <td align="center" class="tablecontent-odd"><?php echo $view->RenderTextBox("txtDosis_cok_1[0]","txtDosis_cok_1_0","3","25",$_POST["txtDosis_cok_1"][0],"curedit", "",true);?><!--<span id="sp_item_<?php /*echo $i;*/?>"><?php /*echo GetDosis($_POST["id_fisik"][$i],$i,$_POST["id_dosis"][$i]);*/?></span>--></td>
+                         <td align="center" class="tablecontent-odd"><?php echo $view->RenderTextBox("txtSatuan[$i]","txtSatuan_".$i,"20","100",$_POST["txtSatuan"][$i],"curedit", "readonly",true);?></td>
+                         <td align="center" class="tablecontent-odd"><?php echo $view->RenderTextBox("txtDosis_cok_1[$i]","txtDosis_cok_1_".$i,"3","25",$_POST["txtDosis_cok_1"][$i],"curedit", null,true,"onkeyup=\"hitungNominal(this.value,".$i.");\"");?></td>
                          <td align="left" width="70%" class="tablecontent-odd">
-                             <?php echo $view->RenderTextBox("txtJumlah_cok_1[]","txtJumlah_cok_1_".$i,"20","100",$_POST["txtJumlah_cok_1"][$i],"curedit", "",false);?>
+                             <?php echo $view->RenderTextBox("txtJumlah_cok_1[$i]","txtJumlah_cok_1_".$i,"20","100",$_POST["txtJumlah_cok_1"][$i],"curedit", "readonly",false);?>
                         </td>
-                         <td align="left" class="tablecontent-odd" width="30%">
+                         <td align="center" class="tablecontent-odd" width="30%">
                               <?php if($i==0) { ?>
                               <input class="button" name="btnAdd_cok" id="btnAdd_cok" type="button" value="Tambah" onClick="Tambah();">
                               <?php } else { ?>
