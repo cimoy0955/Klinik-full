@@ -114,8 +114,8 @@ function GetData($in_nama){
 <?php $plx->Run(); ?>
 
 function sendValue(id,nama,harga) {
-	self.parent.document.getElementById('txtJumlah_cok_1_<?php echo $_GET["el"];?>').value = harga;	
-	self.parent.document.getElementById('txtSatuan_<?php echo $_GET["el"];?>').value = harga;	
+	self.parent.document.getElementById('txtJumlah_cok_1_<?php echo $_GET["el"];?>').value = formatCurrency(harga);	
+	self.parent.document.getElementById('txtSatuan_<?php echo $_GET["el"];?>').value = formatCurrency(harga);	
 	self.parent.document.getElementById('item_nama_cok_<?php echo $_GET["el"];?>').value = nama;
 	self.parent.document.getElementById('id_item_cok_<?php echo $_GET["el"];?>').value = id; 
 	self.parent.document.getElementById('txtDosis_cok_1_<?php echo $_GET["el"];?>').value = 1;	
