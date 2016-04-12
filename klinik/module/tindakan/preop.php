@@ -280,9 +280,9 @@
                               where a.id_reg = ".QuoteValue(DPE_CHAR,$dataRegB4["reg_id"]); 
                     $dataDiagnostik= $dtaccess->Fetch($sql);
                }else{
-		    $sql = "select diag_k1_od, diag_k2_od, diag_k1_os, diag_k2_os from klinik.klinik_refraksi where id_reg=".QuoteValue(DPE_CHAR,$_POST["reg_id"]);
-		    $dataKeratometriRefraksi = $dtaccess->Fetch($sql);
-	       }
+     		    $sql = "select diag_k1_od, diag_k2_od, diag_k1_os, diag_k2_os from klinik.klinik_refraksi where id_reg=".QuoteValue(DPE_CHAR,$_POST["reg_id"]);
+     		    $dataKeratometriRefraksi = $dtaccess->Fetch($sql);
+	          }
           }
           
 		$sql = "select * from klinik.klinik_preop where id_reg = ".QuoteValue(DPE_CHAR,$_POST["id_reg"]);
@@ -304,19 +304,78 @@
 		$_POST["preop_tonometri_scale_os"] = ($dataPreOp["preop_tonometri_scale_os"]) ? $dataPreOp["preop_tonometri_scale_os"]:$dataPemeriksaan["rawat_tonometri_scale_os"];
 		$_POST["preop_tonometri_weight_os"] = ($dataPreOp["preop_tonometri_weight_os"]) ? $dataPreOp["preop_tonometri_weight_os"]:$dataPemeriksaan["rawat_tonometri_weight_os"];
 		$_POST["preop_tonometri_pressure_os"] = ($dataPreOp["preop_tonometri_pressure_os"]) ? $dataPreOp["preop_tonometri_pressure_os"]:$dataPemeriksaan["rawat_tonometri_pressure_os"];
-		$_POST["preop_k1_od"] = ($dataPreOp["preop_k1_od"]) ? $dataPreOp["preop_k1_od"]:$dataPemeriksaan["rawat_k1_od"];
-		$_POST["preop_k1_os"] = ($dataPreOp["preop_k1_os"]) ? $dataPreOp["preop_k1_os"]:$dataPemeriksaan["rawat_k1_os"];
-		$_POST["preop_k2_od"] = ($dataPreOp["preop_k2_od"]) ? $dataPreOp["preop_k2_od"]:$dataPemeriksaan["rawat_k2_od"];
-		$_POST["preop_k2_os"] = ($dataPreOp["preop_k2_os"]) ? $dataPreOp["preop_k2_os"]:$dataPemeriksaan["rawat_k2_os"];
+          
+          if ($dataPemeriksaan["rawat_k1_od"]) {
+               $_POST["preop_k1_od"] =  $dataPemeriksaan["rawat_k1_od"];
+          } elseif ($dataDiagnostik["diag_k1_od"]) {
+               $_POST["preop_k1_od"] =  $dataDiagnostik["diag_k1_od"];
+          } elseif ($dataKeratometriRefraksi["diag_k1_od"]) {
+               $_POST["preop_k1_od"] =  $dataKeratometriRefraksi["diag_k1_od"];
+          } elseif($dataPreOp["preop_k1_od"]){
+               $_POST["preop_k1_od"] =  $dataPreOp["preop_k1_od"];
+          }
+
+          if ($dataPemeriksaan["rawat_k1_os"]) {
+               $_POST["preop_k1_os"] =  $dataPemeriksaan["rawat_k1_os"];
+          } elseif ($dataDiagnostik["diag_k1_os"]) {
+               $_POST["preop_k1_os"] =  $dataDiagnostik["diag_k1_os"];
+          } elseif ($dataKeratometriRefraksi["diag_k1_os"]) {
+               $_POST["preop_k1_os"] =  $dataKeratometriRefraksi["diag_k1_os"];
+          } elseif($dataPreOp["preop_k1_os"]){
+               $_POST["preop_k1_os"] =  $dataPreOp["preop_k1_os"];
+          }
+
+          elseif ($dataPemeriksaan["rawat_k2_od"]) {
+               $_POST["preop_k2_od"] =  $dataPemeriksaan["rawat_k2_od"];
+          } elseif ($dataDiagnostik["diag_k2_od"]) {
+               $_POST["preop_k2_od"] =  $dataDiagnostik["diag_k2_od"];
+          } elseif ($dataKeratometriRefraksi["diag_k2_od"]) {
+               $_POST["preop_k2_od"] =  $dataKeratometriRefraksi["diag_k2_od"];
+          } elseif($dataPreOp["preop_k2_od"]){
+               $_POST["preop_k2_od"] =  $dataPreOp["preop_k2_od"];
+          }
+
+          elseif ($dataPemeriksaan["rawat_k2_os"]) {
+               $_POST["preop_k2_os"] =  $dataPemeriksaan["rawat_k2_os"];
+          } elseif ($dataDiagnostik["diag_k2_os"]) {
+               $_POST["preop_k2_os"] =  $dataDiagnostik["diag_k2_os"];
+          } elseif ($dataKeratometriRefraksi["diag_k2_os"]) {
+               $_POST["preop_k2_os"] =  $dataKeratometriRefraksi["diag_k2_os"];
+          } elseif($dataPreOp["preop_k2_os"]){
+               $_POST["preop_k2_os"] =  $dataPreOp["preop_k2_os"];
+          } 
+
 		$_POST["preop_acial_od"] = ($dataPreOp["preop_acial_od"]) ? $dataPreOp["preop_acial_od"]:$dataPemeriksaan["rawat_acial_od"];
 		$_POST["preop_acial_os"] = ($dataPreOp["preop_acial_os"]) ? $dataPreOp["preop_acial_os"]:$dataPemeriksaan["rawat_acial_os"];
 		$_POST["preop_iol_od"] = ($dataPreOp["preop_iol_od"]) ? $dataPreOp["preop_iol_od"]:$dataPemeriksaan["rawat_iol_od"];
 		$_POST["preop_iol_os"] = ($dataPreOp["preop_iol_os"]) ? $dataPreOp["preop_iol_os"]:$dataPemeriksaan["rawat_iol_os"];
-		$_POST["preop_av_constant"] = ($dataPreOp["preop_av_constant"]) ? $dataPreOp["preop_av_constant"]:$dataPemeriksaan["rawat_av_constant"];
+
+          if ($dataPemeriksaan["rawat_av_constant"]) {
+               $_POST["preop_av_constant"] =  $dataPemeriksaan["rawat_av_constant"];
+          }elseif ($dataDiagnostik["diag_av_constant"]) {
+               $_POST["preop_av_constant"] = $dataDiagnostik["diag_av_constant"];
+          }elseif($dataPreOp["preop_av_constant"]){
+               $_POST["preop_av_constant"] =  $dataPreOp["preop_av_constant"];
+          }
+
 		$_POST["preop_deviasi"] = ($dataPreOp["preop_deviasi"]) ? $dataPreOp["preop_deviasi"]:$dataPemeriksaan["rawat_deviasi"];
-		$_POST["preop_rumus"] = ($dataPreOp["preop_rumus"]) ? $dataPreOp["preop_rumus"]:$dataPemeriksaan["rawat_rumus"];
-		$_POST["preop_operasi_paket"] = ($dataPreOp["preop_operasi_paket"]) ? $dataPreOp["preop_operasi_paket"]:$dataPemeriksaan["rawat_operasi_paket"];
+
+          if ($dataPemeriksaan["rawat_rumus"]) {
+               $_POST["preop_rumus"] =  $dataPemeriksaan["rawat_rumus"];
+          }elseif ($dataDiagnostik["diag_rumus"]) {
+               $_POST["preop_rumus"] = $dataDiagnostik["diag_rumus"];
+          }elseif($dataPreOp["preop_rumus"]){
+               $_POST["preop_rumus"] =  $dataPreOp["preop_rumus"];
+          }
+
+          $_POST["preop_operasi_paket"] = ($dataPreOp["preop_operasi_paket"]) ? $dataPreOp["preop_operasi_paket"]:$dataPemeriksaan["rawat_operasi_paket"];
 		$_POST["preop_operasi_jenis"] = ($dataPreOp["preop_operasi_jenis"]) ? $dataPreOp["preop_operasi_jenis"]:$dataPemeriksaan["rawat_operasi_jenis"];
+          $_POST["preop_regulasi"] = $dataPreOp["preop_regulasi"];
+          $_POST["preop_regulasi_berhasil"] = $dataPreOp["preop_regulasi_berhasil"];
+          $_POST["preop_regulasi_gula_obat"] = $dataPreOp["preop_regulasi_gula_obat"];
+          $_POST["preop_regulasi_gula_hasil"] = $dataPreOp["preop_regulasi_gula_hasil"];
+          $_POST["preop_regulasi_tono_obat"] = $dataPreOp["preop_regulasi_tono_obat"];
+          $_POST["preop_regulasi_tono_hasil"] = $dataPreOp["preop_regulasi_tono_hasil"];
 		
 		if($dataPreOp) {
 			
@@ -387,13 +446,12 @@ where id_app = ".QuoteValue(DPE_NUMERIC,'3');
 			$_POST["preop_suster_nama"][4] = $row["perawat5"];
 		}	
     }
-          $_POST["preop_rumus"] = $dataDiagnostik["diag_rumus"];
-          $_POST["preop_av_constant"] = $dataDiagnostik["diag_av_constant"];
+          
 	}
 
 	// ----- update data ----- //
 	if ($_POST["btnSave"] || $_POST["btnUpdate"]) {
-		if(!$_POST["preop_regulasi_berhasil"]) $_POST["preop_regulasi_berhasil"] = "n";
+		if(!$_POST["preop_regulasi_berhasil"]) $_POST["preop_regulasi_berhasil"] = "";
 		if(!$_POST["preop_regulasi"]) $_POST["preop_regulasi"] = "n";
 		
 		if($_POST["btnSave"]) {
@@ -451,6 +509,17 @@ where id_app = ".QuoteValue(DPE_NUMERIC,'3');
           $dbField[46] = "preop_rumus";
           $dbField[47] = "preop_operasi_paket";
           $dbField[48] = "preop_operasi_jenis";
+          $dbField[49] = "preop_ecg";
+          $dbField[50] = "preop_lab_gula_darah_awal";
+          $dbField[51] = "preop_lab_gula_darah_regulasi";
+          $dbField[52] = "preop_lab_nadi_awal";
+          $dbField[53] = "preop_lab_nadi_regulasi";
+          $dbField[54] = "preop_lab_nafas_awal";
+          $dbField[55] = "preop_lab_nafas_regulasi";
+          $dbField[56] = "preop_lab_tensi_awal";
+          $dbField[57] = "preop_lab_tensi_regulasi";
+          $dbField[58] = "preop_mata_lokal_awal";
+          $dbField[59] = "preop_mata_lokal_regulasi";
           
           if(!$_POST["preop_id"]) $_POST["preop_id"] = $dtaccess->GetTransID();
           $dbValue[0] = QuoteValue(DPE_CHAR,$_POST["preop_id"]);   // PK
@@ -502,6 +571,17 @@ where id_app = ".QuoteValue(DPE_NUMERIC,'3');
           $dbValue[46] = QuoteValue(DPE_CHARKEY,$_POST["preop_rumus"]);
           $dbValue[47] = QuoteValue(DPE_CHARKEY,$_POST["preop_operasi_paket"]);
           $dbValue[48] = QuoteValue(DPE_CHARKEY,$_POST["preop_operasi_jenis"]);
+          $dbValue[49] = QuoteValue(DPE_CHAR,$_POST["preop_ecg"]);
+          $dbValue[50] = QuoteValue(DPE_CHAR,$_POST["preop_lab_gula_darah_awal"]);
+          $dbValue[51] = QuoteValue(DPE_CHAR,$_POST["preop_lab_gula_darah_regulasi"]);
+          $dbValue[52] = QuoteValue(DPE_CHAR,$_POST["preop_lab_nadi_awal"]);
+          $dbValue[53] = QuoteValue(DPE_CHAR,$_POST["preop_lab_nadi_regulasi"]);
+          $dbValue[54] = QuoteValue(DPE_CHAR,$_POST["preop_lab_nafas_awal"]);
+          $dbValue[55] = QuoteValue(DPE_CHAR,$_POST["preop_lab_nafas_regulasi"]);
+          $dbValue[56] = QuoteValue(DPE_CHAR,$_POST["preop_lab_tensi_awal"]);
+          $dbValue[57] = QuoteValue(DPE_CHAR,$_POST["preop_lab_tensi_regulasi"]);
+          $dbValue[58] = QuoteValue(DPE_CHAR,$_POST["preop_mata_lokal_awal"]);
+          $dbValue[59] = QuoteValue(DPE_CHAR,$_POST["preop_mata_lokal_regulasi"]);
 
           $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
           $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey);
@@ -1348,13 +1428,13 @@ function SusterDelete(akhir){
           </tr>	
           <tr>
                <td align="left" class="tablecontent">K1</td>
-               <td align="left" class="tablecontent-odd"><input type="text" name="preop_k1_od" size="30" maxlenght="100" value="<?php echo ($dataDiagnostik["diag_k1_od"])?$dataDiagnostik["diag_k1_od"]:$dataKeratometriRefraksi["diag_k1_od"];?>"></td>
-               <td align="left" class="tablecontent-odd"><input type="text" name="preop_k1_os" size="30" maxlenght="100" value="<?php echo ($dataDiagnostik["diag_k1_od"])?$dataDiagnostik["diag_k1_od"]:$dataKeratometriRefraksi["diag_k1_os"];?>"></td>
+               <td align="left" class="tablecontent-odd"><input type="text" name="preop_k1_od" size="30" maxlenght="100" value="<?php echo $_POST["preop_k1_od"];?>"></td>
+               <td align="left" class="tablecontent-odd"><input type="text" name="preop_k1_os" size="30" maxlenght="100" value="<?php echo $_POST["preop_k1_os"];?>"></td>
           </tr>
           <tr>
                <td align="left" class="tablecontent">K2</td>
-               <td align="left" class="tablecontent-odd"><input type="text" name="preop_k2_od" size="30" maxlenght="100" value="<?php echo ($dataDiagnostik["diag_k1_od"])?$dataDiagnostik["diag_k1_od"]:$dataKeratometriRefraksi["diag_k2_od"];?>"></td>
-               <td align="left" class="tablecontent-odd"><input type="text" name="preop_k2_os" size="30" maxlenght="100" value="<?php echo ($dataDiagnostik["diag_k1_od"])?$dataDiagnostik["diag_k1_od"]:$dataKeratometriRefraksi["diag_k2_os"];?>"></td>
+               <td align="left" class="tablecontent-odd"><input type="text" name="preop_k2_od" size="30" maxlenght="100" value="<?php echo $_POST["preop_k2_od"];?>"></td>
+               <td align="left" class="tablecontent-odd"><input type="text" name="preop_k2_os" size="30" maxlenght="100" value="<?php echo $_POST["preop_k2_os"];?>"></td>
           </tr>
 	</table>
      </fieldset>
@@ -1370,13 +1450,13 @@ function SusterDelete(akhir){
           </tr>	
           <tr>
                <td align="left" class="tablecontent">Acial Length</td>
-               <td align="left" class="tablecontent-odd"><input type="text" name="preop_acial_od" size="30" maxlenght="100" value="<?php echo $dataDiagnostik["diag_acial_od"];?>"></td>
-               <td align="left" class="tablecontent-odd"><input type="text" name="preop_acial_os" size="30" maxlenght="100" value="<?php echo $dataDiagnostik["diag_acial_os"];?>"></td>
+               <td align="left" class="tablecontent-odd"><input type="text" name="preop_acial_od" size="30" maxlenght="100" value="<?php echo $_POST["preop_acial_od"];?>"></td>
+               <td align="left" class="tablecontent-odd"><input type="text" name="preop_acial_os" size="30" maxlenght="100" value="<?php echo $_POST["preop_acial_os"];?>"></td>
           </tr>
           <tr>
                <td align="left" class="tablecontent">Power IOL</td>
-               <td align="left" class="tablecontent-odd"><input type="text" name="preop_iol_od" size="30" maxlenght="100" value="<?php echo $dataDiagnostik["diag_iol_od"];?>"></td>
-               <td align="left" class="tablecontent-odd"><input type="text" name="preop_iol_os" size="30" maxlenght="100" value="<?php echo $dataDiagnostik["diag_iol_os"];?>"></td>
+               <td align="left" class="tablecontent-odd"><input type="text" name="preop_iol_od" size="30" maxlenght="100" value="<?php echo $_POST["preop_iol_od"];?>"></td>
+               <td align="left" class="tablecontent-odd"><input type="text" name="preop_iol_os" size="30" maxlenght="100" value="<?php echo $_POST["preop_iol_os"];?>"></td>
           </tr>
           <tr>
                <td align="left" class="tablecontent">AV Constant</td>
@@ -1384,7 +1464,7 @@ function SusterDelete(akhir){
           </tr>
           <tr>
                <td align="left" class="tablecontent">Standart Deviasi</td>
-               <td align="left" class="tablecontent-odd" colspan=2><?php echo $view->RenderTextBox("preop_deviasi","preop_deviasi","10","30",$dataDiagnostik["diag_deviasi"],"inputField", null,false);?></td>
+               <td align="left" class="tablecontent-odd" colspan=2><?php echo $view->RenderTextBox("preop_deviasi","preop_deviasi","10","30",$_POST["preop_deviasi"],"inputField", null,false);?></td>
           </tr>
           <tr>
                <td align="left" class="tablecontent">Rumus yang dipakai</td>
@@ -1516,33 +1596,39 @@ function SusterDelete(akhir){
 	</table>
      </fieldset>
 
-<!--
-     <fieldset>
-     <legend><strong>Anestesis</strong></legend>
-     <table width="100%" border="1" cellpadding="4" cellspacing="1">
-          
-  
-          <tr>
-               <td align="left" class="tablecontent" width="35%">Komplikasi Anestesis</td>
-               <td align="left" class="tablecontent-odd" width="65%"><?php echo $view->RenderComboBox("preop_anestesis_komp","preop_anestesis_komp",$optAnestesisKomplikasi,null,null,null);?></td>
-          </tr>
-          <tr>
-               <td align="left" class="tablecontent" width="35%">Premedikasi</td>
-               <td align="left" class="tablecontent-odd" width="65%"><?php echo $view->RenderComboBox("preop_anestesis_pre","preop_anestesis_pre",$optAnestesisPremedikasi,null,null,null);?></td>
-          </tr>
-	</table>
-     </fieldset>-->
-
      <fieldset>
      <legend><strong>Regulasi</strong></legend>
      <table width="100%" border="1" cellpadding="4" cellspacing="1">
+     <?php
+          if ($_POST["preop_regulasi"] == "y") {
+               $views = "checked";
+               $displayTbRegulasi = "display: block;";
+               $displayTbCatatan = "display: none;";
+               if ($_POST["preop_regulasi_berhasil"]=='y') {
+                    $displayTbTerapi = "display: none";
+                    $displayTbCatatan = "display: block;";
+                    $showRegulasiBerhasil = "checked";
+                    $showRegulasiGagal = "";
+               }else{
+                    $displayTbTerapi = "display: block";
+                    $displayTbCatatan = "display: none;";
+                    $showRegulasiBerhasil = "";
+                    $showRegulasiGagal = "checked";
+               }
+          }else{
+               $views = "";
+               $displayTbRegulasi = "display: none;";
+               $displayTbCatatan = "display: block;";
+               $displayTbTerapi = "display: none";
+          }
+     ?>
           <tr>
                <td align="left" width="20%" class="tablecontent">Perlu Regulasi</td>
-               <td align="left" class="tablecontent-odd"><?php echo $view->RenderCheckBox("preop_regulasi","preop_regulasi","y","null",($_POST["preop_regulasi"] == "y")?"checked":"",'onClick="GantiRegulasi();"')?>&nbsp;&nbsp;&nbsp;</td>
+               <td align="left" class="tablecontent-odd"><?php echo $view->RenderCheckBox("preop_regulasi","preop_regulasi","y","null",$views,'onClick="GantiRegulasi();"')?>&nbsp;&nbsp;&nbsp;</td>
           </tr>
      </table>
      
-     <table width="100%" border="1" cellpadding="4" cellspacing="1" id="tbRegulasi" style="display:block">
+     <table width="100%" border="1" cellpadding="4" cellspacing="1" id="tbRegulasi" style="<?php echo $displayTbRegulasi; ?>">
           <tr class="subheader">
                <td width="15%" align="center">No</td>
                <td width="45%" align="center">Jenis Regulasi</td>
@@ -1562,26 +1648,26 @@ function SusterDelete(akhir){
                <td align="left" class="tablecontent-odd"><?php echo $view->RenderTextBox("preop_regulasi_tono_hasil","preop_regulasi_tono_hasil","30","30",$_POST["preop_regulasi_tono_hasil"],"inputField", null,false);?></td>
           </tr>
           <tr>
-               <td align="left" class="tablecontent-odd" colspan=4><!--<label for="preop_regulasi_berhasil">Berhasil Diregulasi?</label><?php echo $view->RenderCheckBox("preop_regulasi_berhasil","preop_regulasi_berhasil","y","null",($_POST["preop_regulasi_berhasil"] == "y")?"checked":"",'onClick="GantiBerhasil();"')?>&nbsp;&nbsp;&nbsp;-->Berhasil Diregulasi?&nbsp;&nbsp;
+               <td align="left" class="tablecontent-odd" colspan=4>Berhasil Diregulasi?&nbsp;&nbsp;
 	       <?php
-		    echo $view->RenderRadio("preop_regulasi_berhasil","preop_regulasi_berhasil","y","inputField",null,'onClick="GantiBerhasil(this.value);"');
+		    echo $view->RenderRadio("preop_regulasi_berhasil","preop_regulasi_berhasil","y","inputField",$showRegulasiBerhasil,'onClick="GantiBerhasil(this.value);"');
 		    echo $view->RenderLabel("lbl_rawat_jalan","rd_jenis_rawat_jalan","Ya","inputField",null,null);
 		    echo "&nbsp;&nbsp;&nbsp;&nbsp;";
-		    echo $view->RenderRadio("preop_regulasi_berhasil","preop_regulasi_gagal","n","inputField",null,'onClick="GantiBerhasil(this.value);"');
+		    echo $view->RenderRadio("preop_regulasi_berhasil","preop_regulasi_gagal","n","inputField",$showRegulasiGagal,'onClick="GantiBerhasil(this.value);"');
 		    echo $view->RenderLabel("lbl_rawat_inap","rd_jenis_rawat_inap","Tidak","inputField",null,null);
 	       ?>
 	       </td>
           </tr>
 	</table>
 
-     <table width="100%" border="1" cellpadding="4" cellspacing="1" id="tbCatatan" style="display:none">
+     <table width="100%" border="1" cellpadding="4" cellspacing="1" id="tbCatatan" style="<?php echo $displayTbCatatan; ?>">
           <tr>
                <td align="left" width="20%" class="tablecontent">Catatan Untuk OK</td>
                <td align="left" class="tablecontent-odd"><?php echo $view->RenderTextBox("preop_catatan_ok","preop_catatan_ok","100","100",$_POST["preop_catatan_ok"],"inputField", null,false);?></td>
           </tr>
      </table>
      <div>
-     <table width="100%" border="1" cellpadding="4" cellspacing="1" id="tbTerapi" style="display:none">
+     <table width="100%" border="1" cellpadding="4" cellspacing="1" id="tbTerapi" style="<?php echo $displayTbTerapi; ?>">
           <tr class="subheader">
                <td width="100%" align="center" colspan=3>Tabel Terapi</td>
           </tr>	
