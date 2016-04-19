@@ -675,7 +675,9 @@
 
 	$count=0;	
 	 $optionsNext[$count] = $view->RenderOption(STATUS_REFRAKSI,$rawatStatus[STATUS_REFRAKSI],$show); $count++;
-	 $optionsNext[$count] = $view->RenderOption(STATUS_DIAGNOSTIK_TIPE,$rawatStatus[STATUS_DIAGNOSTIK_TIPE],$show); $count++;
+	 $optionsNext[$count] = $view->RenderOption(STATUS_DIAGNOSTIK_TIPE,$rawatStatus[STATUS_DIAGNOSTIK_TIPE],$show); 
+	 $count++;$optionsNext[$count] = $view->RenderOption(STATUS_PEMERIKSAAN,$rawatStatus[STATUS_PEMERIKSAAN],$show); $count++;
+	 $optionsNext[$count] = $view->RenderOption(STATUS_BEDAH,$rawatStatus[STATUS_BEDAH],$show); $count++;
 	 $optionsNext[$count] = $view->RenderOption(STATUS_PREOP,$rawatStatus[STATUS_PREOP],$show); $count++;
 	 $optionsNext[$count] = $view->RenderOption(STATUS_OPERASI,$rawatStatus[STATUS_OPERASI],$show); $count++;
 	 $optionsNext[$count] = $view->RenderOption(STATUS_LABORATORIUM,$rawatStatus[STATUS_LABORATORIUM],$show); $count++;
