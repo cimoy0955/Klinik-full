@@ -43,7 +43,7 @@
                left join klinik.klinik_iol_merk i on i.iol_merk_id = c.op_iol_merk
                left join klinik.klinik_iol_jenis j on j.iol_jenis_id = c.op_iol_jenis 
                left join klinik.klinik_ina k on k.ina_id = c.id_ina
-               left join klinik.klinik_operasi_metode l on l.op_metode_id = c.id_op_metode ";
+               left join klinik.klinik_operasi_metode l on cast(l.op_metode_id as char) = c.id_op_metode ";
      $sql.= " where ".implode(" and ",$sql_where);
      $sql.= " order by c.op_waktu, a.reg_status_pasien, b.cust_usr_nama"; 
      $rs = $dtaccess->Execute($sql);

@@ -750,17 +750,18 @@ function cekTambahFolio(){
 	}
 }
 
+
 <?php if($_x_mode=="Save"){ ?>
      BukaWindow('kasir_cetak.php?nokwitansi=<?php echo $_POST["kwitansi_id"];?>&id_reg=<?php echo $_POST["id_reg"];?>&jp=1','Invoice');
      document.location.href='<?php echo $thisPage;?>';
 <?php } ?>
 </script>
 
-
-<div id="antri_main" style="width:100%;height:auto;clear:both;overflow:auto">
-		<div class="tableheader">Antrian Kasir</div>
-		<div style="margin:10px auto 5px 7px;"><a href="<?php echo $findPasienFolio;?>&jenis=1&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Tambah Pasien"><img src="<?php echo $ROOT;?>images/bnplus.gif" />Tambah Pasien</a></div>
-		<div id="antri_kiri_isi" style="height:100;overflow:auto"><?php //echo GetFolio(); ?></div>
+<!--  -->
+<div id="antri_main" style="width:100%;height:auto;clear:both;">
+	<div class="tableheader">Antrian Kasir</div>
+	<div style="margin:10px auto 5px 7px;"><a href="<?php echo $findPasienFolio;?>&jenis=1&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Tambah Pasien"><img src="<?php echo $ROOT;?>images/bnplus.gif" />Tambah Pasien</a></div>
+	<div id="antri_kiri_isi" style="height:100;"><?php //echo GetFolio(); ?></div>
 </div>
 <?php if($dataPasien) { ?>
 <table width="100%" border="0" cellpadding="4" cellspacing="1">
@@ -815,7 +816,7 @@ function cekTambahFolio(){
 			 <tr>
 				<td align="left" class="tablecontent">&nbsp;Kode Biaya&nbsp;</td>
 				<td align="left" class="tablecontent-odd"><?php echo $view->RenderTextBox("biaya_kode","biaya_kode","10","100",$_POST["biaya_kode"],"inputField",null,false,"onkeyup=\"lihat01(this.value);\""); ?>
-				  <a href="<?php echo $findPage?>&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Pilih Item">
+				  <a href="<?php echo $findPage?>&TB_iframe=true&height=400&width=600&modal=true" class="thickbox" title="Pilih Item">
 				  <img src="<?php echo $APLICATION_ROOT;?>images/b_select.png" border="0" align="middle" width="18" height="20" style="cursor:pointer" title="Pilih Item" alt="Pilih Item" /></a>
 				  <div id="kotaksugest01" style="position:absolute; background-color:#eeeeee;width:410px;visibility:hidden;z-index:100">
 				       </div>

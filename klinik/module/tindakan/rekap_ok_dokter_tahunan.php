@@ -62,7 +62,7 @@
      // --- end: cari daftar dokternya --- //
 
      //*-- config table ---*//
-     $tableHeader = "&nbsp;Rekap Tahunan Pasien OK berdasar Jenis Tagihan Pasien";
+     $tableHeader = "&nbsp;Rekap Tahunan Pasien OK berdasar Dokter";
 
      if($_POST["btnLanjut"] || $_POST["btnExcel"]){
                // --- construct new table ---- //
