@@ -526,7 +526,7 @@ function TotalSemua(elm,biaya)
           </td>
         </tr>
      </table>
-     <?php echo $view->RenderHidden("id_cust_usr","id_cust_usr",$_POST["id_cust_usr"]);
+     <?php echo $view->RenderHidden("id_cust_usr","id_cust_usr",$_POST["id_cust_usr"]);?>
 </form>
 <?php } ?>
 <?php echo $view->RenderBodyEnd(); ?>

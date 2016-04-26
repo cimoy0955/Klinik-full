@@ -1331,24 +1331,24 @@ function Tambah(){
           'tr', { class  : 'tablecontent-odd',id:'tr_terapi_cok_'+akhir+'' },
                 ['td', { align: 'left', style: 'color: black;' },
                     [
-                         'input', {type:'text', value:'', size:30, maxLength:100, name:'item_nama_cok[]', id:'item_nama_cok_'+akhir},[],
+                         'input', {type:'text', value:'', size:30, maxLength:100, name:'item_nama_cok['+akhir+']', id:'item_nama_cok_'+akhir},[],
                          'a',{ href:'<?php echo $terapiPage;?>&el='+akhir+'&TB_iframe=true&height=400&width=450&modal=true',class:'thickbox', title:'Cari Obat'},
                          [
                               'img', {src:'<?php echo $APLICATION_ROOT?>images/bd_insrow.png', hspace:2, height:20, width:18, align:'middle', style:'cursor:pointer', border:0}
                          ],
-                         'input', {type:'hidden', value:'', name:'id_item_cok[]', id:'id_item_cok_'+akhir+''}
+                         'input', {type:'hidden', value:'', name:'id_item_cok['+akhir+']', id:'id_item_cok_'+akhir+''}
                     ],
                'td', { align: 'center', style: 'color: black;' },
                     [
-                         'input', {type:'text', value:'', size:20, maxLength:100, name:'txtSatuan[]', id:'txtSatuan_'+akhir}
+                         'input', {type:'text', value:'', size:20, maxLength:100, name:'txtSatuan['+akhir+']', id:'txtSatuan_'+akhir}
                     ],
                'td', { align: 'center', style: 'color: black;' },
                     [
-                         'input', {type:'text', value:'', size:3, maxLength:25, name:'txtDosis_cok_1[]', id:'txtDosis_cok_1_'+akhir}
+                         'input', {type:'text', value:'', size:3, maxLength:25, name:'txtDosis_cok_1['+akhir+']', id:'txtDosis_cok_1_'+akhir}
                     ],
               'td',  { align: 'left', style: 'color: black;' },
                       [
-                 'input', {type:'text', value:'', size:20, maxLength:100, name:'txtJumlah_cok_1[]', id:'txtJumlah_cok_1_'+akhir},[],
+                 'input', {type:'text', value:'', size:20, maxLength:100, name:'txtJumlah_cok_1['+akhir+']', id:'txtJumlah_cok_1_'+akhir},[],
                       ],
                'td', { align: 'center', style: 'color: black;' },
                        [
@@ -2426,14 +2426,14 @@ function isi11(nama,id,kode){
           <?php if(!$_POST["item_nama_cok"]) { ?>
                <tr id="tr_terapi_cok_0">
                     <td align="left" class="tablecontent-odd" width="50%">
-                         <?php echo $view->RenderTextBox("item_nama_cok[]","item_nama_cok_0","30","100",$_POST["item_nama_cok"][],"inputField", "readonly",false);?>
+                         <?php echo $view->RenderTextBox("item_nama_cok[0]","item_nama_cok_0","30","100",$_POST["item_nama_cok"][0],"inputField", "readonly",false);?>
                          <a href="<?php echo $terapiPage;?>&el=0&jenis=<?php echo $dataPasien["reg_jenis_pasien"];?>&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Cari Obat"><img src="<?php echo($APLICATION_ROOT);?>images/bd_insrow.png" border="0" align="middle" width="18" height="20" style="cursor:pointer" /></a>
-                         <input type="hidden" name="id_item_cok[]" id="id_item_cok_0" value="<?php echo $_POST["id_item"]?>" />
+                         <input type="hidden" name="id_item_cok[0]" id="id_item_cok_0" value="<?php echo $_POST["id_item"][0]?>" />
                     </td>
-                    <td align="center" class="tablecontent-odd"><?php echo $view->RenderTextBox("txtSatuan[]","txtSatuan_0","20","100",$_POST["txtSatuan"][],"curedit", "readonly",true);?></td>
-                    <td align="center" class="tablecontent-odd"><?php echo $view->RenderTextBox("txtDosis_cok_1[]","txtDosis_cok_1_0","3","25",$_POST["txtDosis_cok_1"][],"curedit", "",true,"onkeyup=\"hitungNominal(this.value,".$i.");\"");?></td>
+                    <td align="center" class="tablecontent-odd"><?php echo $view->RenderTextBox("txtSatuan[0]","txtSatuan_0","20","100",$_POST["txtSatuan"][0],"curedit", "readonly",true);?></td>
+                    <td align="center" class="tablecontent-odd"><?php echo $view->RenderTextBox("txtDosis_cok_1[0]","txtDosis_cok_1_0","3","25",$_POST["txtDosis_cok_1"][0],"curedit", "",true,"onkeyup=\"hitungNominal(this.value,".$i.");\"");?></td>
                     <td align="center" width="70%" class="tablecontent-odd">
-                             <?php echo $view->RenderTextBox("txtJumlah_cok_1[]","txtJumlah_cok_1_0","20","100",$_POST["txtJumlah_cok_1"][],"curedit", "",false);?>
+                             <?php echo $view->RenderTextBox("txtJumlah_cok_1[0]","txtJumlah_cok_1_0","20","100",$_POST["txtJumlah_cok_1"][0],"curedit", "",false);?>
                         </td>
                     <td align="center" class="tablecontent-odd">
                          <input class="button" name="btnAdd_cok" id="btnAdd_cok" type="button" value="Tambah" onClick="Tambah();">
