@@ -26,7 +26,7 @@
      if(!$_POST["tgl_awal"]) $_POST["tgl_awal"] = date("d-m-Y");
      if($_POST["cust_usr_jenis"]) $sql_where[] = "a.reg_jenis_pasien = ".QuoteValue(DPE_CHAR,$_POST["cust_usr_jenis"]);
      $sql_where[] = "a.reg_tanggal = ".QuoteValue(DPE_DATE,date_db($_POST["tgl_awal"]));
-     $sql_where[] = "a.reg_ugd = 'y' ";
+     $sql_where[] = "a.reg_tipe_rawat = 'y' ";
 
      $sql = "select b.cust_usr_kode, b.cust_usr_nama, b.cust_usr_alamat, b.cust_usr_tanggal_lahir, b.cust_usr_jenis_kelamin, 
                a.reg_jenis_pasien, a.reg_status_pasien, a.reg_keterangan, a.reg_waktu   
@@ -34,7 +34,7 @@
                join global.global_customer_user b on a.id_cust_usr = b.cust_usr_id";
      $sql.= " where ".implode(" and ",$sql_where);
      $sql.= "order by a.reg_status_pasien, b.cust_usr_nama, a.reg_waktu";
-     echo $sql;
+     
      $rs = $dtaccess->Execute($sql);
      $dataTable = $dtaccess->FetchAll($rs);
      
