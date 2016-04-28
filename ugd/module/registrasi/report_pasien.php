@@ -34,7 +34,7 @@
                join global.global_customer_user b on a.id_cust_usr = b.cust_usr_id";
      $sql.= " where ".implode(" and ",$sql_where);
      $sql.= "order by a.reg_status_pasien, b.cust_usr_nama, a.reg_waktu";
-     
+     echo $sql;
      $rs = $dtaccess->Execute($sql);
      $dataTable = $dtaccess->FetchAll($rs);
      
