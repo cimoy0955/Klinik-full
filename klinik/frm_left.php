@@ -698,12 +698,13 @@ function setDisplay(id) {
 	       echo "<a target=\"mainFrame\" href=\"".$menu[6]["href"]."\"><font color=\"#333333\" size=\"2\" face=\"Arial, Helvetica, sans-serif\"><strong>".$menu[6]["head"]."</strong></font></a>\n";
 	       echo "<a target=\"mainFrame\" href=\"".$menu[8]["href"]."\"><font color=\"#333333\" size=\"2\" face=\"Arial, Helvetica, sans-serif\"><strong>".$menu[8]["head"]."</strong></font></a>\n";
 	       echo "<a target=\"mainFrame\" href=\"".$menu[7]["href"]."\"><font color=\"#333333\" size=\"2\" face=\"Arial, Helvetica, sans-serif\"><strong>".$menu[7]["head"]."</strong></font></a>\n";
-	       echo "<a target=\"mainFrame\" href=\"".$menu[9]["href"]."\"><font color=\"#333333\" size=\"2\" face=\"Arial, Helvetica, sans-serif\"><strong>".$menu[9]["head"]."</strong></font></a></li></ul>\n";
+	       echo "</li></ul>\n";
 	       echo "<a href=\"#\" onClick=\"setDisplay('cetak');\"><font style=\"color:#3f3f3f; font-size:14px;\" face=\"Arial, Helvetica, sans-serif;\"><strong>Cetak</font></strong></a>\n";
 	       echo "<ul id=\"cetak\" style=\"display:none\"><li>";
 	       echo "<a target=\"mainFrame\" href=\"".$menu[10]["href"]."\"><font color=\"#333333\" size=\"2\" face=\"Arial, Helvetica, sans-serif\"><strong>".$menu[10]["head"]."</strong></font></a>\n";
 	       echo "<a target=\"mainFrame\" href=\"".$menu[11]["href"]."\"><font color=\"#333333\" size=\"2\" face=\"Arial, Helvetica, sans-serif\"><strong>".$menu[11]["head"]."</strong></font></a>\n";
 	       echo "<a target=\"mainFrame\" href=\"".$menu[12]["href"]."\"><font color=\"#333333\" size=\"2\" face=\"Arial, Helvetica, sans-serif\"><strong>".$menu[12]["head"]."</strong></font></a></li></ul>\n";
+	       echo "<a target=\"mainFrame\" href=\"".$menu[9]["href"]."\"><font color=\"#333333\" size=\"2\" face=\"Arial, Helvetica, sans-serif\"><strong>".$menu[9]["head"]."</strong></font></a>\n";
 	    }else{
 	       for($i=0,$n=count($menu);$i<$n;$i++){
 	       if($menu[$i]["status"]==true) {

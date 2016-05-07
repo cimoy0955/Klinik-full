@@ -22,7 +22,7 @@
      
      if(!$_POST["reg_dinasluar_tanggal"]) $_POST["reg_dinasluar_tanggal"] = getDateToday();
      
-     $plx = new InoLiveX("CheckKode,GetReg");     
+     $plx = new InoLiveX("CheckKode,GetReg,getOptDomisili,get_rujukan_rs,get_rujukan_dokter");     
 
  	/*if(!$auth->IsAllowed("registrasi",PRIV_CREATE)){
           die("access_denied");
@@ -39,6 +39,8 @@
     $viewPage = "pegawai_view.php";
     $findPage = "pasien_find.php?";
     $cariPage = "kk_find.php?";
+    $findPage_rujukan = "registrasi_tambah_rujukan.php?";
+    $findPage_rujukan_dokter = "registrasi_tambah_rujukan_dokter.php?";
 	
 	
 	 //AJAX / JQUERY
@@ -72,9 +74,47 @@
           $data = $dtaccess->Fetch($rs);
           
 		return $data["reg_id"];
-     }
+     } 
+
+    function getOptDomisili($idProp){
+      global $dtaccess;
       
+      $sql = "select * from global_kota where id_prop=".$idProp." order by kota_id";
+      $rs_kota = $dtaccess->Execute($sql,DB_SCHEMA_GLOBAL);
+      while($data_kota = $dtaccess->Fetch($rs_kota)){
+        $opt_kota[] = array("id" => $data_kota["kota_id"], "nama" => $data_kota["kota_nama"]);
+      }
+
+      // $data_kota = $dtaccess->FetchAll($rs_kota);
+
+      return json_encode($opt_kota);
+      // return json_encode($data_kota);
+    }
       
+    function get_rujukan_rs()
+    {
+      global $dtaccess;
+
+    $sql = "select rujukan_rs_id, rujukan_rs_nama from global.global_rujukan_rs order by rujukan_rs_id";
+      $rs = $dtaccess->Execute($sql);
+      while($data = $dtaccess->Fetch($rs)){
+        $opt_rujukan_rs[] = array("id" => $data["rujukan_rs_id"], "nama" => $data["rujukan_rs_nama"]);
+      }
+      return json_encode($opt_rujukan_rs);
+    }
+
+    function get_rujukan_dokter()
+    {
+      global $dtaccess;
+
+    $sql = "select rujukan_dokter_id, rujukan_dokter_nama from global.global_rujukan_dokter order by rujukan_dokter_id";
+      $rs = $dtaccess->Execute($sql);
+      while($data = $dtaccess->Fetch($rs)){
+        $opt_rujukan_dokter[] = array("id" => $data["rujukan_dokter_id"], "nama" => $data["rujukan_dokter_nama"]);
+      }
+      return json_encode($opt_rujukan_dokter);
+    }
+
   //AMBIL DATA AWAL UNTUK EDIT
 	if($_POST["btnLanjut"]) {
 		$sql = "select a.*,b.cust_nama,c.reg_jenis_pasien , c.reg_status   from global.global_customer_user a
@@ -413,6 +453,15 @@ die();
      }else{
        $optKotaUser[] = $view->RenderOption("-","--Pilih Propinsi Terlebih Dulu--",null,null);
      }
+    
+      // untuk combo box rujukan
+     $sql = "select * from global.global_rujukan";
+     $rs = $dtaccess->Execute($sql);
+     $rujukan = $dtaccess->FetchAll($rs);
+   
+   // untuk mancing combo box rujukan rs & rujukan dokter
+      $optRujukanID[] = $view->RenderOption("--","--","selected");
+      $optRujukanDokterID[] = $view->RenderOption("--","--","selected");
      
      /* update combo box jenis pasien
       */
@@ -645,6 +694,110 @@ function CheckDataSave(frm)
 	
 }  
 
+function changeOptDomisili(prop){
+  var select = document.getElementById('cust_usr_kota_domisili');
+  var items = getOptDomisili(prop,'type=r');
+  var arrItems = JSON.parse(items);
+  // alert(arrItems.length);
+
+  for (var i = select.length - 1; i >= 0; i--) {
+    select.remove(i);
+  }
+
+  for (var j = 0; j < arrItems.length; j++) {
+    var option = document.createElement("option");
+      option.text = arrItems[j].nama;
+      option.value = arrItems[j].id;
+      select.add(option);
+  } 
+}
+
+function changeOpt(prop){
+  var select = document.getElementById('cust_usr_kota');
+  var items = getOptDomisili(prop,'type=r');
+  var arrItems = JSON.parse(items);
+  // alert(arrItems.length);
+
+  for (var i = select.length - 1; i >= 0; i--) {
+    select.remove(i);
+  }
+
+  for (var j = 0; j < arrItems.length; j++) {
+    var option = document.createElement("option");
+      option.text = arrItems[j].nama;
+      option.value = arrItems[j].id;
+      select.add(option);
+  } 
+}
+
+function update_rujukan_rs(){
+
+  var obj = document.getElementById("id_rujukan_rs");
+  var length = obj.length;
+
+  //clear the existing options first
+  for (var i = length - 1; i >= 0; i--) {
+    obj.remove(i);
+  }
+
+  //js DOM to create options
+  var optText = get_rujukan_rs('type=r'); 
+  var jsonText = JSON.parse(optText);
+
+  var opt = document.createElement("option");
+  opt.text = "--";
+  opt.value = "--";
+  obj.add(opt);
+
+  for (var j = 0; j < jsonText.length; j++) {
+    var opt = document.createElement("option");
+    opt.text = jsonText[j].nama;
+    opt.value = jsonText[j].id;
+    obj.add(opt);
+  };
+  
+}
+
+function update_rujukan_dokter(){
+
+  var obj = document.getElementById("id_rujukan_dokter");
+  var length = obj.options.length;
+
+  //clear the existing options first
+  for (var i = length - 1; i >= 0; i--) {
+    obj.remove(i);
+  }
+
+  //js DOM to create options
+  var optText = get_rujukan_dokter('type=r'); 
+  var jsonText = JSON.parse(optText);
+  
+  var opt = document.createElement("option");
+  opt.text = "--";
+  opt.value = "--";
+  obj.add(opt);
+  
+  for (var j = 0; j < jsonText.length; j++) {
+    var opt = document.createElement("option");
+    opt.text = jsonText[j].nama;
+    opt.value = jsonText[j].id;
+    obj.add(opt);
+  };
+  
+}
+
+function view_rujukan(eval) {
+  if (eval != 6 && eval != '--'){
+    document.getElementById('detail_rujukan').style.display = "inline-block";
+    update_rujukan_rs();
+    update_rujukan_dokter();
+  } else {
+    document.getElementById('detail_rujukan').style.display = "none";
+    document.getElementById('id_rujukan_rs').selectedIndex = "0";
+    document.getElementById('id_rujukan_dokter').selectedIndex = "0";
+  }
+}
+
 </script>
 
 <style type="text/css">
@@ -652,6 +805,12 @@ function CheckDataSave(frm)
 	color: #0F2F13;
 	border: 1px solid #c2c6d3;
 	background-color: #e2dede;
+}
+
+.hint-label {
+  font-size: 9px;
+  font-style: italic;
+  color: #0f0f0f;
 }
 </style>
 
@@ -734,7 +893,7 @@ function CheckDataSave(frm)
 		</td>
 	</tr>
 	<tr>
-		<td width= "20%" class="tablecontent">Alamat<?php if(readbit($err_code,3)) {?>&nbsp;<font color="red">(*)</font><?}?></td>
+		<td width= "20%" class="tablecontent">Alamat<?php if(readbit($err_code,3)) {?>&nbsp;<font color="red">(*)</font><?}?>&nbsp;<span class="hint-label">(sesuai KTP/tanda pengenal)</span></td>
 		<td class="tablecontent-odd">
 			<table border=1 cellpadding=1 cellspacing=0 width="100%">
 				<tr>
@@ -743,6 +902,18 @@ function CheckDataSave(frm)
 					</td>
 				</tr>
 				<?php //if($_x_mode=='Edit'){?>
+        <tr>
+          <td width= "20%" align="left" class="tablecontent-odd">Propinsi&nbsp;</td>
+          <td width= "50%" align="left" class="tablecontent-odd" colspan=2>
+              <?php echo $view->RenderComboBox("cust_usr_propinsi","cust_usr_propinsi",$optProp,"inputfield",null,"onchange=changeOpt(this.value);");?>
+          </td>
+        </tr>
+        <tr>
+          <td width= "20%" align="left" class="tablecontent-odd">Kota&nbsp;</td>
+          <td width= "50%" align="left" class="tablecontent-odd" colspan=2>
+              <?php echo $view->RenderComboBox("cust_usr_kota","cust_usr_kota",$optKotaUser,"inputfield");?>
+          </td>
+        </tr>
 				<tr>
 					<td width="20%" class="tablecontent-odd">Kode Pos</td>
                          <td>
@@ -765,18 +936,18 @@ function CheckDataSave(frm)
 			</table>
 		</td>
 	</tr>
-	<tr>
-		<td width= "20%" align="left" class="tablecontent">Propinsi</td>
-		<td width= "50%" align="left" class="tablecontent-odd" colspan=2>
-      <?php echo $view->RenderComboBox("cust_usr_propinsi","cust_usr_propinsi",$optProp,"inputfield",null,"onchange=submit();");?>
-		</td>
-	</tr>
-	<tr>
-		<td width= "20%" align="left" class="tablecontent">Kota</td>
-		<td width= "50%" align="left" class="tablecontent-odd" colspan=2>
-      <?php echo $view->RenderComboBox("cust_usr_kota","cust_usr_kota",$optKotaUser,"inputfield");?>
-		</td>
-	</tr>
+  <tr>
+    <td width= "20%" align="left" class="tablecontent">Propinsi&nbsp;<span class="hint-label">(Sesuai dengan alamat domisili)</span></td>
+    <td width= "50%" align="left" class="tablecontent-odd" colspan=2>
+      <?php echo $view->RenderComboBox("cust_usr_propinsi_domisili","cust_usr_propinsi_domisili",$optProp,"inputfield",null,"onchange=changeOptDomisili(this.value);");?>
+    </td>
+  </tr>
+  <tr>
+    <td width= "20%" align="left" class="tablecontent">Kota&nbsp;<span class="hint-label">(Sesuai dengan alamat domisili)</span></td>
+    <td width= "50%" align="left" class="tablecontent-odd" colspan=2>
+        <?php echo $view->RenderComboBox("cust_usr_kota_domisili","cust_usr_kota_domisili",$optKotaUser,"inputfield");?>
+    </td>
+  </tr>
 	<tr>
 		<td class="tablecontent">Jenis Kelamin</td>
 		<td colspan="2" class="tablecontent-odd">
@@ -891,30 +1062,41 @@ function CheckDataSave(frm)
   </script>
   <?php }?>
 	<tr>
-	  <td class="tablecontent">Rujukan</td>
-          <td colspan="2" class="tablecontent-odd" >
-	      <select name="reg_rujukan" id="reg_rujukan" onKeyDown="return tabOnEnter(this, event);" onchange="view_opkom(this.value);"> 
-		<option value="" >[ Pilih Rujukan ]</option>
-		<?php
-		  for($i=0;$i<count($rujukan);$i++){
-		?>
-		  <option value="<?php echo $rujukan[$i]["rujukan_id"];?>" <?php if($_POST["reg_rujukan"]==$rujukan[$i]["rujukan_id"]) echo "selected";?>><?php echo $rujukan[$i]["rujukan_nama"];?></option>
-		<?php } ?>
-		</select>
-		<!-- user request 14 Mar 2014 -->
-		<!-- adding option if rujukan==opkom -->
-		<span id="opkom_view">
-		  <?php
-			if($_POST["reg_opkom_jenis"] || $_POST["reg_rujukan"]=="8") {
-			  $optOpkom[] = $view->RenderOption("Kiriman","Kiriman",($_POST["reg_opkom_jenis"]=="Kiriman")?"selected":"",null);
-			  $optOpkom[] = $view->RenderOption("Luar","Luar Gedung",($_POST["reg_opkom_jenis"]=="Luar")?"selected":"",null);
-			  echo $view->RenderComboBox("reg_opkom_jenis","reg_opkom_jenis",$optOpkom,"inputfield",null,null);
-			}else echo "&nbsp;";
-		    ?>
-		</span>
-		<!-- end update-->
-          </td>
-	</tr>
+      <td class="tablecontent">Rujukan</td>
+    <td colspan="2" class="tablecontent-odd" >
+    <select name="reg_rujukan" id="reg_rujukan" onKeyDown="return tabOnEnter(this, event);" onchange="view_rujukan(this.value);"> 
+      <option value="--" >[ Pilih Rujukan ]</option>
+      <?php
+        for($i=0;$i<count($rujukan);$i++){
+      ?>
+        <option value="<?php echo $rujukan[$i]["rujukan_id"];?>" <?php if($_POST["reg_rujukan"]==$rujukan[$i]["rujukan_id"]) echo "selected";?>><?php echo $rujukan[$i]["rujukan_nama"];?></option>
+      <?php } ?>
+    </select>
+      <!-- user request 14 Mar 2014 -->
+      <!-- adding option if rujukan==opkom -->
+      <span id="opkom_view">
+        <?php
+        if($_POST["reg_opkom_jenis"] || $_POST["reg_rujukan"]=="8") {
+          $optOpkom[] = $view->RenderOption("Kiriman","Kiriman",($_POST["reg_opkom_jenis"]=="Kiriman")?"selected":"",null);
+          $optOpkom[] = $view->RenderOption("Luar","Luar Gedung",($_POST["reg_opkom_jenis"]=="Luar")?"selected":"",null);
+          echo $view->RenderComboBox("reg_opkom_jenis","reg_opkom_jenis",$optOpkom,"inputfield",null,null);
+        }else echo "&nbsp;";
+          ?>
+      </span>
+      <!-- end update-->
+      <span id="detail_rujukan" style="display:none;">
+        &nbsp;&nbsp;Asal Rujukan:&nbsp;<?php if (readbit($err_code,5)) {?>&nbsp;<font color="red">(*)</font><?php } ?>
+        <?php echo $view->RenderComboBox("id_rujukan_rs","id_rujukan_rs",$optRujukanID,"myselect",null,null) ?>
+        &nbsp;<a href="<?php echo $findPage_rujukan;?>&TB_iframe=true&height=400&width=600&modal=true" class="thickbox" title="Tambah Asal Rujukan">
+          <img src="<?php echo($APLICATION_ROOT);?>images/b_insrow.png" border="0" width="12" height="14" style="cursor:pointer;margin-top: 4px;" title="Tambah Asal Rujukan" alt="Tambah Asal Rujukan" />
+        </a>
+        &nbsp;&nbsp;&nbsp;Dokter Penanggung Jawab Rujukan:&nbsp;<?php if (readbit($err_code,6)) {?>&nbsp;<font color="red">(*)</font><?php } ?><?php echo $view->RenderComboBox("id_rujukan_dokter","id_rujukan_dokter",$optRujukanDokterID,"myselect",null,null) ?>
+        &nbsp;<a href="<?php echo $findPage_rujukan_dokter;?>&TB_iframe=true&height=400&width=600&modal=true" class="thickbox" title="Tambah Dokter Perujuk">
+          <img src="<?php echo($APLICATION_ROOT);?>images/b_insrow.png" border="0" width="12" height="14" style="cursor:pointer;margin-top: 4px;" title="Tambah Dokter Perujuk" alt="Tambah Dokter Perujuk" />
+        </a>
+      </span>
+    </td>
+  </tr>
 	<?php //if($_x_mode=='Edit'){?>	
   <tr>
 		<td class="tablecontent">Keterangan Tambahan</td>
