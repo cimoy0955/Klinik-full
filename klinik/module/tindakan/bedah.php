@@ -1,7 +1,7 @@
 <?php
 /*   Catatan 13 April 2016:
  *   Inputan petugas injeksi disimpan di tabel klinik.klinik_operasi_suster
- *   Inputan asisten perawan disimpan di tabel klinik.klinik_perawatan_operasi_suster_asisten
+ *   Inputan asisten perawat disimpan di tabel klinik.klinik_perawatan_operasi_suster_asisten
  */
      require_once("root.inc.php");
      require_once($ROOT."library/bitFunc.lib.php");
@@ -437,6 +437,17 @@
 	       $shownya = ($_POST["op_paket_biaya"]==$dataOperasiPaket[$i]["biaya_id"])?"selected":"";
 	       $optOperasiPaket[$i+1] = $view->RenderOption($dataOperasiPaket[$i]["biaya_id"],$dataOperasiPaket[$i]["biaya_nama"],$shownya);
 	  }
+       
+       $showODOS = "";
+       $showODOS = ($_POST["op_jenis_odos"]=='BOTH')?"selected":"";
+       $optOperasiJenisODOS[0] = $view->RenderOption('BOTH','BOTH',$showODOS);
+       $showODOS = "";
+       $showODOS = ($_POST["op_jenis_odos"]=='OD')?"selected":"";
+       $optOperasiJenisODOS[1] = $view->RenderOption('OD','OD',$showODOS);
+       $showODOS = "";
+       $showODOS = ($_POST["op_jenis_odos"]=='OS')?"selected":"";
+       $optOperasiJenisODOS[2] = $view->RenderOption('OS','OS',$showODOS);
+
      }
 
 
@@ -461,6 +472,7 @@
           $dbField[10] = "id_suster";
           $dbField[11] = "id_cust_usr";
           $dbField[12] = "op_paket_biaya";
+          $dbField[13] = "op_jenis_odos";
 
           if(!$_POST["op_id"]) $_POST["op_id"] = $dtaccess->GetTransID();
           $_POST["op_jam_mulai"] = $_POST["op_mulai_jam"].":".$_POST["op_mulai_menit"].":00";
@@ -480,6 +492,7 @@
           $dbValue[10] = QuoteValue(DPE_NUMERICKEY,$_POST["id_suster"]);
           $dbValue[11] = QuoteValue(DPE_NUMERICKEY,$_POST["id_cust_usr"]);
           $dbValue[12] = QuoteValue(DPE_CHARKEY,$_POST["op_paket_biaya"]);
+          $dbValue[13] = QuoteValue(DPE_CHAR,$_POST["op_jenis_odos"]);
 
 
           $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
@@ -2171,7 +2184,8 @@ function isi11(nama,id,kode){
      <table width="100%" border="1" cellpadding="4" cellspacing="1">
           <tr>
                <td align="left" class="tablecontent" width="20%">Jenis Operasi</td>
-               <td align="left" class="tablecontent-odd" width="80%"><?php echo $view->RenderComboBox("op_paket_biaya","op_paket_biaya",$optOperasiPaket,null,null,null);?><!--<?php //echo $view->RenderComboBox("rawat_operasi_jenis","rawat_operasi_jenis",$optOperasiJenis,null,null,null);?>--></td>
+               <td align="left" class="tablecontent-odd" width="40%"><?php echo $view->RenderComboBox("op_paket_biaya","op_paket_biaya",$optOperasiPaket,null,null,null);?><!--<?php //echo $view->RenderComboBox("rawat_operasi_jenis","rawat_operasi_jenis",$optOperasiJenis,null,null,null);?>--></td>
+               <!--<?php //echo $view->RenderComboBox("rawat_operasi_jenis","rawat_operasi_jenis",$optOperasiJenis,null,null,null);?>--></td>
           </tr>
 	</table>
      </fieldset>
@@ -2393,9 +2407,10 @@ function isi11(nama,id,kode){
           </tr>-->
           <tr>
                <td align="left" class="tablecontent">Metode</td>
-               <td align="left" class="tablecontent-odd"  colspan=3>
+               <td align="left" class="tablecontent-odd"  colspan=2>
                     <?php echo $view->RenderComboBox("id_op_jenis","id_op_jenis",$optOperasiJenis,null,null,null);?>
                </td>
+               <td align="left" class="tablecontent-odd""><?php echo $view->RenderComboBox("op_jenis_odos","op_jenis_odos",$optOperasiJenisODOS,null,null,null);?>
           </tr>
           <tr>
                <td align="left" class="tablecontent">Komplikasi Durante OP</td>

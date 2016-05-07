@@ -37,11 +37,11 @@
      } 
 
      $sql = "select b.cust_usr_kode, b.cust_usr_nama, a.reg_status, b.cust_usr_alamat, b.cust_usr_tanggal_lahir, b.cust_usr_jenis_kelamin, 
-               a.reg_jenis_pasien, a.reg_status_pasien, c.jadwal_id, d.op_id, e.preop_id, f.*, g.* 
+               a.reg_jenis_pasien, a.reg_status_pasien, c.jadwal_id, d.op_id, d.op_jenis_odos, e.preop_id, f.*, g.* 
                from klinik.klinik_registrasi a 
                join global.global_customer_user b on a.id_cust_usr = b.cust_usr_id
                left join ( select preop_id as jadwal_id,id_reg,cast(preop_tanggal_jadwal as date) as tanggal_jadwal from klinik.klinik_preop where preop_tanggal_jadwal is not null ) c on c.id_reg = a.reg_id
-               left join ( select op_id, id_reg,op_tanggal,id_op_jenis,id_dokter from klinik.klinik_perawatan_operasi) d on d.id_reg = a.reg_id 
+               left join ( select op_id, id_reg,op_tanggal,id_op_jenis,id_dokter,op_jenis_odos from klinik.klinik_perawatan_operasi) d on d.id_reg = a.reg_id 
                left join klinik.klinik_operasi_jenis f on d.id_op_jenis = f.op_jenis_id
                left join hris.hris_pegawai g on d.id_dokter = g.pgw_id
                left join ( select preop_id, id_reg,cast(preop_waktu as date) as preop_tanggal from klinik.klinik_preop where preop_tanggal_jadwal is null) e on e.id_reg = a.reg_id  ";
@@ -77,6 +77,10 @@
      $tbHeader[0][$counterHeader][TABLE_WIDTH] = "5%";     
      $counterHeader++;
      
+     $tbHeader[0][$counterHeader][TABLE_ISI] = "OD/OS";
+     $tbHeader[0][$counterHeader][TABLE_WIDTH] = "5%";     
+     $counterHeader++;
+     
      $tbHeader[0][$counterHeader][TABLE_ISI] = "Dokter";
      $tbHeader[0][$counterHeader][TABLE_WIDTH] = "13%";     
      $counterHeader++;
@@ -103,7 +107,7 @@
                     where id_op = ".QuoteValue(DPE_CHAR,$dataTable[$i]["op_id"]);
           $rs_per = $dtaccess->Execute($query);
           while ($dataPerawat = $dtaccess->Fetch($rs_per)){
-               $perawatnya .= $dataPerawat["pgw_nama"].", ";
+               $perawatnya .= $dataPerawat["pgw_nama"]."<br />";
           }
           
           $perawatnya = substr(trim($perawatnya, " "),0,-1);
@@ -126,6 +130,10 @@
           
           $tbContent[$i][$counter][TABLE_ISI] = $dataTable[$i]["op_jenis_nama"]; // ambil dari tabel klinik_operasi_jenis
           $tbContent[$i][$counter][TABLE_ALIGN] = "left";          
+          $counter++;
+          
+          $tbContent[$i][$counter][TABLE_ISI] = $dataTable[$i]["op_jenis_odos"];
+          $tbContent[$i][$counter][TABLE_ALIGN] = "center";          
           $counter++;
           
           $tbContent[$i][$counter][TABLE_ISI] = $dataTable[$i]["pgw_nama"];

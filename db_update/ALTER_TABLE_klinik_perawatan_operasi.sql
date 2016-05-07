@@ -1,0 +1,1 @@
+ALTER TABLE "klinik"."klinik_perawatan_operasi" ADD COLUMN "op_jenis_odos" Character Varying( 5 ) COLLATE "pg_catalog"."default";
