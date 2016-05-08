@@ -1,0 +1,1 @@
+ALTER TABLE "klinik"."klinik_premedikasi" ADD COLUMN "preme_status" Character Varying( 1 ) COLLATE "pg_catalog"."default" DEFAULT 'n'::character varying;

@@ -436,6 +436,7 @@
           $dbField[19] = "preme_anestesis_pre";
           $dbField[20] = "preme_iol_jenis";
           $dbField[21] = "preme_iol_merk";
+          $dbField[22] = "preme_status";
           
           if(!$_POST["preme_id"]) $_POST["preme_id"] = $dtaccess->GetTransID();
           $dbValue[0] = QuoteValue(DPE_CHAR,$_POST["preme_id"]);   // PK
@@ -460,6 +461,7 @@
           $dbValue[19] = QuoteValue(DPE_CHARKEY,$_POST["preme_anestesis_pre"]);
           $dbValue[20] = QuoteValue(DPE_CHARKEY,$_POST["preme_iol_jenis"]);
           $dbValue[21] = QuoteValue(DPE_CHARKEY,$_POST["preme_iol_merk"]);
+          $dbValue[22] = QuoteValue(DPE_CHAR,($_POST["btnSaveOk"] || $_POST["btnUpdateOk"]) ? 'y' : 'n');
 
           $dbKey[0] = 0; // -- set key buat clause wherenya , valuenya = index array buat field / value
           $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey);
@@ -703,6 +705,33 @@
 			 }
 		    }
 	       }
+
+            // insert ke tabel klinik_history_pasien
+          $dbSchema = "klinik";
+          $dbTable = "klinik_history_pasien";
+
+          $dbField[0] = "history_id";
+          $dbField[1] = "id_reg";
+          $dbField[2] = "history_status_pasien";
+          $dbField[3] = "history_when_out";
+
+          $history_id = $dtaccess->GetTransID();
+          $dbValue[0] = QuoteValue(DPE_CHAR,$history_id);
+          $dbValue[1] = QuoteValue(DPE_CHAR,$_POST["id_reg"]);
+          $dbValue[2] = QuoteValue(DPE_CHAR,STATUS_PREMEDIKASI);
+          $dbValue[3] = QuoteValue(DPE_DATE,date("Y-m-d H:i:s"));
+
+          $dbKey[0] = 0;
+
+          $dtmodel = new DataModel($dbTable,$dbField,$dbValue,$dbKey,$dbSchema);
+
+          $dtmodel->Insert() or die("insert error");
+
+          unset($dtmodel);
+          unset($dbField);
+          unset($dbValue);
+          unset($dbKey);
+          // end insert 
           
           if($_POST["btnSave"] || $_POST["btnSaveOk"]) echo "<script>document.location.href='".$thisPage."';</script>";
           else echo "<script>document.location.href='".$backPage."&id_cust_usr=".$enc->Encode($_POST["id_cust_usr"])."';</script>";
