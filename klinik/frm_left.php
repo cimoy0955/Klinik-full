@@ -326,6 +326,13 @@
 			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/tindakan/report_poli5.php";
 			$menu[$countMenu]["status"] = true;        
 			$countMenu++;
+			
+			$menu[$countMenu]["head"] = "Report Premedikasi";
+			$menu[$countMenu]["priv"] = "premedikasi";
+			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/tindakan/report_premedikasi.php";
+			$menu[$countMenu]["status"] = true;        
+			$countMenu++;
+			
 
 			$menu[$countMenu]["head"] = "Report Operasi";
 			$menu[$countMenu]["priv"] = "operasi";
@@ -368,13 +375,6 @@
 			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/tindakan/rekap_ok_dokter_lensa_tahunan.php";
 			$menu[$countMenu]["status"] = true;        
 			$countMenu++;
-			
-			$menu[$countMenu]["head"] = "Report Premedikasi";
-			$menu[$countMenu]["priv"] = "premedikasi";
-			$menu[$countMenu]["href"] = $APLICATION_ROOT."module/tindakan/report_premedikasi.php";
-			$menu[$countMenu]["status"] = true;        
-			$countMenu++;
-			
 	
 	/*		$menu[$countMenu]["head"] = "Rekap Pasien";
 			$menu[$countMenu]["priv"] = "report_registrasi";

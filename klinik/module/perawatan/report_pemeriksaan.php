@@ -24,7 +24,9 @@
      }
 
      if(!$_POST["tgl_awal"]) $_POST["tgl_awal"] = date("d-m-Y"); 
-     $sql_where[] = "c.rawat_tanggal = ".QuoteValue(DPE_DATE,date_db($_POST["tgl_awal"]));
+     if(!$_POST["tgl_akhir"]) $_POST["tgl_akhir"] = date("d-m-Y"); 
+
+     $sql_where = "c.rawat_tanggal beetwen ".QuoteValue(DPE_DATE,date_db($_POST["tgl_awal"]))." and ".QuoteValue(DPE_DATE,date_db($_POST["tgl_akhir"]));
 
      $sql = "select b.cust_usr_kode, b.cust_usr_nama, b.cust_usr_alamat, b.cust_usr_tanggal_lahir, b.cust_usr_jenis_kelamin, d.rujuk_nama, c.rawat_next,
                a.reg_jenis_pasien, a.reg_status_pasien, c.rawat_id  
@@ -32,7 +34,7 @@
                join global.global_customer_user b on a.id_cust_usr = b.cust_usr_id
                join klinik.klinik_perawatan c on c.id_reg = a.reg_id
                left join klinik.klinik_rujukan d on c.rawat_rujukan_id = d.rujuk_id";
-     $sql.= " where ".implode(" and ",$sql_where);
+     $sql.= " where ".$sql_where;
      $sql.= " order by a.reg_status_pasien, b.cust_usr_nama";
      $rs = $dtaccess->Execute($sql);
      $dataTable = $dtaccess->FetchAll($rs);
@@ -362,7 +364,9 @@ function CheckSimpan(frm) {
           <td width="15%" class="tablecontent">&nbsp;Tanggal</td>
           <td width="20%" class="tablecontent-odd">
                <input type="text"  id="tgl_awal" name="tgl_awal" size="15" maxlength="10" value="<?php echo $_POST["tgl_awal"];?>"/>
-               <img src="<?php echo $APLICATION_ROOT;?>images/b_calendar.png" width="16" height="16" align="middle" id="img_tgl_awal" style="cursor: pointer; border: 0px solid white;" title="Date selector" onMouseOver="this.style.background='red';" onMouseOut="this.style.background=''" />
+               <img src="<?php echo $APLICATION_ROOT;?>images/b_calendar.png" width="16" height="16" align="middle" id="img_tgl_awal" style="cursor: pointer; border: 0px solid white;" title="Date selector" onMouseOver="this.style.background='red';" onMouseOut="this.style.background=''" />&nbsp;-&nbsp;
+               <input type="text"  id="tgl_akhir" name="tgl_akhir" size="15" maxlength="10" value="<?php echo $_POST["tgl_akhir"];?>"/>
+               <img src="<?php echo $APLICATION_ROOT;?>images/b_calendar.png" width="16" height="16" align="middle" id="img_tgl_akhir" style="cursor: pointer; border: 0px solid white;" title="Date selector" onMouseOver="this.style.background='red';" onMouseOut="this.style.background=''" />
           </td> 
           <td class="tablecontent">
                <input type="submit" name="btnLanjut" value="Lanjut" class="button">
@@ -381,6 +385,17 @@ function CheckSimpan(frm) {
         ifFormat       :    "<?php echo $formatCal;?>",       // format of the input field
         showsTime      :    false,            // will display a time selector
         button         :    "img_tgl_awal",   // trigger for the calendar (button ID)
+        singleClick    :    true,           // double-click mode
+        step           :    1                // show all years in drop-down boxes (instead of every other year as default)
+    });
+</script>
+
+<script type="text/javascript">
+    Calendar.setup({
+        inputField     :    "tgl_akhir",      // id of the input field
+        ifFormat       :    "<?php echo $formatCal;?>",       // format of the input field
+        showsTime      :    false,            // will display a time selector
+        button         :    "img_tgl_akhir",   // trigger for the calendar (button ID)
         singleClick    :    true,           // double-click mode
         step           :    1                // show all years in drop-down boxes (instead of every other year as default)
     });
