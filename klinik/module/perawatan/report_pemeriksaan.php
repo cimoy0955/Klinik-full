@@ -26,7 +26,7 @@
      if(!$_POST["tgl_awal"]) $_POST["tgl_awal"] = date("d-m-Y"); 
      if(!$_POST["tgl_akhir"]) $_POST["tgl_akhir"] = date("d-m-Y"); 
 
-     $sql_where = "c.rawat_tanggal beetwen ".QuoteValue(DPE_DATE,date_db($_POST["tgl_awal"]))." and ".QuoteValue(DPE_DATE,date_db($_POST["tgl_akhir"]));
+     $sql_where = "c.rawat_tanggal between ".QuoteValue(DPE_DATE,date_db($_POST["tgl_awal"]))." and ".QuoteValue(DPE_DATE,date_db($_POST["tgl_akhir"]));
 
      $sql = "select b.cust_usr_kode, b.cust_usr_nama, b.cust_usr_alamat, b.cust_usr_tanggal_lahir, b.cust_usr_jenis_kelamin, d.rujuk_nama, c.rawat_next,
                a.reg_jenis_pasien, a.reg_status_pasien, c.rawat_id  
