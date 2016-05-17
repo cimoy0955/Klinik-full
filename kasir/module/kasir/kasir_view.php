@@ -756,6 +756,11 @@ function cekTambahFolio(){
      document.location.href='<?php echo $thisPage;?>';
 <?php } ?>
 </script>
+<style type="text/css">
+	#TB_window {
+		margin-top: -220px;
+	}
+</style>
 
 <!--  -->
 <div id="antri_main" style="width:100%;height:auto;clear:both;">
@@ -817,7 +822,7 @@ function cekTambahFolio(){
 			 <tr>
 				<td align="left" class="tablecontent">&nbsp;Kode Biaya&nbsp;</td>
 				<td align="left" class="tablecontent-odd"><?php echo $view->RenderTextBox("biaya_kode","biaya_kode","10","100",$_POST["biaya_kode"],"inputField",null,false,"onkeyup=\"lihat01(this.value);\""); ?>
-				  <a href="<?php echo $findPage?>&TB_iframe=true&height=400&width=600&modal=true" class="thickbox" title="Pilih Item">
+				  <a href="<?php echo $findPage?>&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Pilih Item">
 				  <img src="<?php echo $APLICATION_ROOT;?>images/b_select.png" border="0" align="middle" width="18" height="20" style="cursor:pointer" title="Pilih Item" alt="Pilih Item" /></a>
 				  <div id="kotaksugest01" style="position:absolute; background-color:#eeeeee;width:410px;visibility:hidden;z-index:100">
 				       </div>
