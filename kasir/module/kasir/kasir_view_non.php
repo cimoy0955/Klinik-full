@@ -1835,6 +1835,11 @@ function setINAKelas(args) {
      document.location.href='<?php echo $thisPage;?>';
 <?php } ?>
 </script>
+<style type="text/css">
+	#TB_window {
+		margin-top: -220px;
+	}
+</style>
 
 
 
