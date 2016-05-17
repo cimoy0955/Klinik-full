@@ -763,10 +763,10 @@ function cekTambahFolio(){
 </style>
 
 <!--  -->
-<div id="antri_main" style="width:100%;height:auto;clear:both;">
+<div id="antri_main" style="width:100%;height:auto;clear:both;overflow:auto;">
 	<div class="tableheader">Antrian Kasir</div>
 	<div style="margin:10px auto 5px 7px;"><a href="<?php echo $findPasienFolio;?>&jenis=1&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Tambah Pasien"><img src="<?php echo $ROOT;?>images/bnplus.gif" />Tambah Pasien</a></div>
-	<div id="antri_kiri_isi" style="height:100px;"><?php //echo GetFolio(); ?></div>
+	<div id="antri_kiri_isi" style="height:100px;overflow:auto;"><?php //echo GetFolio(); ?></div>
 </div>
 <?php if($dataPasien) { ?>
 <div style="margin-top: 15px;">
