@@ -489,10 +489,10 @@ var _wnd_new;
 function BukaWindow(url,judul)
 {
     if(!_wnd_new) {
-			_wnd_new = window.open(url,judul,'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=850,height=1000,top=35;left=150');
+			_wnd_new = window.open(url,judul,'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=875,height=1000,top=35;left=150');
 	} else {
 		if (_wnd_new.closed) {
-			_wnd_new = window.open(url,judul,'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=850,height=1000,top=35;left=150');
+			_wnd_new = window.open(url,judul,'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=875,height=1000,top=35;left=150');
 		} else {
 			_wnd_new.focus();
 		}
@@ -505,10 +505,10 @@ var _wnd_new2;
 function BukaWindow2(url,judul)
 {
     if(!_wnd_new2) {
-			_wnd_new2 = window.open(url,judul,'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=850,height=1000,top=35;left=150');
+			_wnd_new2 = window.open(url,judul,'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=875,height=1000,top=35;left=150');
 	} else {
 		if (_wnd_new2.closed) {
-			_wnd_new2 = window.open(url,judul,'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=850,height=1000,top=35;left=150');
+			_wnd_new2 = window.open(url,judul,'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=no,width=875,height=1000,top=35;left=150');
 		} else {
 			_wnd_new2.focus();
 		}
@@ -763,10 +763,10 @@ function cekTambahFolio(){
 </style>
 
 <!--  -->
-<div id="antri_main" style="width:100%;height:auto;clear:both;">
+<div id="antri_main" style="width:100%;height:auto;clear:both;overflow: auto;">
 	<div class="tableheader">Antrian Kasir</div>
 	<div style="margin:10px auto 5px 7px;"><a href="<?php echo $findPasienFolio;?>&jenis=1&TB_iframe=true&height=400&width=450&modal=true" class="thickbox" title="Tambah Pasien"><img src="<?php echo $ROOT;?>images/bnplus.gif" />Tambah Pasien</a></div>
-	<div id="antri_kiri_isi" style="height:100px;"><?php //echo GetFolio(); ?></div>
+	<div id="antri_kiri_isi" style="height:100px;overflow: auto;"><?php //echo GetFolio(); ?></div>
 </div>
 <?php if($dataPasien) { ?>
 <div style="margin-top: 15px;">

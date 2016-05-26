@@ -76,7 +76,7 @@ html{
 
 body {
     font-family		: arial;
-    letter-spacing	: 2px;
+    letter-spacing	: 5px;
     margin			: 0px;
   	font-size		: 10px;
   	width			: 100%;
@@ -88,7 +88,7 @@ body {
 .tableisi {
 	border-collapse	: collapse;
 	font-family		: monospace;
-	font-size		: 9px;
+	font-size		: 12px;
 	border-top		: black solid 1px; 
 	border-bottom	: black solid 1px;
 }
@@ -97,7 +97,7 @@ body {
 
 .tablenota {
     font-family:      monospace;
-    font-size:        10px;
+    font-size:        14px;
 	border: solid black 1px; 
 	border-collapse:collapse;
 }
@@ -116,10 +116,13 @@ body {
 }
 
 .judul {
-     font-size:      10px;
+     font-size:      12px;
 	font-weight: bolder;
 }
 
+@media print{
+
+}
 
 </style>
 
@@ -136,7 +139,7 @@ function cetak() {
 
 <body onload="cetak();">
 
-<div style="width:750px;margin:1px auto auto 10px;position:absolute;height:auto;float:left;">
+<div style="width:875px;margin:1px auto auto 10px;position:absolute;height:auto;float:left;">
 <table align="center" style="width:95%;"  border="0" cellpadding="4" cellspacing="1">
 	<tr>
 		<td align="center" style="font-size:17px">
@@ -158,7 +161,7 @@ function cetak() {
 	</tr>
 </table> 
 <br>
-<table border="0" align="center" style="width:95%;border:1px solid black;border-collapse:collapse;font-size:12px;" >
+<table border="0" align="center" style="width:100%;border:1px solid black;border-collapse:collapse;font-size:12px;" >
 	<tr>
 		<td style="border-bottom:1px solid black;border-right:1px solid black;" width= "40%" align="center"><b>NAMA PASIEN</b></td>
 		<td style="border-bottom:1px solid black;border-right:1px solid black;" width= "30%" align="center"><b>NO REGISTER</b></td>
@@ -174,7 +177,7 @@ function cetak() {
 <BR>
 
 	
-<table style="width:95%;"   align="center"  class="tablenota">
+<table style="width:100%;"   align="center"  class="tablenota">
 	<tr height="30">
 		<td style="border-bottom:1px solid black;border-right:1px solid black;" width="5%" align="center"><STRONG>NO</STRONG></td>
 		<td style="border-bottom:1px solid black;border-right:1px solid black;" width="10%" align="center"><STRONG>KODE</STRONG></td>
@@ -208,7 +211,7 @@ function cetak() {
 </table>
 
 <br>
-<table border="0" align="center" style="width:95%;border:1px solid black;border-collapse:collapse;font-size:12px;">
+<table border="0" align="center" style="width:100%;border:1px solid black;border-collapse:collapse;font-size:12px;">
 <tr height="25">
 		<td colspan=4>&nbsp;&nbsp;<strong>TERBILANG</strong></td>
 	</tr>
@@ -219,7 +222,7 @@ function cetak() {
 <br>
 <BR>
 
-<table  border="0" align="center" style="width:95%;border:1px solid black;border-collapse:collapse;font-size:12px;" >
+<table  border="0" align="center" style="width:100%;border:1px solid black;border-collapse:collapse;font-size:12px;" >
 	<tr height="25">
 		<td  style="border-bottom:1px solid black;border-right:1px solid black;"  width= "25%" align="center">KASIR</td>
 		<td style="border-bottom:1px solid black;border-right:1px solid black;"  width= "25%" align="center">TANGGAL</td>
