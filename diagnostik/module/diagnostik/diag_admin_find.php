@@ -22,7 +22,7 @@ function GetData($in_nama){
 	
 	$table = new InoTable("table1","100%","center",null,0,5,1,null,"tblForm");
 	
-	$sql_where[] = "pgw_jenis_pegawai = ".PGW_JENIS_ADMIN; 
+	$sql_where[] = "pgw_jenis_pegawai in(".PGW_JENIS_ADMIN.",".PGW_JENIS_SUSTER.")"; 
 	if($in_nama) $sql_where[] = "UPPER(pgw_nama) like ".QuoteValue(DPE_CHAR,strtoupper("%".$in_nama."%"));
 	$sql_where = implode(" and ",$sql_where);
 
